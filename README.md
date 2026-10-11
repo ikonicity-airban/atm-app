@@ -77,4 +77,4 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 5. **Role-Based Access Control:** Staff accounts are provisioned exclusively by administrative management; public self-registration for staff is forbidden.
 
 
-> AXtcJ2f4KsvTv0Lj
+> **AXtcJ2f4KsvTv0Lj**
