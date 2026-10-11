@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%">
+  <rect width="400" height="220" fill="#f8fafc"/>
+  <rect x="20" y="20" width="360" height="180" rx="8" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+  <!-- Sienna Silhouette -->
+  <path d="M 80 135 L 110 90 L 170 75 L 290 75 L 330 105 L 345 135 L 340 155 L 60 155 Z" fill="#ca2484" fill-opacity="0.15" stroke="#ca2484" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Windows -->
+  <polygon points="120,95 165,83 165,115 120,115" fill="#ffffff" stroke="#ca2484" stroke-width="1.5"/>
+  <polygon points="175,83 235,83 235,115 175,115" fill="#ffffff" stroke="#ca2484" stroke-width="1.5"/>
+  <polygon points="245,83 285,83 315,110 245,115" fill="#ffffff" stroke="#ca2484" stroke-width="1.5"/>
+  <!-- Wheels -->
+  <circle cx="115" cy="155" r="22" fill="#1e293b"/>
+  <circle cx="115" cy="155" r="10" fill="#94a3b8"/>
+  <circle cx="295" cy="155" r="22" fill="#1e293b"/>
+  <circle cx="295" cy="155" r="10" fill="#94a3b8"/>
+  <!-- Specification text -->
+  <text x="200" y="45" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">
+    TOYOTA SIENNA &bull; 5 PASSENGER SEATS &bull; AIR CONDITIONED
+  </text>
+</svg>

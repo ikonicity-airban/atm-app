@@ -1,0 +1,16 @@
+{
+  "name": "Ascent Transport Management (ATM Nigeria)",
+  "short_name": "ATM Nigeria",
+  "description": "Intercity passenger transport, courier parcels, and vehicle charter across Nigeria. Travel Safe and Fast.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ca2484",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+/* Dev-Preview Entry Point: imports the single source of truth from apps/web */
+@import "../apps/web/src/app/globals.css";

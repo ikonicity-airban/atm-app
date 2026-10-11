@@ -1,0 +1,19 @@
+{
+  "name": "@atm/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@atm/shared": "workspace:*",
+    "@atm/db": "workspace:*",
+    "@google/genai": "^2.4.0",
+    "lucide-react": "^0.546.0",
+    "zod": "^3.24.2"
+  }
+}

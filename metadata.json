@@ -1,0 +1,6 @@
+{
+  "name": "Ascent Transport Management (ATM Nigeria)",
+  "description": "Intercity passenger transport, courier parcels, and vehicle charter across Nigeria. Travel Safe and Fast.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
