@@ -22,7 +22,7 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 | 9 | Terminal check-in and vehicle dispatch | Phase 8 | done |
 | 10 | Admin logistics, CRM, and fleet maintenance | Phase 9 | done |
 | 11 | Customer accounts and credit ledger | Phase 10 | done |
-| 12 | Charter and corporate logistics | Phase 11 | in-progress |
+| 12 | Charter and corporate logistics | Phase 11 | done |
 | 13 | SEO landing pages and launch preparation | Phase 12 | planned |
 
 ## Foundations
