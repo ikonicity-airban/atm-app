@@ -1,12 +1,13 @@
 {
-  "name": "react-example",
+  "name": "ascent-transport-management",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "pnpm --filter @atm/web dev",
+    "build": "turbo run build",
+    "preview": "pnpm --filter @atm/web start",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
@@ -46,6 +47,7 @@
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.21.0",
+    "turbo": "^2.4.4",
     "typescript": "^7.0.2"
   }
 }
