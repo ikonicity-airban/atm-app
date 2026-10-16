@@ -23,7 +23,9 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 | 10 | Admin logistics, CRM, and fleet maintenance | Phase 9 | done |
 | 11 | Customer accounts and credit ledger | Phase 10 | done |
 | 12 | Charter and corporate logistics | Phase 11 | done |
-| 13 | SEO landing pages and launch preparation | Phase 12 | planned |
+| 13 | SEO landing pages and launch preparation | Phase 12 | in-progress |
+| 14 | Driver mobile web portal and roadside manifest | Phase 13 | planned |
+| 15 | Real time fleet telematics and journey tracking | Phase 14 | planned |
 
 ## Foundations
 
@@ -205,10 +207,30 @@ Request workflow for private Toyota Sienna charters, intercity corporate transpo
 - [x] Test it: `/test charter and corporate logistics`
 [Spec 0019](../specs/0019-charter-and-corporate-logistics.md) · code in `apps/web/src/app/(public)/charter`, `apps/web/src/app/(public)/corporate`, `apps/web/src/app/(admin)/admin/requests`
 
-### 13. SEO landing pages and launch preparation · needs a decision
+### 13. SEO landing pages and launch preparation · in-progress
 Dynamic corridor landing pages, XML sitemaps, structured metadata, rate limiting, and production readiness checks.
 **Done when:** search engines index key corridor routes (such as Enugu to Abuja), Open Graph cards render cleanly, and route security audits pass.
-- [ ] Design it (spec): `/architect seo landing pages and launch preparation`
+- [x] Design it (spec): `/architect seo landing pages and launch preparation`
+- [ ] Build it: `/develop seo landing pages and launch preparation`
+   - [ ] Define corridor SEO profiles, schema types, and metadata registry (AC-1, AC-2)
+   - [ ] Implement dynamic corridor landing page `/routes/[corridor]` with booking widget and FAQ schema (AC-1, AC-2, AC-3)
+   - [ ] Build edge Open Graph image generator `/routes/[corridor]/opengraph-image` (AC-4)
+   - [ ] Implement dynamic `sitemap.ts` and `robots.ts` with private route exclusions (AC-5, AC-6)
+   - [ ] Configure production HTTP security headers and CSP in `next.config.mjs` (AC-7)
+   - [ ] Implement system healthcheck endpoint `/api/health` with database ping (AC-8)
+- [ ] Verify it: `/check verify seo landing pages and launch preparation`
+- [ ] Test it: `/test seo landing pages and launch preparation`
+[Spec 0020](../specs/0020-seo-landing-pages-and-launch-preparation.md) · code in `apps/web/src/app/(public)/routes`, `apps/web/src/app/sitemap.ts`, `apps/web/src/app/robots.ts`, `apps/web/src/app/api/health`, `apps/web/next.config.mjs`
+
+### 14. Driver mobile web portal and roadside manifest · planned
+Driver facing mobile web application for digital manifest verification, passenger boarding marks, departure status, and roadside incident reporting.
+**Done when:** assigned drivers can authenticate via mobile phone number, access their daily passenger manifest, mark boardings, and record arrival times.
+- [ ] Design it (spec): `/architect driver mobile web portal and roadside manifest`
+
+### 15. Real time fleet telematics and journey tracking · planned
+Live transit tracking, GPS coordinates, estimated arrival calculation, and emergency roadside breakdown assistance for passengers and operations staff.
+**Done when:** travelers can view a live journey timeline showing vehicle transit progress between terminals and estimated arrival times.
+- [ ] Design it (spec): `/architect real time fleet telematics and journey tracking`
 
 ## Deferred
 Out of scope for the initial release passes:
