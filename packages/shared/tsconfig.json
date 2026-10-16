@@ -6,8 +6,17 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "declaration": true,
-    "esModuleInterop": true
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["../../apps/web/src/*"],
+      "@web/*": ["../../apps/web/src/*"],
+      "@atm/shared": ["./src/index.ts"],
+      "@atm/db": ["../db/src/index.ts"]
+    }
   },
   "include": ["src/**/*", "tests/**/*"]
 }

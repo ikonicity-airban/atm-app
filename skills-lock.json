@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "skills": {
+    "architect": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/architect/SKILL.md",
+      "computedHash": "66856595ec9fd2477534954ff9ee1f0b91c537eabbce0b4b9a19f69329c02f72"
+    },
+    "audit": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/audit/SKILL.md",
+      "computedHash": "f388e74b95dcfea40615dcce28223b9166e9213867ac35e9971b549b7cda1eae"
+    },
+    "check": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/check/SKILL.md",
+      "computedHash": "59055fb74dd47dc1443cbdf970152d614e81372dd51aa636159eb3246a627dd8"
+    },
+    "debug": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/debug/SKILL.md",
+      "computedHash": "fa8f950ff8f78b45b5f665d889bc0df9f93b9784deca6dfc588ab08e23152f0e"
+    },
+    "develop": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/develop/SKILL.md",
+      "computedHash": "151812557fd511f80196653d0dae0efc878558cc96e962857f2710ed98789573"
+    },
+    "document": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/document/SKILL.md",
+      "computedHash": "a47c5d29a1263d987c2fa05dbc993a5276aaf6c4ddc54fbd329463a5f3a1aa77"
+    },
+    "drizzle-orm": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "drizzle-orm/SKILL.md",
+      "computedHash": "6bbe7c6fe2dd98e505b27d09fe559075a9da64783dca825daaaaf235bbcc2d8b"
+    },
+    "scope": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scope/SKILL.md",
+      "computedHash": "737c19451b3d0e08edf9560b195a864d1a4006e4f70760339ddc3b2d9b6b6447"
+    },
+    "sync": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/sync/SKILL.md",
+      "computedHash": "5986c38a23bbb14f82c018862ff0a601f3f20b4a8a1f429e9731b4da6742a765"
+    },
+    "tailwindcss": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "tailwindcss/SKILL.md",
+      "computedHash": "153aabb1099bd04c9a065b5ce86741ce5f991646a998efbcc1c3cdd057b15b06"
+    },
+    "test": {
+      "source": "jsmastery-pro/skills",
+      "sourceType": "github",
+      "skillPath": "skills/test/SKILL.md",
+      "computedHash": "6b742c465b3e9cec898bf3621ec555faefb41fdcc0cbbf43ec0a6041fbdcb6be"
+    },
+    "turborepo": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "turborepo/SKILL.md",
+      "computedHash": "73a11ad3de673223737a6ddf6de29f906e6f908e94077451b5a9075ef2afef17"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "computedHash": "10eb4ec94577b79ae98c63ce3e7f35f8a6a06436a4011bff083b397de6960eeb"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "6b526d013e28073246a36f99b529bc43745d30832ecfa8217b359c34f260ca6b"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
+    },
+    "zod-schema-validation": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "zod-schema-validation/SKILL.md",
+      "computedHash": "6330fa83f34790e3687336bf240797f63f49287701da00a6501b9dd938505baf"
+    },
+    "antigravity-design-expert": {
+      "source": "local/skills",
+      "sourceType": "local",
+      "skillPath": "skills/antigravity-design-expert/SKILL.md"
+    },
+    "ui-skills-root": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-skills-root/SKILL.md"
+    },
+    "improve-ui": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "skillPath": "skills/improve-ui/SKILL.md"
+    },
+    "improve-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/improve-animations/SKILL.md"
+    },
+    "google-stitch": {
+      "source": "google-labs/stitch",
+      "sourceType": "github",
+      "skillPath": "skills/google-stitch/SKILL.md"
+    }
+  }
+}

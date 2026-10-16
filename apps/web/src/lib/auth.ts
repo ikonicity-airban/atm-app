@@ -29,48 +29,82 @@ export interface BetterAuthConfig {
   baseURL: string;
 }
 
-// In-memory / session stub for Phase 0 scaffold
+// In-memory / session store
 let currentSession: AuthSession | null = null;
+
+// Initialize from localStorage if running in browser
+if (typeof window !== 'undefined') {
+  try {
+    const stored = window.localStorage.getItem('atm_auth_session');
+    if (stored) {
+      currentSession = JSON.parse(stored);
+    }
+  } catch {
+    // Ignore storage parse issues
+  }
+}
 
 export const auth = {
   async getSession(): Promise<AuthSession | null> {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = window.localStorage.getItem('atm_auth_session');
+        if (stored) {
+          currentSession = JSON.parse(stored);
+        }
+      } catch {
+        // Ignore
+      }
+    }
     return currentSession;
+  },
+
+  async setSession(user: { id: string; email: string; name: string; role: UserRole; image?: string | null }): Promise<AuthSession> {
+    const session: AuthSession = {
+      user,
+      session: {
+        id: `sess-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
+      },
+    };
+    currentSession = session;
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.setItem('atm_auth_session', JSON.stringify(session));
+      } catch {
+        // Ignore
+      }
+    }
+    return session;
   },
 
   async setDevStaffSession() {
-    currentSession = {
-      user: {
-        id: 'user-staff-dev-01',
-        email: 'admin@atmnigeria.com',
-        name: 'Ascent Operations Lead',
-        role: 'staff',
-      },
-      session: {
-        id: 'sess-dev-01',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-      },
-    };
-    return currentSession;
+    return this.setSession({
+      id: 'user-staff-dev-01',
+      email: 'admin@atmnigeria.com',
+      name: 'Ascent Operations Lead',
+      role: 'staff',
+    });
   },
 
   async setDevCustomerSession() {
-    currentSession = {
-      user: {
-        id: 'user-cust-dev-01',
-        email: 'customer@example.com',
-        name: 'Chioma Okeke',
-        role: 'customer',
-      },
-      session: {
-        id: 'sess-dev-02',
-        expiresAt: new Date(Date.now() + 86400000).toISOString(),
-      },
-    };
-    return currentSession;
+    return this.setSession({
+      id: 'user-cust-dev-01',
+      email: 'customer@example.com',
+      name: 'Chioma Okeke',
+      role: 'customer',
+    });
   },
 
   async signOut() {
     currentSession = null;
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.removeItem('atm_auth_session');
+      } catch {
+        // Ignore
+      }
+    }
   },
 };
 

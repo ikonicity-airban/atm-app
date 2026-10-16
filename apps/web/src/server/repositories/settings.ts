@@ -31,7 +31,7 @@ const STATIC_SETTINGS: Record<string, any> = {
 export class StaticSettingsRepository implements ISettingsRepository {
   async getBookingSettings(): Promise<BookingSettings> {
     return {
-      holdMinutes: STATIC_SETTINGS['booking.holdMinutes'] ?? 10,
+      holdMinutes: STATIC_SETTINGS['booking.holdMinutes'] ?? 15,
       maxAdvanceDays: STATIC_SETTINGS['booking.maxAdvanceDays'] ?? 30,
       cutoffMinutes: STATIC_SETTINGS['booking.cutoffMinutes'] ?? 60,
     };

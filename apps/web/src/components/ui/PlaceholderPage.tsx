@@ -20,7 +20,7 @@ export function PlaceholderPage({
   children,
 }: PlaceholderPageProps) {
   return (
-    <div className="py-8 px-4 sm:px-6 max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-12 sm:pb-16">
       {/* Title is plain typography on background (Hard ban: never wrap titles in a pill, badge, or card) */}
       <div className="mb-6">
         {category && (
@@ -28,19 +28,19 @@ export function PlaceholderPage({
             {category}
           </span>
         )}
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight text-balance">
           {title}
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-slate-600">
+        <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed text-pretty">
           {subtitle}
         </p>
       </div>
 
-      <div className="border border-slate-200 rounded-lg p-6 sm:p-8 bg-slate-50/50">
+      <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 bg-slate-50/50 shadow-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
           <div>
             <span className="text-xs font-mono text-slate-500">Route:</span>
-            <code className="ml-2 text-xs font-mono bg-white px-2 py-1 rounded border border-slate-200 text-slate-800">
+            <code className="ml-2 text-xs font-mono bg-white px-2.5 py-1 rounded-md border border-slate-200 text-slate-800">
               {routePath}
             </code>
           </div>
@@ -59,7 +59,7 @@ export function PlaceholderPage({
                 <button
                   type="button"
                   onClick={onAction}
-                  className="mt-4 px-4 py-2 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded transition-colors"
+                  className="mt-4 px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-xs min-h-[44px] inline-flex items-center justify-center cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ca2484] focus-visible:ring-offset-2"
                 >
                   {actionText}
                 </button>

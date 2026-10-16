@@ -6,7 +6,9 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "declaration": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
     "esModuleInterop": true
   },
   "include": ["src/**/*"]

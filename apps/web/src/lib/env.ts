@@ -7,6 +7,8 @@ const envSchema = z.object({
   BETTER_AUTH_URL: z.string().url().optional().default('http://localhost:3000'),
   PAYSTACK_SECRET_KEY: z.string().optional().default(''),
   PAYSTACK_PUBLIC_KEY: z.string().optional().default(''),
+  PAYSTACK_WEBHOOK_SECRET: z.string().optional().default(''),
+  TICKET_SIGNING_SECRET: z.string().optional().default('atm-dev-ticket-secret-key-32b'),
   TERMII_API_KEY: z.string().optional().default(''),
   TERMII_SENDER_ID: z.string().optional().default('ATMNigeria'),
   DATA_SOURCE: z.enum(['db', 'static']).default('static'),

@@ -223,14 +223,27 @@ export interface DbPayment {
 export interface DbCancellation {
   id: string; // UUID
   bookingId: string;
+  ticketId: string | null; // Null if entire booking cancelled, or specific ticket UUID
   customerId: string;
-  feeKobo: number;
-  refundKobo: number;
   reason: string;
+  cancelledSeatsCount: number;
+  totalFareCancelledKobo: number;
+  cancellationFeeKobo: number;
+  refundKobo: number;
+  disbursementMethod: 'atm_credit' | 'paystack_reversal';
+  paystackRefundId: string | null;
   processedByStaffId: string | null;
-  status: 'requested' | 'approved' | 'refunded' | 'rejected';
+  status: 'requested' | 'approved' | 'refunded' | 'rejected' | 'completed' | 'pending_gateway' | 'failed';
   createdAt: string;
   updatedAt: string;
+}
+
+export interface DbRateLimitAttempt {
+  id: string; // UUID
+  key: string; // Unique, e.g. 'lookup:ip:phone_hash'
+  attemptCount: number;
+  lockedUntil: string | null; // ISO UTC timestamp
+  lastAttemptAt: string; // ISO UTC timestamp
 }
 
 export interface DbCreditLedger {
@@ -241,6 +254,38 @@ export interface DbCreditLedger {
   reason: string;
   referenceBookingId: string | null;
   createdAt: string;
+}
+
+export interface DbCompanionPassenger {
+  id: string; // UUID
+  customerId: string; // FK -> DbCustomer.id
+  fullName: string;
+  gender: 'male' | 'female' | 'other';
+  phone: string; // E.164 format
+  isDefaultNextOfKin: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DbAuthVerificationToken {
+  id: string; // UUID
+  identifier: string; // Phone or email
+  token: string; // Hashed code
+  type: 'phone_otp' | 'email_verify' | 'password_reset' | 'two_factor';
+  expiresAt: string; // ISO UTC
+  usedAt: string | null;
+  attempts: number;
+  createdAt: string;
+}
+
+export interface DbUserTwoFactor {
+  id: string; // UUID
+  userId: string;
+  secret: string; // Base32 TOTP secret or SMS setting
+  enabled: boolean;
+  backupCodesJson: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface DbParcel {
@@ -260,11 +305,16 @@ export interface DbParcel {
   fragile: boolean;
   declaredValueKobo: number | null;
   feeKobo: number;
+  insuranceFeeKobo?: number;
+  totalFeeKobo?: number;
+  pickupOtp?: string | null;
+  paymentMethod?: 'online' | 'pay_on_dropoff';
   status:
     | 'booked'
     | 'received_at_origin'
     | 'in_transit'
     | 'arrived_at_destination'
+    | 'ready_for_pickup'
     | 'out_for_delivery'
     | 'delivered'
     | 'cancelled'

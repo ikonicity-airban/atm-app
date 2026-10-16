@@ -26,9 +26,9 @@ export default function TerminalsPage() {
       <div className="space-y-12">
         {/* City-grouped Terminal Listings */}
         {groups.map((group) => (
-          <section key={group.city} className="space-y-4">
+          <section key={group.city} className="scroll-mt-28 space-y-4">
             <div className="border-b border-slate-200 pb-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight text-balance">
                 {group.city} Terminals
               </h2>
               <p className="text-xs text-slate-500">{group.state}</p>

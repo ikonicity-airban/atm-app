@@ -2,6 +2,15 @@ import { z } from 'zod';
 import { normalisePhone, isValidNigerianPhone } from '../utils/phone.ts';
 export * from './search.ts';
 export * from './booking.ts';
+export * from './payment.ts';
+export * from './cancellation.ts';
+export * from './courier.ts';
+export * from './dispatch.ts';
+export * from './fleet.ts';
+export * from './pricing.ts';
+export * from './inquiries.ts';
+export * from './auth.ts';
+export * from './customer.ts';
 
 const phoneSchema = z
   .string()

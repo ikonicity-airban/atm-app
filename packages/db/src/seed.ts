@@ -272,7 +272,7 @@ export async function runSeed(): Promise<SeedReport> {
   const defaultSettings = [
     {
       key: 'booking.holdMinutes',
-      value: { holdMinutes: 10 },
+      value: { holdMinutes: 15 },
     },
     {
       key: 'booking.maxAdvanceDays',

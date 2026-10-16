@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Ascent Transport Management</title>
+  <desc id="desc">ATM logo with a purple ascent line, ATM monogram, and clearly legible company name.</desc>
+
+  <!-- Ascent line -->
+  <g fill="none" stroke="#4B075F" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M165 310 C220 215 310 180 430 180 C535 180 610 135 690 78 C795 3 930 20 1035 45 C1135 69 1220 105 1310 150" stroke-width="24"/>
+    <path d="M170 310 C142 345 136 385 145 430" stroke-width="24"/>
+  </g>
+
+  <!-- Monogram -->
+  <text x="700" y="535" fill="#4B075F" font-family="Arial, Helvetica, sans-serif" font-size="360" font-weight="800" letter-spacing="-24">ATM</text>
+
+  <!-- Legibility divider -->
+  <path d="M190 620 H1410" stroke="#4B075F" stroke-width="7" opacity="0.28"/>
+
+  <!-- Company name: large, bold, and spaced for clear website rendering -->
+  <text x="800" y="755" text-anchor="middle" fill="#4B075F" font-family="Arial, Helvetica, sans-serif" font-size="60" font-weight="700" letter-spacing="8">ASCENT TRANSPORT MANAGEMENT</text>
+</svg>

@@ -12,9 +12,6 @@ import { Accordion } from '../../../../components/ui/Accordion.tsx';
 import { PageShell } from '../../../../components/layout/Templates.tsx';
 import { Clock, MapPin, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 
-export function generateStaticParams() {
-  return STATIC_ROUTES.map((r) => ({ slug: r.slug }));
-}
 
 export default function RouteDetailPage({
   params,

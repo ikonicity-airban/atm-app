@@ -45,6 +45,7 @@ export type ParcelStatus =
   | 'received_at_origin'
   | 'in_transit'
   | 'arrived_at_destination'
+  | 'ready_for_pickup'
   | 'out_for_delivery'
   | 'delivered'
   | 'cancelled'
@@ -88,3 +89,9 @@ export interface CancellationPolicy {
   rules: CancellationPolicyRule[];
   noRefundHoursBefore: number; // e.g. 2 hours before
 }
+
+export * from './dispatch.ts';
+export * from './fleet.ts';
+export * from './pricing.ts';
+export * from './inquiries.ts';
+export * from './customer.ts';

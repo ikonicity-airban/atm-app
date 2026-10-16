@@ -4,7 +4,8 @@ export const PARCEL_STATUS_FLOW: Record<ParcelStatus, readonly ParcelStatus[]> =
   booked: ['received_at_origin', 'cancelled'],
   received_at_origin: ['in_transit', 'cancelled'],
   in_transit: ['arrived_at_destination', 'returned'],
-  arrived_at_destination: ['out_for_delivery', 'delivered', 'returned'],
+  arrived_at_destination: ['ready_for_pickup', 'out_for_delivery', 'delivered', 'returned'],
+  ready_for_pickup: ['delivered', 'returned'],
   out_for_delivery: ['delivered', 'arrived_at_destination', 'returned'],
   delivered: [],
   cancelled: [],
@@ -48,6 +49,15 @@ export const TICKET_STATUS_FLOW: Record<TicketStatus, readonly TicketStatus[]> =
   expired: [],
 } as const;
 
+export function canTransitionTicketStatus(
+  current: TicketStatus,
+  target: TicketStatus
+): boolean {
+  if (current === target) return true;
+  const allowed = TICKET_STATUS_FLOW[current];
+  return allowed ? (allowed as readonly TicketStatus[]).includes(target) : false;
+}
+
 export const TRIP_STATUS_FLOW: Record<TripStatus, readonly TripStatus[]> = {
   scheduled: ['boarding', 'delayed', 'cancelled'],
   boarding: ['in_transit', 'delayed', 'cancelled'],
@@ -56,3 +66,12 @@ export const TRIP_STATUS_FLOW: Record<TripStatus, readonly TripStatus[]> = {
   completed: [],
   cancelled: [],
 } as const;
+
+export function canTransitionTripStatus(
+  current: TripStatus,
+  target: TripStatus
+): boolean {
+  if (current === target) return true;
+  const allowed = TRIP_STATUS_FLOW[current];
+  return allowed ? allowed.includes(target) : false;
+}

@@ -16,6 +16,7 @@ import {
 import { env } from '../../lib/env.ts';
 import { db } from '../../lib/db.ts';
 import { settingsRepository } from './settings.ts';
+import { pricingRepository } from './pricing.ts';
 
 export interface TripSearchResult {
   id: string;
@@ -62,6 +63,7 @@ export interface SearchTripsQuery {
 export interface ITripRepository {
   searchTrips(query: SearchTripsQuery): Promise<TripSearchResult[]>;
   getTripById(id: string): Promise<TripSearchResult | null>;
+  getAllTrips(date?: string): Promise<TripSearchResult[]>;
 }
 
 // Scheduled departure templates for all served corridors
@@ -286,7 +288,7 @@ export class StaticTripRepository implements ITripRepository {
             photoUrl: '/placeholder-vehicle.svg',
             features: ['5 Seats', 'Air Conditioning', 'Extra Legroom', 'Refreshments'],
           },
-          fareKobo: item.fareKobo,
+          fareKobo: pricingRepository.getEffectiveFare(item.routeId, date),
           isPlaceholder: true,
           seatsLeft: availableSeats,
           bookable: isCurrentlyBookable,
@@ -299,15 +301,61 @@ export class StaticTripRepository implements ITripRepository {
   }
 
   async getTripById(id: string): Promise<TripSearchResult | null> {
-    // Extract date and schedule from ID if generated: trip-{schId}-{date}
     const parts = id.split('-');
-    const date = parts.slice(-3).join('-');
+    const potentialDate = parts.slice(-3).join('-');
+    const date = /^\d{4}-\d{2}-\d{2}$/.test(potentialDate)
+      ? potentialDate
+      : new Date().toISOString().split('T')[0] || '2026-10-16';
+
     const all = await this.searchTrips({
       originCity: 'Enugu',
       destinationCity: 'Abuja',
-      date: date || '2026-10-15',
+      date,
     });
-    return all.find((t) => t.id === id) ?? all[0] ?? null;
+    const found = all.find((t) => t.id === id) ?? all[0];
+    if (found) return found;
+
+    const orig = getTerminalById('term-enugu-ogui');
+    const dest = getTerminalById('term-abuja-utako');
+    return {
+      id,
+      scheduleId: 'sch-enugu-abuja-morning',
+      routeId: 'route-enugu-abuja',
+      routeTitle: `${orig.name} → ${dest.name}`,
+      distanceKm: 420,
+      durationHours: 7.5,
+      originTerminal: orig,
+      destinationTerminal: dest,
+      departureTimeUtc: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+      vehicle: {
+        model: 'Toyota Sienna',
+        passengerCapacity: 5,
+        photoUrl: '/placeholder-vehicle.svg',
+        features: ['5 Seats', 'Air Conditioning', 'Extra Legroom', 'Refreshments'],
+      },
+      fareKobo: 3200000,
+      isPlaceholder: true,
+      seatsLeft: 5,
+      bookable: true,
+    };
+  }
+
+  async getAllTrips(date?: string): Promise<TripSearchResult[]> {
+    const targetDate = date || new Date().toISOString().split('T')[0] || '2026-10-16';
+    const cityPairs = [
+      { originCity: 'Enugu', destinationCity: 'Abuja' },
+      { originCity: 'Abuja', destinationCity: 'Enugu' },
+      { originCity: 'Enugu', destinationCity: 'Lagos' },
+      { originCity: 'Lagos', destinationCity: 'Enugu' },
+      { originCity: 'Lagos', destinationCity: 'Owerri' },
+      { originCity: 'Owerri', destinationCity: 'Lagos' },
+    ];
+    const results: TripSearchResult[] = [];
+    for (const pair of cityPairs) {
+      const trips = await this.searchTrips({ ...pair, date: targetDate });
+      results.push(...trips);
+    }
+    return results;
   }
 }
 
@@ -329,6 +377,10 @@ export class DrizzleTripRepository implements ITripRepository {
 
   async getTripById(id: string): Promise<TripSearchResult | null> {
     return this.fallback.getTripById(id);
+  }
+
+  async getAllTrips(date?: string): Promise<TripSearchResult[]> {
+    return this.fallback.getAllTrips(date);
   }
 }
 

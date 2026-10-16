@@ -15,7 +15,7 @@ export async function runMigrations() {
     console.log('No migrations directory found.');
     return;
   }
-  const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
+  const files = fs.readdirSync(migrationsDir).filter((f: string) => f.endsWith('.sql')).sort();
   console.log(`Found ${files.length} migration file(s):`);
   for (const file of files) {
     console.log(`- ${file} (ready to apply)`);

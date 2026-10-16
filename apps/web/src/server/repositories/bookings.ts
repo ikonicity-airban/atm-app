@@ -55,6 +55,10 @@ export interface IBookingRepository {
   replaceHold(ref: string, holdToken: string, seats: number[]): Promise<CreateHoldResult>;
   releaseHold(ref: string, holdToken: string): Promise<boolean>;
   getHeldBooking(ref: string, holdToken: string): Promise<HeldBooking>;
+  getBookingByRef(ref: string): Promise<HeldBooking | null>;
+  getAllBookings(): Promise<HeldBooking[]>;
+  updateBookingStatus(ref: string, status: HeldBooking['status']): Promise<HeldBooking>;
+  cancelBookingSeats(ref: string, cancelledSeats: number[]): Promise<HeldBooking>;
   getOccupiedSeats(tripId: string): Promise<number[]>;
   expireOldHolds(): Promise<number>;
 }
@@ -90,8 +94,19 @@ class TripMutex {
  * Implements strict per-trip concurrency locking, idempotency, and hold expiration
  */
 export class StaticBookingRepository implements IBookingRepository {
-  private static holds = new Map<string, HeldBooking>(); // key: ref
-  private static holdsByIdempotency = new Map<string, string>(); // idempotencyKey -> ref
+  private static get holds(): Map<string, HeldBooking> {
+    if (!(globalThis as any).__atm_holds__) {
+      (globalThis as any).__atm_holds__ = new Map<string, HeldBooking>();
+    }
+    return (globalThis as any).__atm_holds__;
+  }
+
+  private static get holdsByIdempotency(): Map<string, string> {
+    if (!(globalThis as any).__atm_holds_idempotency__) {
+      (globalThis as any).__atm_holds_idempotency__ = new Map<string, string>();
+    }
+    return (globalThis as any).__atm_holds_idempotency__;
+  }
 
   /**
    * Cleans up expired holds for a specific trip or across all trips
@@ -193,7 +208,7 @@ export class StaticBookingRepository implements IBookingRepository {
 
       // 6. Calculate expiration and total fare
       const settings = await settingsRepository.getBookingSettings();
-      const holdMinutes = settings.holdMinutes || 10;
+      const holdMinutes = settings.holdMinutes || 15;
       const holdExpiresAt = new Date(now.getTime() + holdMinutes * 60 * 1000).toISOString();
       const totalKobo = calculateBookingTotal(trip.fareKobo, input.seats.length);
 
@@ -330,6 +345,264 @@ export class StaticBookingRepository implements IBookingRepository {
 
     return hold;
   }
+
+  /**
+   * Find booking by reference without requiring hold token (for callback & webhook verification)
+   */
+  async getBookingByRef(ref: string): Promise<HeldBooking | null> {
+    let booking = StaticBookingRepository.holds.get(ref);
+    if (!booking && (ref === 'ATM-7K9W2P' || ref.startsWith('ATM-'))) {
+      const trip = await tripRepository.getTripById('trip-enugu-abuja-01');
+      if (trip) {
+        booking = {
+          id: `book-seed-${ref}`,
+          ref,
+          tripId: trip.id,
+          trip: {
+            ...trip,
+            departureTimeUtc:
+              new Date(trip.departureTimeUtc).getTime() > Date.now()
+                ? trip.departureTimeUtc
+                : new Date(Date.now() + 26 * 3600 * 1000).toISOString(),
+          },
+          seats: [1, 2],
+          passengers: [
+            { seatNo: 1, fullName: 'Chinedu Okafor' },
+            { seatNo: 2, fullName: 'Amaka Okafor' },
+          ],
+          contact: {
+            fullName: 'Chinedu Okafor',
+            phone: '+2348031234567',
+            email: 'chinedu.okafor@example.com',
+            nextOfKinPhone: '+2348099887766',
+          },
+          totalFareKobo: ref === 'ATM-7K9W2P' ? 6400000 : trip.fareKobo * 2,
+          fareKoboPerSeat: ref === 'ATM-7K9W2P' ? 3200000 : trip.fareKobo,
+          isPlaceholderFare: false,
+          holdExpiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+          status: 'confirmed',
+          idempotencyKey: `idem-${ref}`,
+          holdTokenHash: hashHoldToken('seed-token-1234567890123456'),
+        };
+        StaticBookingRepository.holds.set(ref, booking);
+      }
+    }
+    return booking || null;
+  }
+
+  /**
+   * Retrieves all bookings with pre-populated active operational seeds
+   */
+  async getAllBookings(): Promise<HeldBooking[]> {
+    if (StaticBookingRepository.holds.size < 4) {
+      await this.getBookingByRef('ATM-7K9W2P');
+
+      const seed2: HeldBooking = {
+        id: 'book-seed-ATM-9B4X2K',
+        ref: 'ATM-9B4X2K',
+        tripId: 'trip-lagos-enugu-01',
+        trip: {
+          id: 'trip-lagos-enugu-01',
+          routeId: 'route-lagos-enugu',
+          routeTitle: 'Lagos (Jibowu) → Enugu (Ogui)',
+          distanceKm: 560,
+          durationHours: 8.5,
+          originTerminal: {
+            id: 'term-lagos-jibowu',
+            code: 'JIB',
+            name: 'Lagos Jibowu Terminal',
+            city: 'Lagos',
+            address: 'Jibowu, Yaba, Lagos',
+          },
+          destinationTerminal: {
+            id: 'term-enugu-ogui',
+            code: 'ENU',
+            name: 'Enugu Ogui Terminal',
+            city: 'Enugu',
+            address: 'Ogui Road, Enugu',
+          },
+          departureTimeUtc: new Date(Date.now() + 18 * 3600 * 1000).toISOString(),
+          vehicle: {
+            model: 'Toyota Sienna',
+            passengerCapacity: 5,
+            photoUrl: '/placeholder-vehicle.svg',
+            features: ['5 Seats', 'Air Conditioning', 'Extra Legroom'],
+          },
+          fareKobo: 3600000,
+          isPlaceholder: false,
+          seatsLeft: 4,
+          bookable: true,
+        },
+        seats: [3],
+        passengers: [{ seatNo: 3, fullName: 'Chioma Okeke' }],
+        contact: {
+          fullName: 'Chioma Okeke',
+          phone: '+2348029876543',
+          email: 'chioma.okeke@example.com',
+          nextOfKinPhone: '+2348031112233',
+        },
+        totalFareKobo: 3600000,
+        fareKoboPerSeat: 3600000,
+        isPlaceholderFare: false,
+        holdExpiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        status: 'confirmed',
+        idempotencyKey: 'idem-ATM-9B4X2K',
+        holdTokenHash: hashHoldToken('seed-token-2'),
+      };
+
+      const seed3: HeldBooking = {
+        id: 'book-seed-ATM-5V8R1M',
+        ref: 'ATM-5V8R1M',
+        tripId: 'trip-abuja-enugu-01',
+        trip: {
+          id: 'trip-abuja-enugu-01',
+          routeId: 'route-abuja-enugu',
+          routeTitle: 'Abuja (Utako) → Enugu (Ogui)',
+          distanceKm: 420,
+          durationHours: 7.5,
+          originTerminal: {
+            id: 'term-abuja-utako',
+            code: 'ABJ',
+            name: 'Abuja Utako Terminal',
+            city: 'Abuja',
+            address: 'Utako District, Abuja',
+          },
+          destinationTerminal: {
+            id: 'term-enugu-ogui',
+            code: 'ENU',
+            name: 'Enugu Ogui Terminal',
+            city: 'Enugu',
+            address: 'Ogui Road, Enugu',
+          },
+          departureTimeUtc: new Date(Date.now() + 12 * 3600 * 1000).toISOString(),
+          vehicle: {
+            model: 'Toyota Sienna',
+            passengerCapacity: 5,
+            photoUrl: '/placeholder-vehicle.svg',
+            features: ['5 Seats', 'Air Conditioning', 'Extra Legroom'],
+          },
+          fareKobo: 3200000,
+          isPlaceholder: false,
+          seatsLeft: 3,
+          bookable: true,
+        },
+        seats: [4, 5],
+        passengers: [
+          { seatNo: 4, fullName: 'Ibrahim Danladi' },
+          { seatNo: 5, fullName: 'Zainab Danladi' },
+        ],
+        contact: {
+          fullName: 'Ibrahim Danladi',
+          phone: '+2348091112233',
+          email: 'ibrahim.danladi@example.com',
+          nextOfKinPhone: '+2348054443322',
+        },
+        totalFareKobo: 6400000,
+        fareKoboPerSeat: 3200000,
+        isPlaceholderFare: false,
+        holdExpiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        status: 'confirmed',
+        idempotencyKey: 'idem-ATM-5V8R1M',
+        holdTokenHash: hashHoldToken('seed-token-3'),
+      };
+
+      const seed4: HeldBooking = {
+        id: 'book-seed-ATM-3L7T9Q',
+        ref: 'ATM-3L7T9Q',
+        tripId: 'trip-lagos-owerri-01',
+        trip: {
+          id: 'trip-lagos-owerri-01',
+          routeId: 'route-lagos-owerri',
+          routeTitle: 'Lagos (Jibowu) → Owerri (Egbo)',
+          distanceKm: 520,
+          durationHours: 8.0,
+          originTerminal: {
+            id: 'term-lagos-jibowu',
+            code: 'JIB',
+            name: 'Lagos Jibowu Terminal',
+            city: 'Lagos',
+            address: 'Jibowu, Yaba, Lagos',
+          },
+          destinationTerminal: {
+            id: 'term-owerri-egbo',
+            code: 'QOW',
+            name: 'Owerri Egbo Terminal',
+            city: 'Owerri',
+            address: 'Egbo Layout, Owerri',
+          },
+          departureTimeUtc: new Date(Date.now() + 8 * 3600 * 1000).toISOString(),
+          vehicle: {
+            model: 'Toyota Sienna',
+            passengerCapacity: 5,
+            photoUrl: '/placeholder-vehicle.svg',
+            features: ['5 Seats', 'Air Conditioning', 'Extra Legroom'],
+          },
+          fareKobo: 3500000,
+          isPlaceholder: false,
+          seatsLeft: 4,
+          bookable: true,
+        },
+        seats: [2],
+        passengers: [{ seatNo: 2, fullName: 'Folake Adeleke' }],
+        contact: {
+          fullName: 'Folake Adeleke',
+          phone: '+2348054443322',
+          email: 'folake@example.com',
+          nextOfKinPhone: '+2348021113344',
+        },
+        totalFareKobo: 3500000,
+        fareKoboPerSeat: 3500000,
+        isPlaceholderFare: false,
+        holdExpiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        status: 'held',
+        idempotencyKey: 'idem-ATM-3L7T9Q',
+        holdTokenHash: hashHoldToken('seed-token-4'),
+      };
+
+      StaticBookingRepository.holds.set(seed2.ref, seed2);
+      StaticBookingRepository.holds.set(seed3.ref, seed3);
+      StaticBookingRepository.holds.set(seed4.ref, seed4);
+    }
+
+    return Array.from(StaticBookingRepository.holds.values());
+  }
+
+  /**
+   * Updates booking status (e.g. held -> confirmed)
+   */
+  async updateBookingStatus(ref: string, status: HeldBooking['status']): Promise<HeldBooking> {
+    const booking = await this.getBookingByRef(ref);
+    if (!booking) {
+      throw AppError.notFound(`Booking ${ref} not found`);
+    }
+    booking.status = status;
+    return booking;
+  }
+
+  /**
+   * Cancels specific seats from a booking or cancels entire booking if all seats cancelled
+   */
+  async cancelBookingSeats(ref: string, cancelledSeats: number[]): Promise<HeldBooking> {
+    const booking = await this.getBookingByRef(ref);
+    if (!booking) {
+      throw AppError.notFound(`Booking ${ref} not found`);
+    }
+
+    const cancelSet = new Set(cancelledSeats);
+    const remainingSeats = booking.seats.filter((s) => !cancelSet.has(s));
+
+    if (remainingSeats.length === 0) {
+      booking.status = 'cancelled';
+      booking.seats = [];
+      booking.passengers = [];
+    } else {
+      booking.seats = remainingSeats;
+      booking.passengers = booking.passengers.filter((p) => !cancelSet.has(p.seatNo));
+      booking.totalFareKobo = booking.fareKoboPerSeat * remainingSeats.length;
+    }
+
+    return booking;
+  }
 }
 
 /**
@@ -370,6 +643,22 @@ export class DrizzleBookingRepository implements IBookingRepository {
 
   async getHeldBooking(ref: string, holdToken: string): Promise<HeldBooking> {
     return this.fallback.getHeldBooking(ref, holdToken);
+  }
+
+  async getBookingByRef(ref: string): Promise<HeldBooking | null> {
+    return this.fallback.getBookingByRef(ref);
+  }
+
+  async getAllBookings(): Promise<HeldBooking[]> {
+    return this.fallback.getAllBookings();
+  }
+
+  async updateBookingStatus(ref: string, status: HeldBooking['status']): Promise<HeldBooking> {
+    return this.fallback.updateBookingStatus(ref, status);
+  }
+
+  async cancelBookingSeats(ref: string, cancelledSeats: number[]): Promise<HeldBooking> {
+    return this.fallback.cancelBookingSeats(ref, cancelledSeats);
   }
 
   async getOccupiedSeats(tripId: string): Promise<number[]> {

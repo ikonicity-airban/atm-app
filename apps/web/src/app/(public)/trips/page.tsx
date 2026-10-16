@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { SearchForm } from '../../../components/booking/SearchForm.tsx';
+import { SEOHead } from '../../../components/seo/SEOHead.tsx';
 import {
   TimeText,
   MoneyText,
   StatusBadge,
   SectionBanner,
 } from '../../../components/atm/AtmBlocks.tsx';
+import { PageShell } from '../../../components/layout/Templates.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
 import {
   tripRepository,
@@ -174,14 +176,20 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
   const canGoPrev = dateParam > todayLagos;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <PageShell width="compact" density="compact" className="pb-12 sm:pb-16 space-y-6 sm:space-y-8">
+      <SEOHead
+        title={`${fromParam} to ${toParam} Scheduled Sienna Trips | Ascent Transport`}
+        description={`Daily executive 5-passenger Toyota Sienna departures from ${fromParam} to ${toParam}. Real-time seat availability, departure times, and fixed kobo fares.`}
+        canonicalPath={`/trips?from=${encodeURIComponent(fromParam)}&to=${encodeURIComponent(toParam)}`}
+      />
+
       {/* 1. Header with Search Summary and Compact SearchForm */}
       <div className="space-y-4">
         <div>
           <span className="text-xs uppercase font-bold text-slate-500 tracking-wider block mb-1">
             Trip Results
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-balance">
             {fromParam} to {toParam}
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 mt-1 flex items-center gap-2">
@@ -497,6 +505,6 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           All Sienna departures leave strictly on schedule. Please report to your departure terminal 30 minutes prior to your trip time with your booking reference.
         </p>
       </SectionBanner>
-    </div>
+    </PageShell>
   );
 }

@@ -1,7 +1,100 @@
 @import "tailwindcss";
 
+@theme inline {
+  /* ---------------------------------------------------------------------------
+     Coss UI Semantic Tokens (Tailwind CSS v4 Contract)
+     --------------------------------------------------------------------------- */
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --font-mono: var(--font-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* ---------------------------------------------------------------------------
+     Ascent Transport Management Brand Palette (Primary Magenta/Purple)
+     --------------------------------------------------------------------------- */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-brand-950: var(--brand-950);
+
+  /* ---------------------------------------------------------------------------
+     Neutrals (Slate-calibrated)
+     --------------------------------------------------------------------------- */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+}
+
 @layer base {
   :root {
+    /* -------------------------------------------------------------------------
+       Font Variable Contract (Coss UI)
+       ------------------------------------------------------------------------- */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: 'Montserrat', var(--font-sans);
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    /* -------------------------------------------------------------------------
+       Radii Scale
+       ------------------------------------------------------------------------- */
+    --radius: 0.625rem;
+
     /* -------------------------------------------------------------------------
        Brand Palette (Primary Magenta/Purple)
        ------------------------------------------------------------------------- */
@@ -11,7 +104,7 @@
     --brand-300: #f5a7d7;
     --brand-400: #ed70bd;
     --brand-500: #df3ea1;
-    --brand-600: #ca2484; /* Primary Brand Accent */
+    --brand-600: #ca2484; /* Core Brand Accent */
     --brand-700: #aa1769;
     --brand-800: #8c1656;
     --brand-900: #741749;
@@ -33,7 +126,54 @@
     --neutral-950: #020617;
 
     /* -------------------------------------------------------------------------
-       Semantic Colors
+       Coss UI Semantic Tokens (Light Mode Default)
+       ------------------------------------------------------------------------- */
+    --background: #ffffff;
+    --foreground: #0f172a;
+
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+
+    --primary: #ca2484; /* Mapped directly to ATM Brand-600 */
+    --primary-foreground: #ffffff;
+
+    --secondary: --alpha(var(--color-black) / 4%);
+    --secondary-foreground: #0f172a;
+
+    --muted: --alpha(var(--color-black) / 4%);
+    --muted-foreground: #64748b;
+
+    --accent: #fdf2f9; /* Mapped directly to ATM Brand-50 */
+    --accent-foreground: #ca2484;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #b91c1c;
+
+    --success: #22c55e;
+    --success-foreground: #15803d;
+
+    --warning: #f59e0b;
+    --warning-foreground: #b45309;
+
+    --info: #0ea5e9;
+    --info-foreground: #0369a1;
+
+    --border: --alpha(var(--color-black) / 8%);
+    --input: --alpha(var(--color-black) / 10%);
+    --ring: #ca2484;
+
+    /* Semantic helper aliases for existing components */
+    --surface-card: var(--card);
+    --surface-card-foreground: var(--card-foreground);
+    --surface-muted: var(--neutral-50);
+    --surface-muted-foreground: var(--muted-foreground);
+    --border-strong: var(--neutral-300);
+
+    /* -------------------------------------------------------------------------
+       Semantic Colors (Palette-level)
        ------------------------------------------------------------------------- */
     --success-50: #f0fdf4;
     --success-100: #dcfce7;
@@ -56,32 +196,6 @@
     --info-700: #0369a1;
 
     /* -------------------------------------------------------------------------
-       Surfaces, Foreground, Borders, Rings (Light Mode Only)
-       ------------------------------------------------------------------------- */
-    --background: #ffffff;
-    --foreground: #0f172a;
-
-    --surface-card: #ffffff;
-    --surface-card-foreground: #0f172a;
-
-    --surface-muted: #f8fafc;
-    --surface-muted-foreground: #64748b;
-
-    --border: #e2e8f0;
-    --border-strong: #cbd5e1;
-    --input: #e2e8f0;
-    --ring: #ca2484;
-
-    /* -------------------------------------------------------------------------
-       Radii
-       ------------------------------------------------------------------------- */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.375rem;
-    --radius-lg: 0.5rem;
-    --radius-xl: 0.75rem;
-    --radius-full: 9999px;
-
-    /* -------------------------------------------------------------------------
        Elevation & Shadows
        ------------------------------------------------------------------------- */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -98,12 +212,6 @@
     --z-modal: 1050;
     --z-popover: 1060;
     --z-tooltip: 1070;
-
-    /* -------------------------------------------------------------------------
-       Fluid Typography Scale
-       ------------------------------------------------------------------------- */
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
   body {
@@ -128,7 +236,12 @@
   }
 }
 
-/* Minimum 44px touch targets */
+/* -----------------------------------------------------------------------------
+   Architectural Bans & Constraints
+   1. HARD BAN: No animate-pulse or pulsing keyframes anywhere.
+   2. HARD BAN: Titles must rest directly on backgrounds, never inside pills/cards.
+   3. Minimum 44px touch targets on all interactive elements.
+   ----------------------------------------------------------------------------- */
 .touch-target {
   min-height: 44px;
   min-width: 44px;

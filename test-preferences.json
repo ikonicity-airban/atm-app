@@ -1,0 +1,9 @@
+{
+  "tool": "node:test",
+  "gate": null,
+  "additionalTools": ["tsx"],
+  "e2eTool": "none",
+  "testDir": "packages/shared/tests",
+  "filePattern": "*.test.ts",
+  "packageManager": "pnpm"
+}

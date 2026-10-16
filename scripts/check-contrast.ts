@@ -69,7 +69,13 @@ export function runContrastCheck(): boolean {
   return allPassed;
 }
 
-if (typeof process !== 'undefined' && process.argv && process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
-  const success = runContrastCheck();
-  process.exit(success ? 0 : 1);
+if (typeof process !== 'undefined') {
+  const isDirectRun =
+    process.argv[1] &&
+    (process.argv[1].endsWith('check-contrast.ts') ||
+      import.meta.url.includes('check-contrast.ts'));
+  if (isDirectRun) {
+    const success = runContrastCheck();
+    process.exit(success ? 0 : 1);
+  }
 }

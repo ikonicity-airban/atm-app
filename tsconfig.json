@@ -18,7 +18,10 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": [
-        "./*"
+        "./apps/web/src/*"
+      ],
+      "@web/*": [
+        "./apps/web/src/*"
       ],
       "@atm/shared": [
         "./packages/shared/src/index.ts"
@@ -29,5 +32,10 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scratch"
+  ]
 }

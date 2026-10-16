@@ -1,128 +1,223 @@
 /**
- * NotificationProvider Interface & Implementations
- * Allows swapping between Termii, Resend, and Stub Providers
+ * Notification Service
+ * Dispatches automated SMS confirmation via Termii gateway with development stub logger fallback.
  */
 
-export interface SendMessageOptions {
-  recipient: string; // phone or email
-  message: string;
-  subject?: string;
-  channel: 'sms' | 'whatsapp' | 'email';
+import { formatTicketConfirmationSms, normalisePhone } from '@atm/shared';
+import type { DbNotification } from '@atm/db';
+import { env } from '../../lib/env.ts';
+
+export interface SendSmsParams {
+  recipientPhone: string;
+  bookingRef: string;
+  corridor: string;
+  departureTimeWAT: string;
+  seats: number[];
+  passengerCount: number;
 }
 
-export interface SendResult {
+export interface SendCancellationSmsParams {
+  recipientPhone: string;
+  bookingRef: string;
+  cancelledSeats: number[];
+  feeKobo: number;
+  refundKobo: number;
+  disbursementMethod: 'atm_credit' | 'paystack_reversal';
+}
+
+export interface SendSmsResult {
   success: boolean;
+  provider: 'termii' | 'stub';
   messageId: string;
-  provider: string;
-  timestamp: string;
+  body: string;
+  error?: string;
 }
 
-export interface NotificationProvider {
-  name: string;
-  sendSms(toPhone: string, message: string): Promise<SendResult>;
-  sendWhatsApp(toPhone: string, message: string): Promise<SendResult>;
-  sendEmail(toEmail: string, subject: string, htmlBody: string): Promise<SendResult>;
-}
-
-/**
- * Termii Provider implementation stub
- */
-export class TermiiNotificationProvider implements NotificationProvider {
-  public readonly name = 'termii';
+export class NotificationService {
+  private static notificationHistory: DbNotification[] = [];
 
   constructor(
-    private readonly apiKey: string,
-    private readonly senderId: string = 'ATMNigeria'
+    private readonly apiKey: string = env.TERMII_API_KEY || '',
+    private readonly senderId: string = env.TERMII_SENDER_ID || 'ATMNigeria'
   ) {}
 
-  async sendSms(toPhone: string, message: string): Promise<SendResult> {
-    // Stub implementation for Phase 0
-    console.log(`[Termii SMS to ${toPhone} via ${this.senderId}]: ${message}`);
+  /**
+   * Dispatches passenger ticket SMS confirmation
+   */
+  async sendBookingConfirmation(params: SendSmsParams): Promise<SendSmsResult> {
+    const normalised = normalisePhone(params.recipientPhone);
+    const body = formatTicketConfirmationSms({
+      bookingRef: params.bookingRef,
+      corridor: params.corridor,
+      departureTimeWAT: params.departureTimeWAT,
+      seats: params.seats,
+      passengerCount: params.passengerCount,
+    });
+
+    // If live Termii API key is provided, invoke Termii HTTP endpoint
+    if (this.apiKey && this.apiKey.length > 5) {
+      try {
+        const response = await fetch('https://api.ng.termii.com/api/sms/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: normalised.replace(/^\+/, ''), // Termii accepts 234... without leading +
+            from: this.senderId,
+            sms: body,
+            type: 'plain',
+            channel: 'generic',
+            api_key: this.apiKey,
+          }),
+        });
+
+        const data = await response.json();
+        const msgId = data?.message_id || `termii-${Date.now()}`;
+
+        const notificationRecord: DbNotification = {
+          id: crypto.randomUUID ? crypto.randomUUID() : `notif-${Date.now()}`,
+          channel: 'sms',
+          recipient: normalised,
+          subject: 'ATM Ticket Confirmation',
+          body,
+          provider: 'termii',
+          providerMessageId: msgId,
+          status: response.ok ? 'sent' : 'failed',
+          createdAt: new Date().toISOString(),
+        };
+
+        NotificationService.notificationHistory.push(notificationRecord);
+
+        return {
+          success: response.ok,
+          provider: 'termii',
+          messageId: msgId,
+          body,
+          error: !response.ok ? (data?.message || 'Termii dispatch failed') : undefined,
+        };
+      } catch (err) {
+        console.warn('[NotificationService] Termii API error, logging fallback stub:', err);
+      }
+    }
+
+    // Local stub fallback
+    const stubMessageId = `stub-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    console.log(`[SMS Stub to ${normalised} via ${this.senderId}]: "${body}"`);
+
+    const stubRecord: DbNotification = {
+      id: crypto.randomUUID ? crypto.randomUUID() : `notif-${Date.now()}`,
+      channel: 'sms',
+      recipient: normalised,
+      subject: 'ATM Ticket Confirmation',
+      body,
+      provider: 'stub',
+      providerMessageId: stubMessageId,
+      status: 'sent',
+      createdAt: new Date().toISOString(),
+    };
+
+    NotificationService.notificationHistory.push(stubRecord);
+
     return {
       success: true,
-      messageId: `termii-sms-${Date.now()}`,
-      provider: this.name,
-      timestamp: new Date().toISOString(),
+      provider: 'stub',
+      messageId: stubMessageId,
+      body,
     };
   }
 
-  async sendWhatsApp(toPhone: string, message: string): Promise<SendResult> {
-    // Stub implementation for Phase 0
-    console.log(`[Termii WhatsApp to ${toPhone}]: ${message}`);
+  /**
+   * Dispatches passenger ticket cancellation confirmation SMS
+   */
+  async sendCancellationConfirmation(params: SendCancellationSmsParams): Promise<SendSmsResult> {
+    const normalised = normalisePhone(params.recipientPhone);
+    const { formatCancellationConfirmationSms } = await import('@atm/shared');
+    const body = formatCancellationConfirmationSms({
+      bookingRef: params.bookingRef,
+      cancelledSeats: params.cancelledSeats,
+      feeKobo: params.feeKobo,
+      refundKobo: params.refundKobo,
+      disbursementMethod: params.disbursementMethod,
+    });
+
+    if (this.apiKey && this.apiKey.length > 5) {
+      try {
+        const response = await fetch('https://api.ng.termii.com/api/sms/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: normalised.replace(/^\+/, ''),
+            from: this.senderId,
+            sms: body,
+            type: 'plain',
+            channel: 'generic',
+            api_key: this.apiKey,
+          }),
+        });
+
+        const data = await response.json();
+        const msgId = data?.message_id || `termii-cancel-${Date.now()}`;
+
+        const notificationRecord: DbNotification = {
+          id: crypto.randomUUID ? crypto.randomUUID() : `notif-${Date.now()}`,
+          channel: 'sms',
+          recipient: normalised,
+          subject: 'ATM Ticket Cancellation Confirmation',
+          body,
+          provider: 'termii',
+          providerMessageId: msgId,
+          status: response.ok ? 'sent' : 'failed',
+          createdAt: new Date().toISOString(),
+        };
+
+        NotificationService.notificationHistory.push(notificationRecord);
+
+        return {
+          success: response.ok,
+          provider: 'termii',
+          messageId: msgId,
+          body,
+          error: !response.ok ? (data?.message || 'Termii dispatch failed') : undefined,
+        };
+      } catch (err) {
+        console.warn('[NotificationService] Termii API error on cancellation SMS:', err);
+      }
+    }
+
+    const stubMessageId = `stub-cancel-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    console.log(`[SMS Stub to ${normalised} via ${this.senderId}]: "${body}"`);
+
+    const stubRecord: DbNotification = {
+      id: crypto.randomUUID ? crypto.randomUUID() : `notif-${Date.now()}`,
+      channel: 'sms',
+      recipient: normalised,
+      subject: 'ATM Ticket Cancellation Confirmation',
+      body,
+      provider: 'stub',
+      providerMessageId: stubMessageId,
+      status: 'sent',
+      createdAt: new Date().toISOString(),
+    };
+
+    NotificationService.notificationHistory.push(stubRecord);
+
     return {
       success: true,
-      messageId: `termii-wa-${Date.now()}`,
-      provider: this.name,
-      timestamp: new Date().toISOString(),
+      provider: 'stub',
+      messageId: stubMessageId,
+      body,
     };
   }
 
-  async sendEmail(_toEmail: string, _subject: string, _htmlBody: string): Promise<SendResult> {
-    throw new Error('Termii provider does not support email. Use ResendNotificationProvider instead.');
+  getHistory(): DbNotification[] {
+    return [...NotificationService.notificationHistory];
   }
 }
 
-/**
- * Resend Provider implementation stub
- */
-export class ResendNotificationProvider implements NotificationProvider {
-  public readonly name = 'resend';
+let notificationServiceInstance: NotificationService | null = null;
 
-  constructor(private readonly apiKey: string) {}
-
-  async sendSms(_toPhone: string, _message: string): Promise<SendResult> {
-    throw new Error('Resend provider does not support SMS. Use TermiiNotificationProvider instead.');
+export function getNotificationService(): NotificationService {
+  if (!notificationServiceInstance) {
+    notificationServiceInstance = new NotificationService();
   }
-
-  async sendWhatsApp(_toPhone: string, _message: string): Promise<SendResult> {
-    throw new Error('Resend provider does not support WhatsApp. Use TermiiNotificationProvider instead.');
-  }
-
-  async sendEmail(toEmail: string, subject: string, htmlBody: string): Promise<SendResult> {
-    // Stub implementation for Phase 0
-    console.log(`[Resend Email to ${toEmail} | Subject: ${subject}]: (length: ${htmlBody.length} chars)`);
-    return {
-      success: true,
-      messageId: `resend-email-${Date.now()}`,
-      provider: this.name,
-      timestamp: new Date().toISOString(),
-    };
-  }
-}
-
-/**
- * Stub / Mock Provider for local development & testing
- */
-export class StubNotificationProvider implements NotificationProvider {
-  public readonly name = 'stub';
-
-  async sendSms(toPhone: string, message: string): Promise<SendResult> {
-    console.log(`[Stub SMS -> ${toPhone}]: ${message}`);
-    return {
-      success: true,
-      messageId: `stub-sms-${Date.now()}`,
-      provider: this.name,
-      timestamp: new Date().toISOString(),
-    };
-  }
-
-  async sendWhatsApp(toPhone: string, message: string): Promise<SendResult> {
-    console.log(`[Stub WhatsApp -> ${toPhone}]: ${message}`);
-    return {
-      success: true,
-      messageId: `stub-wa-${Date.now()}`,
-      provider: this.name,
-      timestamp: new Date().toISOString(),
-    };
-  }
-
-  async sendEmail(toEmail: string, subject: string, htmlBody: string): Promise<SendResult> {
-    console.log(`[Stub Email -> ${toEmail} (${subject})]: ${htmlBody}`);
-    return {
-      success: true,
-      messageId: `stub-email-${Date.now()}`,
-      provider: this.name,
-      timestamp: new Date().toISOString(),
-    };
-  }
+  return notificationServiceInstance;
 }

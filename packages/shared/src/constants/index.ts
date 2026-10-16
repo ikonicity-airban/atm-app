@@ -14,13 +14,13 @@ export const BRAND = {
   contactPhones: ['+2349070000625', '+2349070000210', '+2349070000884'],
 } as const;
 
-export const SEAT_HOLD_DURATION_MINUTES = 10; // // ASSUMPTION: 10 min hold for pending checkout
+export const SEAT_HOLD_DURATION_MINUTES = 15; // 15-minute reservation hold window (Spec 0009)
 
 // Default booking settings (configurable in settings)
 export const DEFAULT_BOOKING_SETTINGS = {
-  holdMinutes: 10,     // // ASSUMPTION: 10 minutes hold
-  maxAdvanceDays: 30,  // // ASSUMPTION: 30 days maximum advance booking window
-  cutoffMinutes: 60,   // // ASSUMPTION: booking closes 60 minutes before departure
+  holdMinutes: 15,     // 15-minute hold window for seat reservations
+  maxAdvanceDays: 30,  // 30 days maximum advance booking window
+  cutoffMinutes: 60,   // booking closes 60 minutes before departure
 } as const;
 
 // Official vehicle description requirement: "Toyota Sienna, 5 seats, A/C, extra legroom, refreshments."
@@ -138,3 +138,6 @@ export const PLACEHOLDER_FARES_KOBO = {
   LAGOS_OWERRI: 3500000,  // ₦35,000
   isPlaceholder: true,
 } as const;
+
+export * from './navigation.ts';
+

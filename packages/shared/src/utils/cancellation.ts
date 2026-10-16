@@ -1,4 +1,5 @@
 import type { CancellationPolicy } from '../types/index.ts';
+import { formatNaira } from './money.ts';
 
 export interface CancellationCalculationResult {
   hoursBeforeDeparture: number;
@@ -40,7 +41,7 @@ export function calculateCancellationFee(
       cancellationFeeKobo: fareKobo,
       refundAmountKobo: 0,
       feePercentageApplied: 100,
-      reason: `Cancellations within ${policy.noRefundHoursBefore} hours of departure are non-refundable.`,
+      reason: `Cancellations within ${policy.noRefundHoursBefore} hours of departure are non refundable.`,
     };
   }
 
@@ -69,3 +70,19 @@ export function calculateCancellationFee(
     reason: `Cancellation ${Math.round(hoursBefore)} hours before departure (${selectedFeePct}% fee applied).`,
   };
 }
+
+/**
+ * Constructs SMS notification text for processed ticket cancellation
+ */
+export function formatCancellationConfirmationSms(params: {
+  bookingRef: string;
+  cancelledSeats: number[];
+  feeKobo: number;
+  refundKobo: number;
+  disbursementMethod: 'atm_credit' | 'paystack_reversal';
+}): string {
+  const methodLabel = params.disbursementMethod === 'atm_credit' ? 'ATM wallet credit' : 'card refund';
+  const seatsList = params.cancelledSeats.sort((a, b) => a - b).join(', ');
+  return `Ascent Transport: Cancellation confirmed for Ref ${params.bookingRef}. Seat(s) ${seatsList}. Refund of ${formatNaira(params.refundKobo)} processed via ${methodLabel}. Fee deducted: ${formatNaira(params.feeKobo)}. Support: 09070000625.`;
+}
+

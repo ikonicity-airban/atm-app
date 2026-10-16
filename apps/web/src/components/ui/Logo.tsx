@@ -4,33 +4,43 @@ import { BRAND } from '@atm/shared';
 interface LogoProps {
   variant?: 'full' | 'mark';
   className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export function Logo({ variant = 'full', className = '' }: LogoProps) {
+export function Logo({ variant = 'full', className = '', size = 'md' }: LogoProps) {
   if (variant === 'mark') {
     return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <div className="w-9 h-9 rounded bg-[#ca2484] flex items-center justify-center text-white font-black text-xl tracking-tighter shadow-sm">
-          A
-        </div>
+      <div className={`inline-flex items-center ${className}`}>
+        <img
+          src="/favicon.ico"
+          alt="Ascent Transport Management Mark"
+          className="w-9 h-9 object-contain"
+          width={36}
+          height={36}
+          onError={(e) => {
+            // Fallback to stylized monogram if asset is delayed
+            (e.currentTarget as HTMLElement).style.display = 'none';
+          }}
+        />
       </div>
     );
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      {/* Mark with car silhouette icon */}
-      <div className="w-10 h-10 rounded-lg bg-[#ca2484] flex items-center justify-center text-white font-black text-xl tracking-tighter shadow-sm relative overflow-hidden">
-        <span>ATM</span>
-      </div>
-      <div>
-        <span className="font-extrabold text-slate-900 tracking-tight text-lg leading-none block">
-          Ascent Transport
-        </span>
-        <span className="text-[10px] text-slate-500 font-medium tracking-wide uppercase block mt-1">
-          {BRAND.tagline}
-        </span>
-      </div>
+    <div className={`inline-flex items-center gap-3 ${className}`}>
+      <img
+        src="/logo.svg"
+        alt="Ascent Transport Management (ATM Nigeria)"
+        className={`object-contain ${
+          size === 'sm' ? 'h-7 w-auto' : size === 'lg' ? 'h-11 w-auto' : 'h-9 w-auto'
+        }`}
+        height={36}
+        onError={(e) => {
+          // If SVG fails to load, gracefully fallback to text branding
+          (e.currentTarget as HTMLElement).style.display = 'none';
+        }}
+      />
     </div>
   );
 }
+
