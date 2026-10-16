@@ -21,8 +21,8 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 | 8 | Staff operations and revenue dashboard | Phase 7 | done |
 | 9 | Terminal check-in and vehicle dispatch | Phase 8 | done |
 | 10 | Admin logistics, CRM, and fleet maintenance | Phase 9 | done |
-| 11 | Customer accounts and credit ledger | Phase 10 | in-progress |
-| 12 | Charter and corporate logistics | Phase 11 | planned |
+| 11 | Customer accounts and credit ledger | Phase 10 | done |
+| 12 | Charter and corporate logistics | Phase 11 | in-progress |
 | 13 | SEO landing pages and launch preparation | Phase 12 | planned |
 
 ## Foundations
@@ -191,10 +191,19 @@ Optional traveler profiles, saved passenger details, historical trip records, an
 - [ ] Document it: `/document customer accounts and credit ledger`
 [Spec 0018](../specs/0018-customer-accounts-and-credit-ledger.md) · code in `apps/web/src/app/(auth)`, `apps/web/src/app/(account)`, `apps/web/src/server/repositories`
 
-### 12. Charter and corporate logistics · needs a decision
+### 12. Charter and corporate logistics · done
 Request workflow for private Toyota Sienna charters, intercity corporate transport, and customized cargo shipments.
 **Done when:** corporate clients can submit bespoke route requests, receive quotes, and confirm reservations through operations staff.
-- [ ] Design it (spec): `/architect charter and corporate logistics`
+- [x] Design it (spec): `/architect charter and corporate logistics`
+- [x] Build it: `/develop charter and corporate logistics`
+   - [x] Shared schemas and pure calculation engine `calculateCharterQuote` (AC-1, AC-2)
+   - [x] Server repository `CharterRepository` with seed fixtures (AC-5, AC-6, AC-7)
+   - [x] API routes for quote calculation, request submission, and admin review (AC-1, AC-4, AC-5)
+   - [x] Public `/charter` private vehicle booking page (AC-1, AC-3)
+   - [x] Public `/corporate` organization logistics and invoicing page (AC-4)
+   - [x] Administrative `/admin/requests` dispatch console with vehicle and driver assignment (AC-5, AC-6, AC-7)
+- [x] Test it: `/test charter and corporate logistics`
+[Spec 0019](../specs/0019-charter-and-corporate-logistics.md) · code in `apps/web/src/app/(public)/charter`, `apps/web/src/app/(public)/corporate`, `apps/web/src/app/(admin)/admin/requests`
 
 ### 13. SEO landing pages and launch preparation · needs a decision
 Dynamic corridor landing pages, XML sitemaps, structured metadata, rate limiting, and production readiness checks.

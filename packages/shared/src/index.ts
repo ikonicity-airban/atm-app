@@ -9,4 +9,5 @@ export * from './utils/search.ts';
 export * from './utils/booking.ts';
 export * from './utils/payment.ts';
 export * from './utils/courier.ts';
+export * from './utils/charter.ts';
 export * from './schemas/index.ts';

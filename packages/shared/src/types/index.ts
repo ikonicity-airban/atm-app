@@ -95,3 +95,4 @@ export * from './fleet.ts';
 export * from './pricing.ts';
 export * from './inquiries.ts';
 export * from './customer.ts';
+export * from './charter.ts';
