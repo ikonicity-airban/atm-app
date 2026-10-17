@@ -238,13 +238,24 @@ Driver facing mobile web application for digital manifest verification, passenge
 - [x] Test it: `/test driver mobile web portal and roadside manifest`
 [Spec 0021](../specs/0021-driver-mobile-web-portal-and-roadside-manifest.md) · code in `apps/web/src/app/(driver)`, `apps/web/src/app/api/driver`, `apps/web/src/server/repositories/driver.ts`, `packages/shared/src/schemas/driver.ts`
 
-### 15. Real time fleet telematics and journey tracking · planned
+### 15. Real time fleet telematics and journey tracking · in-progress
 Live transit tracking, GPS coordinates, estimated arrival calculation, and emergency roadside breakdown assistance for passengers and operations staff.
-**Done when:** travelers can view a live journey timeline showing vehicle transit progress between terminals and estimated arrival times.
-- [ ] Design it (spec): `/architect real time fleet telematics and journey tracking`
+**Done when:** travelers can view a live journey timeline showing vehicle transit progress between terminals, estimated arrival times, and emergency roadside breakdown assistance.
+- [x] Design it (spec): `/architect real time fleet telematics and journey tracking`
+- [ ] Build it: `/develop real time fleet telematics and journey tracking`
+   - [ ] Define shared telematics domain models and schemas (AC-2, AC-4, AC-5)
+   - [ ] Define Nigerian highway corridor waypoints and coordinates (AC-4, AC-5)
+   - [ ] Implement progression and dynamic ETA calculation engine (AC-4, AC-6)
+   - [ ] Build server-side telematics repository and API endpoints (AC-2, AC-3, AC-7)
+   - [ ] Upgrade public `/track` hub with segmented switcher (AC-1, AC-2)
+   - [ ] Build dedicated `/track/journey/[ref]` journey tracking view (AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9)
+- [ ] Verify it: `/check verify real time fleet telematics and journey tracking`
+- [ ] Test it: `/test real time fleet telematics and journey tracking`
+[Spec 0022](../specs/0022-fleet-telematics-and-live-journey-tracking.md) · code in `apps/web/src/app/(public)/track`, `apps/web/src/app/api/telematics`, `packages/shared/src/types/telematics.ts`, `packages/shared/src/constants/waypoints.ts`
 
 ## Deferred
 Out of scope for the initial release passes:
 - **Mobile app build**: React Native Expo native application (deferred to post launch, consuming shared packages).
 - **International payment methods**: Multi currency foreign card processing (deferred until cross border expansion).
 - **Driver self-dispatch app**: Driver facing mobile portal (terminal staff manage manifests initially).
+

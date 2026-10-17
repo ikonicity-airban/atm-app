@@ -141,4 +141,6 @@ export const PLACEHOLDER_FARES_KOBO = {
 
 export * from './navigation.ts';
 export * from './corridors.ts';
+export * from './waypoints.ts';
+
 
