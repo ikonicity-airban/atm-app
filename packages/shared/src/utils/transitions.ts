@@ -61,8 +61,8 @@ export function canTransitionTicketStatus(
 export const TRIP_STATUS_FLOW: Record<TripStatus, readonly TripStatus[]> = {
   scheduled: ['boarding', 'delayed', 'cancelled'],
   boarding: ['in_transit', 'delayed', 'cancelled'],
-  delayed: ['boarding', 'in_transit', 'cancelled'],
-  in_transit: ['completed', 'cancelled'],
+  delayed: ['boarding', 'in_transit', 'completed', 'cancelled'],
+  in_transit: ['delayed', 'completed', 'cancelled'],
   completed: [],
   cancelled: [],
 } as const;
