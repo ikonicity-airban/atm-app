@@ -209,14 +209,14 @@ Trip operational state machine driven by driver actions:
 
 ## Build plan
 
-1. Define shared driver schemas, incident types, and validation models in `packages/shared/src/schemas/driver.ts` and `packages/shared/src/types/driver.ts`, satisfies **AC-2**, **AC-6**.
-2. Implement server-side driver repository with multi-method authentication (badge ID, phone OTP, email), active trip resolution, and incident logging in `apps/web/src/server/repositories/driver.ts`, satisfies **AC-2**, **AC-3**, **AC-6**, **AC-7**.
-3. Create API route handlers under `apps/web/src/app/api/driver/` for authentication, OTP dispatch, active trip retrieval, passenger boarding toggles, incident reporting, and status updates, satisfies **AC-2**, **AC-3**, **AC-4**, **AC-6**, **AC-7**.
-4. Build responsive touch-friendly driver mobile layout and authentication views at `apps/web/src/app/(driver)/driver/login/page.tsx` with tabs for Phone OTP, Driver Badge ID, and Password, satisfies **AC-1**, **AC-2**.
-5. Build driver active trip dashboard at `apps/web/src/app/(driver)/driver/page.tsx` with departure countdown, corridor details, passenger roster, and emergency contact drawer, satisfies **AC-1**, **AC-3**, **AC-4**, **AC-8**.
-6. Build offline-capable roadside manifest view with local storage persistence and FRSC inspection view at `apps/web/src/app/(driver)/driver/manifest/page.tsx`, satisfies **AC-1**, **AC-5**.
-7. Build roadside incident advisory modal allowing one-tap reporting of checkpoints, traffic delays, and mechanical breakdowns with live operational status updates, satisfies **AC-1**, **AC-6**, **AC-7**.
-8. Write comprehensive automated unit and contract test suites in `packages/shared/tests/phase14-driver-manifest.test.ts` verifying authentication methods, state machine transitions, incident schemas, and manifest offline caching structures, satisfies **AC-2**, **AC-5**, **AC-6**, **AC-7**.
+- [x] 1. Define shared driver schemas, incident types, and validation models in `packages/shared/src/schemas/driver.ts` and `packages/shared/src/types/driver.ts`, satisfies **AC-2**, **AC-6**.
+- [x] 2. Implement server-side driver repository with multi-method authentication (badge ID, phone OTP, email), active trip resolution, and incident logging in `apps/web/src/server/repositories/driver.ts`, satisfies **AC-2**, **AC-3**, **AC-6**, **AC-7**.
+- [x] 3. Create API route handlers under `apps/web/src/app/api/driver/` for authentication, OTP dispatch, active trip retrieval, passenger boarding toggles, incident reporting, and status updates, satisfies **AC-2**, **AC-3**, **AC-4**, **AC-6**, **AC-7**.
+- [x] 4. Build responsive touch-friendly driver mobile layout and authentication views at `apps/web/src/app/(driver)/driver/login/page.tsx` with tabs for Phone OTP, Driver Badge ID, and Password, satisfies **AC-1**, **AC-2**.
+- [x] 5. Build driver active trip dashboard at `apps/web/src/app/(driver)/driver/page.tsx` with departure countdown, corridor details, passenger roster, and emergency contact drawer, satisfies **AC-1**, **AC-3**, **AC-4**, **AC-8**.
+- [x] 6. Build offline-capable roadside manifest view with local storage persistence and FRSC inspection view at `apps/web/src/app/(driver)/driver/manifest/page.tsx`, satisfies **AC-1**, **AC-5**.
+- [x] 7. Build roadside incident advisory modal allowing one-tap reporting of checkpoints, traffic delays, and mechanical breakdowns with live operational status updates, satisfies **AC-1**, **AC-6**, **AC-7**.
+- [x] 8. Write comprehensive automated unit and contract test suites in `packages/shared/tests/phase14-driver-manifest.test.ts` verifying authentication methods, state machine transitions, incident schemas, and manifest offline caching structures, satisfies **AC-2**, **AC-5**, **AC-6**, **AC-7**.
 
 ## Consequences
 
