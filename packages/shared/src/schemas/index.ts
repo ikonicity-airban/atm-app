@@ -14,6 +14,8 @@ export * from './customer.ts';
 export * from './charter.ts';
 export * from './seo.ts';
 export * from './driver.ts';
+export * from './telematics.ts';
+
 
 const phoneSchema = z
   .string()
