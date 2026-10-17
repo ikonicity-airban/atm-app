@@ -265,7 +265,18 @@ Modern spatial trip cards, elevated 7-day calendar navigation strip, interactive
    - [x] Enhance unserved corridor fallback and zero-result empty state views (AC-7)
 - [x] Verify it: `/check verify trips search page high craft ui and spatial polish`
 - [x] Test it: `/test trips search page high craft ui and spatial polish`
-[Spec 0023](../specs/0023-trips-search-page-high-craft-ui-and-spatial-polish.md) · code in `apps/web/src/app/(public)/trips`
+### 17. Live tracking pass and manage booking integration · done
+Direct real time highway telematics and vehicle tracking integration across post checkout booking success pass and self service management portal.
+**Done when:** passengers on `/book/success/[ref]` and `/manage` can view live vehicle transit status, dynamic arrival times, driver details, active highway incident advisories, and jump to `/track/journey/[ref]` with one tap.
+- [x] Design it (spec): `/architect live tracking pass and manage booking integration`
+- [x] Build it: `/develop live tracking pass and manage booking integration`
+   - [x] Build live highway telematics summary card for booking success view (AC-1, AC-2, AC-4)
+   - [x] Implement enhanced SMS and WhatsApp share action with tracking URL (AC-6)
+   - [x] Build live vehicle and highway telematics panel for `/manage` portal (AC-3, AC-4, AC-5)
+   - [x] Implement active roadside incident alert banners across confirmation views (AC-5, AC-7)
+- [x] Verify it: `/check verify live tracking pass and manage booking integration`
+- [x] Test it: `/test live tracking pass and manage booking integration`
+[Spec 0024](../specs/0024-live-tracking-pass-and-manage-booking-integration.md) · code in `apps/web/src/app/(public)/book/success/[ref]`, `apps/web/src/app/(public)/manage`
 
 ## Deferred
 

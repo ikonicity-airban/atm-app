@@ -26,6 +26,9 @@ import {
   Wallet,
   ArrowRight,
   Info,
+  Compass,
+  Radio,
+  Truck,
 } from 'lucide-react';
 
 export default function ManageBookingPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
@@ -288,7 +291,14 @@ export default function ManageBookingPage({ onNavigate }: { onNavigate?: (path: 
                 {bookingDetails.booking.ref}
               </h2>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={`/track/journey/${encodeURIComponent(bookingDetails.booking.ref)}?phone=${encodeURIComponent(phoneInput || bookingDetails.booking.contact.phone)}`}
+                className="min-h-[44px] px-4 rounded-xl bg-accent-600 hover:bg-accent-700 text-xs font-bold text-white transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 shadow-sm"
+              >
+                <Compass className="h-4 w-4" />
+                Track Live Vehicle
+              </a>
               <button
                 type="button"
                 onClick={handleResetSearch}
@@ -353,6 +363,80 @@ export default function ManageBookingPage({ onNavigate }: { onNavigate?: (path: 
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Live Vehicle Telematics & Corridor Tracking Card */}
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-accent-50 text-accent-800 text-xs font-bold border border-accent-200">
+                    <Radio className="w-3.5 h-3.5 text-accent-600" />
+                    Live Vehicle &amp; Highway Telematics
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                    {bookingDetails.telematics ? (
+                      bookingDetails.telematics.tripStatus === 'in_transit'
+                        ? 'En Route (In Transit)'
+                        : bookingDetails.telematics.tripStatus === 'delayed'
+                        ? 'Advisory Delay'
+                        : bookingDetails.telematics.tripStatus === 'boarding'
+                        ? 'Boarding'
+                        : bookingDetails.telematics.tripStatus === 'completed'
+                        ? 'Completed'
+                        : 'Scheduled'
+                    ) : (
+                      'Assigned'
+                    )}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
+                  <span className="flex items-center gap-1.5">
+                    <Car className="w-4 h-4 text-accent-600" />
+                    <span>
+                      {bookingDetails.telematics?.vehicle.model || 'Toyota Sienna Limited'} • Reg:{' '}
+                      <strong className="font-mono text-slate-900">
+                        {bookingDetails.telematics?.vehicle.plateNumber || 'ENU-418-XY'}
+                      </strong>
+                    </span>
+                  </span>
+                  <span className="text-slate-500">
+                    Driver: <strong>{bookingDetails.telematics?.driver.name || 'Emeka Nwosu'}</strong>
+                  </span>
+                  <span className="text-slate-500">
+                    ETA:{' '}
+                    <strong className="font-mono text-emerald-700">
+                      {bookingDetails.telematics?.estimatedArrivalWat || '1:45 PM WAT'}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <a
+                  href={`/track/journey/${encodeURIComponent(bookingDetails.booking.ref)}?phone=${encodeURIComponent(phoneInput || bookingDetails.booking.contact.phone)}`}
+                  className="min-h-[44px] px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <Compass className="w-4 h-4 text-accent-400" />
+                  <span>Launch Live GPS Tracker</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Roadside Incident Notice on Manage Portal if active */}
+            {bookingDetails.telematics?.activeIncidents && bookingDetails.telematics.activeIncidents.length > 0 && (
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <span className="font-bold text-amber-950 block">Active Highway Advisory Notice</span>
+                  <p className="text-amber-800 leading-relaxed text-pretty">
+                    {bookingDetails.telematics.activeIncidents[0].description} (Estimated delay of +{bookingDetails.telematics.activeIncidents[0].estimatedDelayMinutes || 25} minutes).
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Passenger & Ticket Overview Bar */}

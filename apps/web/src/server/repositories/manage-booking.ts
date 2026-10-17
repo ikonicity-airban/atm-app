@@ -23,12 +23,16 @@ import { paymentRepository } from '@/server/repositories/payments.ts';
 import { getPaymentProvider } from '@/server/payments/index.ts';
 import { getNotificationService } from '@/server/notifications/index.ts';
 
+import { telematicsRepository } from '@/server/repositories/telematics.ts';
+import type { JourneyTrackingPayload } from '@atm/shared';
+
 export interface ManageBookingDetails {
   booking: HeldBooking;
   tickets: DbTicket[];
   payment: DbPayment | null;
   cancellationEligibility: CancellationQuoteResult | null;
   walletBalanceKobo: number;
+  telematics?: JourneyTrackingPayload | null;
 }
 
 export interface RateLimitEntry {
@@ -162,12 +166,21 @@ export class ManageBookingRepository implements IManageBookingRepository {
       }
     }
 
+    // Attempt to lookup real-time telematics
+    let telematics: JourneyTrackingPayload | null = null;
+    try {
+      telematics = await telematicsRepository.lookupJourneyByBooking(booking.ref, input.phone);
+    } catch {
+      telematics = null;
+    }
+
     return {
       booking,
       tickets,
       payment,
       cancellationEligibility,
       walletBalanceKobo,
+      telematics,
     };
   }
 
