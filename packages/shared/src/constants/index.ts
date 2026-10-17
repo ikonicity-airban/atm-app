@@ -140,4 +140,5 @@ export const PLACEHOLDER_FARES_KOBO = {
 } as const;
 
 export * from './navigation.ts';
+export * from './corridors.ts';
 

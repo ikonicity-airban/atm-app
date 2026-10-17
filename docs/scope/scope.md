@@ -211,15 +211,15 @@ Request workflow for private Toyota Sienna charters, intercity corporate transpo
 Dynamic corridor landing pages, XML sitemaps, structured metadata, rate limiting, and production readiness checks.
 **Done when:** search engines index key corridor routes (such as Enugu to Abuja), Open Graph cards render cleanly, and route security audits pass.
 - [x] Design it (spec): `/architect seo landing pages and launch preparation`
-- [ ] Build it: `/develop seo landing pages and launch preparation`
-   - [ ] Define corridor SEO profiles, schema types, and metadata registry (AC-1, AC-2)
-   - [ ] Implement dynamic corridor landing page `/routes/[corridor]` with booking widget and FAQ schema (AC-1, AC-2, AC-3)
-   - [ ] Build edge Open Graph image generator `/routes/[corridor]/opengraph-image` (AC-4)
-   - [ ] Implement dynamic `sitemap.ts` and `robots.ts` with private route exclusions (AC-5, AC-6)
-   - [ ] Configure production HTTP security headers and CSP in `next.config.mjs` (AC-7)
-   - [ ] Implement system healthcheck endpoint `/api/health` with database ping (AC-8)
-- [ ] Verify it: `/check verify seo landing pages and launch preparation`
-- [ ] Test it: `/test seo landing pages and launch preparation`
+- [x] Build it: `/develop seo landing pages and launch preparation`
+   - [x] Define corridor SEO profiles, schema types, and metadata registry (AC-1, AC-2)
+   - [x] Implement dynamic corridor landing page `/routes/[corridor]` with booking widget and FAQ schema (AC-1, AC-2, AC-3)
+   - [x] Build edge Open Graph image generator `/routes/[corridor]/opengraph-image` (AC-4)
+   - [x] Implement dynamic `sitemap.ts` and `robots.ts` with private route exclusions (AC-5, AC-6)
+   - [x] Configure production HTTP security headers and CSP in `next.config.mjs` (AC-7)
+   - [x] Implement system healthcheck endpoint `/api/health` with database ping (AC-8)
+- [x] Verify it: `/check verify seo landing pages and launch preparation`
+- [x] Test it: `/test seo landing pages and launch preparation`
 [Spec 0020](../specs/0020-seo-landing-pages-and-launch-preparation.md) · code in `apps/web/src/app/(public)/routes`, `apps/web/src/app/sitemap.ts`, `apps/web/src/app/robots.ts`, `apps/web/src/app/api/health`, `apps/web/next.config.mjs`
 
 ### 14. Driver mobile web portal and roadside manifest · planned

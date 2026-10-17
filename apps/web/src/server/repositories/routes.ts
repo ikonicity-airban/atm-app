@@ -1,9 +1,14 @@
 /**
  * Routes Repository
  * Supports dual data sources: 'static' and 'db'
+ * Synchronized with CORRIDOR_SEO_PROFILES across all 12 Nigerian corridors
  */
 
-import { SEED_TERMINALS, PLACEHOLDER_FARES_KOBO, VEHICLE_DESCRIPTION } from '@atm/shared';
+import {
+  SEED_TERMINALS,
+  CORRIDOR_SEO_PROFILES,
+  type CorridorSEOProfile,
+} from '@atm/shared';
 import { env } from '../../lib/env.ts';
 import { db } from '../../lib/db.ts';
 import type { Terminal } from './terminals.ts';
@@ -23,6 +28,9 @@ export interface RouteDetail {
   amenities: string[];
   description: string;
   isPlaceholder: boolean; // Flagged placeholder data guard
+  travelAdvisory?: string;
+  popularPickupPoints?: string[];
+  departureSchedules?: Array<{ time: string; serviceTier: string }>;
   faqs: Array<{ question: string; answer: string }>;
 }
 
@@ -45,148 +53,38 @@ function getTerminal(id: string): Terminal {
     latitude: t.latitude,
     longitude: t.longitude,
     isActive: true,
-    googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Ascent Transport ${t.name}, ${t.address}`)}`,
+    googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      `Ascent Transport ${t.name}, ${t.address}`
+    )}`,
   };
 }
 
-export const STATIC_ROUTES: RouteDetail[] = [
-  {
-    id: 'route-enugu-abuja',
-    slug: 'enugu-abuja',
-    title: 'Enugu to Abuja',
-    origin: getTerminal('term-enugu-ogui'),
-    destination: getTerminal('term-abuja-utako'),
-    distanceKm: 420,
-    durationHours: 7.5,
-    baseFareKobo: PLACEHOLDER_FARES_KOBO.ENUGU_ABUJA,
-    dailyDepartures: ['Morning'], // Neutralized departure hour (TODO(client))
+function mapCorridorProfileToRouteDetail(profile: CorridorSEOProfile): RouteDetail {
+  return {
+    id: `route-${profile.slug}`,
+    slug: profile.slug,
+    title: profile.title,
+    origin: getTerminal(profile.originTerminalId),
+    destination: getTerminal(profile.destinationTerminalId),
+    distanceKm: profile.distanceKm,
+    durationHours: profile.estimatedDurationHours,
+    baseFareKobo: profile.startingFareKobo,
+    dailyDepartures: profile.departureSchedules.map((s) => s.time),
     vehicleModel: 'Toyota Sienna',
     passengerCapacity: 5,
     amenities: ['Air Conditioning', '5 Passenger Seats', 'Extra Legroom', 'Refreshments'],
-    description: 'Direct passenger travel from Enugu Central (Ogui Road) to Atlantic Mall Utako, Abuja. Scheduled departures.',
-    isPlaceholder: true,
-    faqs: [
-      {
-        question: 'What time should I arrive at the terminal?',
-        answer: 'Please arrive at the terminal before your scheduled departure time for check-in and luggage placement.',
-      },
-      {
-        question: 'How much luggage can I bring?',
-        answer: 'Luggage guidelines are set per terminal. Extra or bulky items can be sent as courier freight.',
-      },
-    ],
-  },
-  {
-    id: 'route-abuja-enugu',
-    slug: 'abuja-enugu',
-    title: 'Abuja to Enugu',
-    origin: getTerminal('term-abuja-utako'),
-    destination: getTerminal('term-enugu-ogui'),
-    distanceKm: 420,
-    durationHours: 7.5,
-    baseFareKobo: PLACEHOLDER_FARES_KOBO.ENUGU_ABUJA,
-    dailyDepartures: ['Morning'],
-    vehicleModel: 'Toyota Sienna',
-    passengerCapacity: 5,
-    amenities: ['Air Conditioning', '5 Passenger Seats', 'Extra Legroom', 'Refreshments'],
-    description: 'Scheduled departures from Atlantic Mall Utako, Abuja, arriving at Ogui Road, Enugu.',
-    isPlaceholder: true,
-    faqs: [
-      {
-        question: 'Where is the Abuja boarding point?',
-        answer: 'Atlantic Mall, Plot 482, Obafemi Awolowo Way, Utako, Abuja FCT.',
-      },
-    ],
-  },
-  {
-    id: 'route-enugu-lagos',
-    slug: 'enugu-lagos',
-    title: 'Enugu to Lagos (Jibowu / Ajah / Festac)',
-    origin: getTerminal('term-enugu-ogui'),
-    destination: getTerminal('term-lagos-jibowu'),
-    distanceKm: 550,
-    durationHours: 9.0,
-    baseFareKobo: PLACEHOLDER_FARES_KOBO.ENUGU_LAGOS,
-    dailyDepartures: ['Morning'],
-    vehicleModel: 'Toyota Sienna',
-    passengerCapacity: 5,
-    amenities: ['Air Conditioning', '5 Passenger Seats', 'Extra Legroom', 'Refreshments'],
-    description: 'Service connecting Enugu to three Lagos terminals: Jibowu, Ajah, and Festac Town.',
-    isPlaceholder: true,
-    faqs: [
-      {
-        question: 'Can I choose my drop-off terminal in Lagos?',
-        answer: 'Yes, select either Jibowu, Ajah, or Festac when completing your booking.',
-      },
-    ],
-  },
-  {
-    id: 'route-lagos-enugu',
-    slug: 'lagos-enugu',
-    title: 'Lagos to Enugu',
-    origin: getTerminal('term-lagos-jibowu'),
-    destination: getTerminal('term-enugu-ogui'),
-    distanceKm: 550,
-    durationHours: 9.0,
-    baseFareKobo: PLACEHOLDER_FARES_KOBO.ENUGU_LAGOS,
-    dailyDepartures: ['Morning'],
-    vehicleModel: 'Toyota Sienna',
-    passengerCapacity: 5,
-    amenities: ['Air Conditioning', '5 Passenger Seats', 'Extra Legroom', 'Refreshments'],
-    description: 'Departures from Lagos terminals (Jibowu, Ajah, Festac) direct to Enugu Ogui Road.',
-    isPlaceholder: true,
-    faqs: [
-      {
-        question: 'Are departures available from mainland and island terminals?',
-        answer: 'Yes, we depart from Jibowu, Ajah, and Festac Town.',
-      },
-    ],
-  },
-  {
-    id: 'route-lagos-owerri',
-    slug: 'lagos-owerri',
-    title: 'Lagos to Owerri',
-    origin: getTerminal('term-lagos-jibowu'),
-    destination: getTerminal('term-owerri-egbo'),
-    distanceKm: 510,
-    durationHours: 8.5,
-    baseFareKobo: PLACEHOLDER_FARES_KOBO.LAGOS_OWERRI,
-    dailyDepartures: ['Morning'],
-    vehicleModel: 'Toyota Sienna',
-    passengerCapacity: 5,
-    amenities: ['Air Conditioning', '5 Passenger Seats', 'Extra Legroom', 'Refreshments'],
-    description: 'Intercity route connecting Lagos terminals directly to Plot C38 Egbo Road, Owerri.',
-    isPlaceholder: true,
-    faqs: [
-      {
-        question: 'What is the terminal address in Owerri?',
-        answer: 'Plot C38 Egbo Road, opposite Young Shall Grow, Owerri, Imo State.',
-      },
-    ],
-  },
-  {
-    id: 'route-owerri-lagos',
-    slug: 'owerri-lagos',
-    title: 'Owerri to Lagos',
-    origin: getTerminal('term-owerri-egbo'),
-    destination: getTerminal('term-lagos-jibowu'),
-    distanceKm: 510,
-    durationHours: 8.5,
-    baseFareKobo: PLACEHOLDER_FARES_KOBO.LAGOS_OWERRI,
-    dailyDepartures: ['Morning'],
-    vehicleModel: 'Toyota Sienna',
-    passengerCapacity: 5,
-    amenities: ['Air Conditioning', '5 Passenger Seats', 'Extra Legroom', 'Refreshments'],
-    description: 'Scheduled travel from Egbo Road Owerri to Lagos (Jibowu, Festac, and Ajah).',
-    isPlaceholder: true,
-    faqs: [
-      {
-        question: 'Can parcels be sent on this route?',
-        answer: 'Yes, courier parcel services operate across all terminals.',
-      },
-    ],
-  },
-];
+    description: profile.description,
+    isPlaceholder: profile.isPlaceholder ?? true,
+    travelAdvisory: profile.travelAdvisory,
+    popularPickupPoints: profile.popularPickupPoints,
+    departureSchedules: profile.departureSchedules,
+    faqs: profile.faqs,
+  };
+}
+
+export const STATIC_ROUTES: RouteDetail[] = CORRIDOR_SEO_PROFILES.map(
+  mapCorridorProfileToRouteDetail
+);
 
 export class StaticRouteRepository implements IRouteRepository {
   async getAll(): Promise<RouteDetail[]> {

@@ -1,15 +1,20 @@
 /**
  * Next.js Dynamic Robots Generator
  */
-export default function robots() {
+import type { MetadataRoute } from 'next';
+import { env } from '../lib/env.ts';
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = env.NEXT_PUBLIC_APP_URL || 'https://atmnigeria.com';
+
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/account/'],
+        disallow: ['/admin/', '/api/', '/account/', '/login', '/register'],
       },
     ],
-    sitemap: 'https://atmnigeria.com/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

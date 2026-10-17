@@ -1,7 +1,7 @@
 # 0020. SEO landing pages and launch preparation
 
 **Date**: 2026-10-16
-**Status**: Proposed
+**Status**: In Progress
 
 ## Summary
 
@@ -179,15 +179,15 @@ Corridor pages, sitemaps, robots directives, and healthcheck routes are publicly
 
 ## Build plan
 
-1. Define corridor SEO profiles and schema metadata in shared packages and web server repositories, satisfies **AC-1**, **AC-2**.
-2. Implement JSON-LD generator helper producing BusTrip, BreadcrumbList, and FAQPage schemas, satisfies **AC-3**.
-3. Build dynamic corridor landing page template under `apps/web/src/app/(public)/routes/[corridor]/page.tsx` with prefilled booking search widget, timetable, and FAQ accordions, satisfies **AC-1**, **AC-2**, **AC-3**.
-4. Implement dynamic edge Open Graph image generator in `apps/web/src/app/(public)/routes/[corridor]/opengraph-image.tsx`, satisfies **AC-4**.
-5. Implement dynamic `sitemap.ts` in Next.js App Router listing all corridors, marketing pages, and terminal guides, satisfies **AC-5**.
-6. Implement `robots.ts` in Next.js App Router with strict disallow directives for private routes, satisfies **AC-6**.
-7. Configure production HTTP security headers and Content Security Policy in `apps/web/next.config.mjs`, satisfies **AC-7**.
-8. Implement production healthcheck endpoint in `apps/web/src/app/api/health/route.ts` with database ping, satisfies **AC-8**.
-9. Write unit and contract tests verifying sitemap generation, corridor metadata resolution, schema validation, and health endpoint responses, satisfies **AC-1**, **AC-5**, **AC-6**, **AC-8**.
+1. [x] Define corridor SEO profiles and schema metadata in shared packages and web server repositories, satisfies **AC-1**, **AC-2**.
+2. [x] Implement JSON-LD generator helper producing BusTrip, BreadcrumbList, and FAQPage schemas, satisfies **AC-3**.
+3. [x] Build dynamic corridor landing page template under `apps/web/src/app/(public)/routes/[corridor]/page.tsx` with prefilled booking search widget, timetable, and FAQ accordions, satisfies **AC-1**, **AC-2**, **AC-3**.
+4. [x] Implement dynamic edge Open Graph image generator in `apps/web/src/app/(public)/routes/[corridor]/opengraph-image.tsx`, satisfies **AC-4**.
+5. [x] Implement dynamic `sitemap.ts` in Next.js App Router listing all corridors, marketing pages, and terminal guides, satisfies **AC-5**.
+6. [x] Implement `robots.ts` in Next.js App Router with strict disallow directives for private routes, satisfies **AC-6**.
+7. [x] Configure production HTTP security headers and Content Security Policy in `apps/web/next.config.mjs`, satisfies **AC-7**.
+8. [x] Implement production healthcheck endpoint in `apps/web/src/app/api/health/route.ts` with database ping, satisfies **AC-8**.
+9. [x] Write unit and contract tests verifying sitemap generation, corridor metadata resolution, schema validation, and health endpoint responses, satisfies **AC-1**, **AC-5**, **AC-6**, **AC-8**.
 
 ## Consequences
 

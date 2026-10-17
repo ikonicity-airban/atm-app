@@ -2,7 +2,7 @@
  * SEO & Structured Data Helpers (JSON-LD)
  */
 
-import { BRAND, SEED_TERMINALS } from '@atm/shared';
+import { BRAND, type CorridorSEOProfile } from '@atm/shared';
 
 export function getOrganizationJsonLd() {
   return {
@@ -57,5 +57,75 @@ export function getTerminalJsonLd(terminal: {
           },
         }
       : {}),
+  };
+}
+
+export function getBusTripJsonLd(corridor: {
+  slug: string;
+  title: string;
+  originCity: string;
+  destinationCity: string;
+  originName: string;
+  originAddress: string;
+  destinationName: string;
+  destinationAddress: string;
+  startingFareKobo: number;
+}) {
+  const fareInNaira = (corridor.startingFareKobo / 100).toFixed(2);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BusTrip',
+    name: corridor.title,
+    busNumber: 'Toyota Sienna (5-Passenger Fleet)',
+    departureBusStop: {
+      '@type': 'BusStop',
+      name: corridor.originName,
+      address: corridor.originAddress,
+    },
+    arrivalBusStop: {
+      '@type': 'BusStop',
+      name: corridor.destinationName,
+      address: corridor.destinationAddress,
+    },
+    provider: {
+      '@type': 'TravelAgency',
+      name: BRAND.name,
+      url: 'https://atmnigeria.com',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: fareInNaira,
+      priceCurrency: 'NGN',
+      availability: 'https://schema.org/InStock',
+      url: `https://atmnigeria.com/routes/${corridor.slug}`,
+    },
+  };
+}
+
+export function getBreadcrumbListJsonLd(items: Array<{ name: string; url: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+export function getFAQPageJsonLd(faqs: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
   };
 }
