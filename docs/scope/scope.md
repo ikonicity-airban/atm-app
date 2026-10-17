@@ -253,7 +253,22 @@ Live transit tracking, GPS coordinates, estimated arrival calculation, and emerg
 - [x] Test it: `/test real time fleet telematics and journey tracking`
 [Spec 0022](../specs/0022-fleet-telematics-and-live-journey-tracking.md) · code in `apps/web/src/app/(public)/track`, `apps/web/src/app/api/telematics`, `packages/shared/src/types/telematics.ts`, `packages/shared/src/constants/waypoints.ts`
 
+### 16. Trips search page high craft UI and spatial polish · in-progress
+Modern spatial trip cards, elevated 7-day calendar navigation strip, interactive departure window filters, and tactile booking controls.
+**Done when:** travelers can filter departures by time of day, navigate dates with chevron pagers, and inspect trips on modern spatial cards with optical hierarchy.
+- [x] Design it (spec): `/architect trips search page high craft ui and spatial polish`
+- [ ] Build it: `/develop trips search page high craft ui and spatial polish`
+   - [ ] Implement time window filtering logic (AC-4)
+   - [ ] Build elevated 7-day calendar navigation strip with day labels and date shortcuts (AC-3)
+   - [ ] Build interactive filter toolbar for time window, sorting, and station filtering (AC-4, AC-6)
+   - [ ] Upgrade trip result cards with spatial surfaces, specular sheens, and corridor lines (AC-1, AC-2, AC-5, AC-6)
+   - [ ] Enhance unserved corridor fallback and zero-result empty state views (AC-7)
+- [ ] Verify it: `/check verify trips search page high craft ui and spatial polish`
+- [ ] Test it: `/test trips search page high craft ui and spatial polish`
+[Spec 0023](../specs/0023-trips-search-page-high-craft-ui-and-spatial-polish.md) · code in `apps/web/src/app/(public)/trips`
+
 ## Deferred
+
 
 Out of scope for the initial release passes:
 - **Mobile app build**: React Native Expo native application (deferred to post launch, consuming shared packages).
