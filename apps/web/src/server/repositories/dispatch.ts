@@ -145,6 +145,42 @@ export class DispatchRepository {
       homeTerminalId: 'term-owerri-egbo',
       isActive: true,
     },
+    {
+      id: 'drv-enugu-01',
+      fullName: 'Emeka Nwosu',
+      phone: '+2349070000210',
+      licenseNumber: 'FRSC-ENU-99421A',
+      licenseExpiry: '2027-08-15',
+      homeTerminalId: 'term-enugu-ogui',
+      isActive: true,
+    },
+    {
+      id: 'drv-abuja-01',
+      fullName: 'Ibrahim Garba',
+      phone: '+2349070000625',
+      licenseNumber: 'FRSC-ABJ-88123B',
+      licenseExpiry: '2028-01-20',
+      homeTerminalId: 'term-abuja-utako',
+      isActive: true,
+    },
+    {
+      id: 'drv-lagos-01',
+      fullName: 'Babatunde Adeleke',
+      phone: '+2349070000884',
+      licenseNumber: 'FRSC-LOS-77319C',
+      licenseExpiry: '2027-11-30',
+      homeTerminalId: 'term-lagos-jibowu',
+      isActive: true,
+    },
+    {
+      id: 'drv-owerri-01',
+      fullName: 'Chidi Okonkwo',
+      phone: '+2349070000867',
+      licenseNumber: 'FRSC-IMO-55102D',
+      licenseExpiry: '2028-06-12',
+      homeTerminalId: 'term-owerri-egbo',
+      isActive: true,
+    },
   ];
 
   // In-memory assignment and passenger status stores

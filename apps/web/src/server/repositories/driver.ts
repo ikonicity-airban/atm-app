@@ -185,14 +185,22 @@ export class DriverRepository implements IDriverRepository {
 
     // Fallback: if not yet assigned in seed dispatch, bind to first active trip in driver's terminal
     if (!assignedTrip && trips.length > 0) {
-      assignedTrip = trips[0];
-      if (assignedTrip) {
-        await dispatchRepository.assignVehicleAndDriver({
-          tripId: assignedTrip.id,
+      const firstTrip = trips[0];
+      if (firstTrip) {
+        assignedTrip = await dispatchRepository.assignVehicleAndDriver({
+          tripId: firstTrip.id,
           vehicleId: driver.assignedVehicleId || 'veh-sienna-01',
           driverId: driver.id,
+          status: 'boarding',
         });
       }
+    } else if (assignedTrip && assignedTrip.status === 'scheduled') {
+      assignedTrip = await dispatchRepository.assignVehicleAndDriver({
+        tripId: assignedTrip.id,
+        vehicleId: driver.assignedVehicleId || 'veh-sienna-01',
+        driverId: driver.id,
+        status: 'boarding',
+      });
     }
 
     if (!assignedTrip) {
@@ -294,7 +302,13 @@ export class DriverRepository implements IDriverRepository {
       return { success: false, message: 'Assigned trip not found' };
     }
 
-    if (!canTransitionTripStatus(trip.status, status)) {
+    // If trip was scheduled when driver prepares to depart, transition to boarding first
+    let currentStatus = trip.status;
+    if (currentStatus === 'scheduled' && status === 'in_transit') {
+      currentStatus = 'boarding';
+    }
+
+    if (!canTransitionTripStatus(currentStatus, status)) {
       return {
         success: false,
         message: `Cannot transition trip from ${trip.status} to ${status}`,
@@ -302,6 +316,13 @@ export class DriverRepository implements IDriverRepository {
     }
 
     trip.status = status;
+    await dispatchRepository.assignVehicleAndDriver({
+      tripId: trip.id,
+      vehicleId: trip.vehicle?.id || driver.assignedVehicleId || 'veh-sienna-01',
+      driverId: driver.id,
+      status,
+    });
+
     return { success: true, message: `Trip updated to ${status}`, updatedTrip: trip };
   }
 
