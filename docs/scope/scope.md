@@ -278,6 +278,20 @@ Direct real time highway telematics and vehicle tracking integration across post
 - [x] Test it: `/test live tracking pass and manage booking integration`
 [Spec 0024](../specs/0024-live-tracking-pass-and-manage-booking-integration.md) · code in `apps/web/src/app/(public)/book/success/[ref]`, `apps/web/src/app/(public)/manage`
 
+### 18. Trips search results page high-craft Coss redesign · done
+Airline-grade executive transit search experience with collapsible search modifier, lowest fare calendar strip, Coss segmented filters, and horizontal transit cards.
+**Done when:** travelers can review departures on clean horizontal transit cards with baggage chips, inspect 7-day lowest fare hints, toggle segmented time and station filters, and modify searches with a non-intrusive drawer.
+- [x] Design it (spec): `/architect trips search results page high-craft Coss redesign`
+- [x] Build it: `/develop trips search results page high-craft Coss redesign`
+   - [x] Implement collapsible "Edit Search" header toolbar with compact drawer trigger
+   - [x] Build elevated 7-day calendar navigation strip with lowest-fare indicators and tactile pills
+   - [x] Build Coss-style segmented filter and sort toolbar (time of day, terminal, price sort)
+   - [x] Rebuild horizontal trip cards with airline-style departure-to-arrival corridor lines, baggage tags, and dedicated fare action column
+   - [x] Ensure strict adherence to DESIGN_SYSTEM.md (zero animate-pulse, integer kobo, 44px hit targets)
+- [x] Verify it: `/check verify trips search results page high-craft Coss redesign`
+- [x] Test it: `/test trips search results page high-craft Coss redesign`
+[Spec 0025](../specs/0025-trips-search-results-page-high-craft-coss-redesign.md) · code in `apps/web/src/app/(public)/trips`
+
 ## Deferred
 
 

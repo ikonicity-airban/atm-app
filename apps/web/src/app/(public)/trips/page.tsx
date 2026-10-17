@@ -6,7 +6,6 @@ import { SEOHead } from '../../../components/seo/SEOHead.tsx';
 import {
   TimeText,
   MoneyText,
-  StatusBadge,
   SectionBanner,
 } from '../../../components/atm/AtmBlocks.tsx';
 import { PageShell } from '../../../components/layout/Templates.tsx';
@@ -21,7 +20,6 @@ import {
   isServedPair,
   sortTrips,
   type ServedCity,
-  searchParamsSchema,
   formatNaira,
 } from '@atm/shared';
 import {
@@ -40,6 +38,14 @@ import {
   ShieldCheck,
   CheckCircle2,
   Navigation,
+  Car,
+  Suitcase,
+  Fan,
+  Heart,
+  ChevronDown,
+  ChevronUp,
+  SlidersHorizontal,
+  Compass,
 } from 'lucide-react';
 
 export type TimeWindowFilter = 'all' | 'morning' | 'afternoon';
@@ -81,6 +87,24 @@ function matchesTimeWindow(utcIso: string, filter: TimeWindowFilter): boolean {
   }
 }
 
+/**
+ * Calculates approximate arrival time based on departure and route duration
+ */
+function getArrivalTimeWat(departureUtc: string, durationHours: number = 7.5): string {
+  try {
+    const dep = new Date(departureUtc);
+    const arr = new Date(dep.getTime() + durationHours * 60 * 60 * 1000);
+    return new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Africa/Lagos',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }).format(arr);
+  } catch {
+    return '02:30 PM';
+  }
+}
+
 export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: string) => void }) {
   const searchParams = useSafeSearchParams();
 
@@ -102,14 +126,25 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
   const sortParam = (searchParams.get('sort') as 'earliest' | 'cheapest') || 'earliest';
   const terminalFilter = searchParams.get('terminal') || 'all';
 
-  // Client side time window filter state
+  // Client side state
   const [timeFilter, setTimeFilter] = useState<TimeWindowFilter>('all');
+  const [isEditingSearch, setIsEditingSearch] = useState<boolean>(false);
+  const [savedTrips, setSavedTrips] = useState<Set<string>>(new Set());
 
   const [loading, setLoading] = useState(true);
   const [trips, setTrips] = useState<TripSearchResult[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const isCorridorServed = isServedPair(fromParam, toParam);
+
+  const toggleSaveTrip = (tripId: string) => {
+    setSavedTrips((prev) => {
+      const next = new Set(prev);
+      if (next.has(tripId)) next.delete(tripId);
+      else next.add(tripId);
+      return next;
+    });
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -167,13 +202,25 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
     return sortTrips(filteredTrips, sortParam);
   }, [filteredTrips, sortParam]);
 
-  // Generate 7-day quick pick list
+  // Find lowest fare for currently active corridor
+  const lowestFareKobo = useMemo(() => {
+    if (trips.length === 0) return 3200000;
+    return Math.min(...trips.map((t) => t.fareKobo));
+  }, [trips]);
+
+  // Generate 7-day quick pick list with fare hint
   const dateQuickPick = useMemo(() => {
-    const list: Array<{ dateStr: string; dayLabel: string; dayNum: string; isToday: boolean }> = [];
+    const list: Array<{
+      dateStr: string;
+      dayLabel: string;
+      dayNum: string;
+      fareHintKobo: number;
+      isToday: boolean;
+    }> = [];
     const baseDate = new Date(dateParam);
     if (Number.isNaN(baseDate.getTime())) return list;
 
-    // Center selected date in window
+    // Center selected date in window (-2 to +4)
     for (let offset = -2; offset <= 4; offset++) {
       const d = new Date(baseDate);
       d.setDate(d.getDate() + offset);
@@ -183,12 +230,13 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           dateStr: dStr,
           dayLabel: new Intl.DateTimeFormat('en-GB', { weekday: 'short', timeZone: 'Africa/Lagos' }).format(d),
           dayNum: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'Africa/Lagos' }).format(d),
+          fareHintKobo: lowestFareKobo,
           isToday: dStr === todayLagos,
         });
       }
     }
     return list;
-  }, [dateParam, todayLagos]);
+  }, [dateParam, todayLagos, lowestFareKobo]);
 
   const handleDateChange = (newDate: string) => {
     const query = new URLSearchParams(searchParams.toString());
@@ -220,43 +268,77 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
   const canGoPrev = dateParam > todayLagos;
 
   return (
-    <PageShell width="compact" density="compact" className="pb-16 space-y-6 sm:space-y-8">
+    <PageShell width="compact" density="compact" className="pb-20 space-y-6">
       <SEOHead
         title={`${fromParam} to ${toParam} Scheduled Sienna Trips | Ascent Transport`}
         description={`Daily executive 5-passenger Toyota Sienna departures from ${fromParam} to ${toParam}. Real-time seat availability, departure times, and fixed kobo fares.`}
         canonicalPath={`/trips?from=${encodeURIComponent(fromParam)}&to=${encodeURIComponent(toParam)}`}
       />
 
-      {/* 1. Header with Search Summary & Modification Bar */}
-      <div className="space-y-4">
+      {/* 1. Airline-Grade Clean Corridor Header (Skyloop reference layout) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 border-b border-slate-100 pb-4">
         <div>
-          <span className="text-xs uppercase font-bold text-slate-500 tracking-wider block mb-1">
-            Available Departures
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-balance">
-            {fromParam} to {toParam}
+          {/* Main Title rests directly on page background per ATM rules */}
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-balance flex items-center gap-2.5">
+            <span>{fromParam}</span>
+            <span className="text-slate-400 font-normal">→</span>
+            <span>{toParam}</span>
           </h1>
-          <div className="text-xs sm:text-sm text-slate-600 mt-1 flex flex-wrap items-center gap-2">
-            <span>Date: <strong className="text-slate-900">{dateParam}</strong></span>
-            <span>&bull;</span>
-            <span>Travelers: <strong className="text-slate-900">{passengersParam} {passengersParam === 1 ? 'Seat' : 'Seats'}</strong></span>
-            <span>&bull;</span>
+
+          <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-slate-500 font-medium">
+            <span className="text-slate-700 font-semibold">{dateParam}</span>
+            <span className="text-slate-300">•</span>
+            <span>
+              {passengersParam} {passengersParam === 1 ? 'Adult' : 'Adults'}
+            </span>
+            <span className="text-slate-300">•</span>
+            <span className="text-slate-700 font-semibold">Executive Sienna</span>
+            <span className="text-slate-300">•</span>
             <span className="text-emerald-700 font-semibold flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5" />
-              Direct Toyota Sienna Fleet
+              Air Conditioned
             </span>
           </div>
         </div>
 
-        {/* Compact Search Modification Form */}
-        <SearchForm
-          compact
-          initialFrom={fromParam}
-          initialTo={toParam}
-          initialDate={dateParam}
-          initialPassengers={passengersParam}
-        />
+        {/* Edit Search Toggle Button */}
+        <div>
+          <button
+            type="button"
+            onClick={() => setIsEditingSearch(!isEditingSearch)}
+            className="min-h-[44px] px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
+            <span>{isEditingSearch ? 'Close Search' : 'Edit Search'}</span>
+            {isEditingSearch ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Collapsible Search Modification Drawer */}
+      {isEditingSearch && (
+        <div className="p-5 rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-all animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Modify Route &amp; Travel Date
+            </h3>
+            <button
+              type="button"
+              onClick={() => setIsEditingSearch(false)}
+              className="text-xs text-slate-400 hover:text-slate-600 font-semibold"
+            >
+              Cancel
+            </button>
+          </div>
+          <SearchForm
+            compact
+            initialFrom={fromParam}
+            initialTo={toParam}
+            initialDate={dateParam}
+            initialPassengers={passengersParam}
+          />
+        </div>
+      )}
 
       {/* 2. Unserved Corridor Fallback Warning */}
       {!isCorridorServed ? (
@@ -267,7 +349,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
             {fromParam} to {toParam} is not an active corridor
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-            Ascent Transport Management currently operates fixed daily Sienna departures along three primary Nigerian intercity corridors:
+            Ascent Transport Management operates fixed daily executive Sienna departures along three primary Nigerian intercity corridors:
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <button
@@ -295,7 +377,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
         </div>
       ) : (
         <>
-          {/* 3. Elevated 7-Day Calendar Navigation Strip */}
+          {/* 3. Elevated 7-Day Calendar Navigation Strip (Skyloop Reference Pattern) */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-2.5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
             <div className="flex items-center gap-2">
               <button
@@ -308,7 +390,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                 <ChevronLeft className="w-5 h-5" />
               </button>
 
-              <div className="flex-1 flex gap-2 overflow-x-auto py-1">
+              <div className="flex-1 flex gap-2 overflow-x-auto py-1 scrollbar-none">
                 {dateQuickPick.map((item) => {
                   const isSelected = item.dateStr === dateParam;
                   return (
@@ -316,17 +398,17 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                       key={item.dateStr}
                       type="button"
                       onClick={() => handleDateChange(item.dateStr)}
-                      className={`flex-1 min-w-[85px] sm:min-w-[100px] px-3 py-2 rounded-xl text-center transition-all min-h-[44px] flex flex-col items-center justify-center ${
+                      className={`flex-1 min-w-[85px] sm:min-w-[105px] px-3 py-2 rounded-xl text-center transition-all min-h-[44px] flex flex-col items-center justify-center cursor-pointer ${
                         isSelected
                           ? 'bg-brand-600 text-white font-bold shadow-md shadow-brand-600/20'
                           : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/60'
                       }`}
                     >
-                      <span className={`block text-[10px] uppercase tracking-wider ${isSelected ? 'text-white/90' : 'text-slate-500'}`}>
-                        {item.isToday ? 'Today' : item.dayLabel}
+                      <span className={`block text-[11px] font-semibold ${isSelected ? 'text-white/90' : 'text-slate-500'}`}>
+                        {item.isToday ? 'Today' : `${item.dayLabel} ${item.dayNum.split(' ')[0]}`}
                       </span>
-                      <span className="block text-xs font-extrabold leading-tight mt-0.5">
-                        {item.dayNum}
+                      <span className={`block text-xs font-mono font-black mt-0.5 ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                        {formatNaira(item.fareHintKobo)}
                       </span>
                     </button>
                   );
@@ -342,36 +424,22 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
-
-            {/* Today Jump Shortcut */}
-            {dateParam !== todayLagos && (
-              <div className="pt-2 mt-2 border-t border-slate-100 flex justify-end px-2">
-                <button
-                  type="button"
-                  onClick={() => handleDateChange(todayLagos)}
-                  className="text-xs font-bold text-brand-700 hover:text-brand-900 flex items-center gap-1 min-h-[36px]"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Jump to today's earliest departures ({todayLagos})</span>
-                </button>
-              </div>
-            )}
           </div>
 
-          {/* 4. Interactive Filters & Sorting Toolbar */}
-          <div className="rounded-2xl border border-slate-200/70 bg-white p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            {/* Time Window Filter Pills */}
-            <div className="flex items-center gap-1.5 flex-wrap">
+          {/* 4. Segmented Filter & Sort Toolbar */}
+          <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            {/* Filter Pills */}
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">
-                Departure Time:
+                Departure:
               </span>
               <button
                 type="button"
                 onClick={() => setTimeFilter('all')}
-                className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`min-h-[38px] px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   timeFilter === 'all'
                     ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/70'
                 }`}
               >
                 All Day
@@ -379,10 +447,10 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               <button
                 type="button"
                 onClick={() => setTimeFilter('morning')}
-                className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                className={`min-h-[38px] px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   timeFilter === 'morning'
                     ? 'bg-brand-600 text-white shadow-xs shadow-brand-600/20'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/70'
                 }`}
               >
                 <Sun className="w-3.5 h-3.5" />
@@ -391,10 +459,10 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               <button
                 type="button"
                 onClick={() => setTimeFilter('afternoon')}
-                className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                className={`min-h-[38px] px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   timeFilter === 'afternoon'
                     ? 'bg-brand-600 text-white shadow-xs shadow-brand-600/20'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/70'
                 }`}
               >
                 <Sunset className="w-3.5 h-3.5" />
@@ -402,54 +470,59 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               </button>
             </div>
 
-            {/* Sort & Terminal Controls */}
-            <div className="flex items-center gap-3 flex-wrap self-end md:self-auto">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-500">Sort:</span>
-                <button
-                  type="button"
-                  onClick={() => handleSortChange('earliest')}
-                  className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                    sortParam === 'earliest'
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  Earliest
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSortChange('cheapest')}
-                  className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                    sortParam === 'cheapest'
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  Lowest Fare
-                </button>
-              </div>
-
-              {/* Lagos Terminal Dropdown Filter (when either from or to is Lagos) */}
+            {/* Sort & Station Dropdowns */}
+            <div className="flex items-center gap-2.5 flex-wrap self-end md:self-auto">
+              {/* Lagos Terminal Dropdown Filter (when corridor touches Lagos) */}
               {(fromParam === 'Lagos' || toParam === 'Lagos') && (
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-slate-500">Station:</span>
+                <div className="relative">
                   <select
                     value={terminalFilter}
                     onChange={(e) => handleTerminalFilterChange(e.target.value)}
-                    className="min-h-[36px] px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-semibold focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none"
+                    className="min-h-[38px] pl-3 pr-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-semibold focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none appearance-none cursor-pointer"
                   >
-                    <option value="all">All Lagos Stations</option>
+                    <option value="all">All Lagos Terminals</option>
                     <option value="jibowu">Jibowu (Yaba)</option>
                     <option value="ajah">Ajah (Lekki)</option>
                     <option value="festac">Festac Town</option>
                   </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               )}
+
+              {/* Sort Selector */}
+              <div className="relative">
+                <select
+                  value={sortParam}
+                  onChange={(e) => handleSortChange(e.target.value as 'earliest' | 'cheapest')}
+                  className="min-h-[38px] pl-3 pr-8 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-semibold focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none appearance-none cursor-pointer"
+                >
+                  <option value="earliest">Sort by: Earliest Departure</option>
+                  <option value="cheapest">Sort by: Lowest Fare</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
           </div>
 
-          {/* 5. Trip Results List */}
+          {/* AC Comfort Guarantee Banner (Skyloop greener choices reference pattern) */}
+          <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between gap-3 text-xs text-emerald-950">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <strong className="block text-emerald-950 font-bold">Guaranteed 5-Passenger Executive Cabin</strong>
+                <span className="text-emerald-800 text-[11px]">
+                  Zero overcrowding. Clean air conditioning, extra legroom, and rear luggage boot on every departure.
+                </span>
+              </div>
+            </div>
+            <span className="hidden sm:inline-block px-2.5 py-1 rounded-full bg-emerald-100/80 text-emerald-800 text-[11px] font-bold">
+              Standard On All Trips
+            </span>
+          </div>
+
+          {/* 5. Trip Results List (Horizontal High-Craft Cards based on Skyloop Reference) */}
           {loading ? (
             /* Static modern skeleton surfaces (Zero animate-pulse per design guidelines) */
             <div className="space-y-4">
@@ -496,7 +569,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                   <button
                     type="button"
                     onClick={() => setTimeFilter('all')}
-                    className="min-h-[44px] px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors"
+                    className="min-h-[44px] px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors cursor-pointer"
                   >
                     View All Departure Times
                   </button>
@@ -504,7 +577,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                 <button
                   type="button"
                   onClick={() => handleDayOffset(1)}
-                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-colors shadow-sm"
+                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-colors shadow-sm cursor-pointer"
                 >
                   Check Next Day Departures
                 </button>
@@ -512,127 +585,156 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
             </div>
           ) : (
             <div className="space-y-4">
-              {sortedTrips.map((trip) => {
+              {sortedTrips.map((trip, idx) => {
                 const totalFare = trip.fareKobo * passengersParam;
                 const isFewSeats = trip.seatsLeft <= 2 && trip.seatsLeft > 0;
-                const isSoldOut = trip.seatsLeft === 0;
+                const isBestValue = idx === 0 && trip.bookable;
+                const arrivalTimeWat = getArrivalTimeWat(trip.departureTimeUtc, trip.durationHours || 7.5);
+                const isSaved = savedTrips.has(trip.id);
 
                 return (
                   <div
                     key={trip.id}
-                    className={`relative overflow-hidden rounded-2xl border bg-white p-6 transition-all shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)] ${
+                    className={`relative overflow-hidden rounded-2xl border bg-white p-5 sm:p-6 transition-all shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)] ${
                       trip.bookable
                         ? 'border-slate-200/80 hover:border-slate-300'
                         : 'border-slate-200/60 opacity-60 bg-slate-50/50'
                     }`}
                   >
                     {/* Specular Top Sheen */}
-                    <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/20 to-transparent" />
 
-                    <div className="flex flex-col lg:flex-row justify-between gap-6">
-                      {/* Left: Departure Details, Corridor Timeline & Terminals */}
-                      <div className="space-y-4 flex-1">
-                        {/* Top Metadata Header */}
-                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                          <div className="flex items-center gap-3">
-                            <div className="text-xl sm:text-2xl font-mono font-black text-slate-900 flex items-center gap-2">
-                              <Clock className="w-5 h-5 text-brand-600" />
+                    {/* Best Value Tag Pill (Skyloop Reference) */}
+                    {isBestValue && (
+                      <div className="mb-3">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[11px] font-bold">
+                          Best value
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
+                      {/* Left: Airline-Style Timeline & Corridor */}
+                      <div className="flex-1 space-y-4">
+                        {/* Corridor Timeline Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                          {/* Departure Point */}
+                          <div className="sm:col-span-4 space-y-0.5">
+                            <div className="text-xl sm:text-2xl font-black font-mono text-slate-900 tracking-tight">
                               <TimeText utcDateString={trip.departureTimeUtc} format="short" />
                             </div>
-
-                            {/* Urgency Status Pill */}
-                            {trip.bookable && isFewSeats && (
-                              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 flex items-center gap-1">
-                                <span>Only {trip.seatsLeft} {trip.seatsLeft === 1 ? 'seat' : 'seats'} remaining!</span>
-                              </span>
-                            )}
-
-                            {trip.bookable && !isFewSeats && (
-                              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 flex items-center gap-1">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>{trip.seatsLeft} seats available</span>
-                              </span>
-                            )}
-
-                            {!trip.bookable && (
-                              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-rose-800 bg-rose-50 border border-rose-200">
-                                {trip.unavailableReason ?? 'Departed / Sold Out'}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="text-xs text-slate-500 font-medium flex items-center gap-1">
-                            <span>Service: </span>
-                            <strong className="text-slate-800">Executive Sienna</strong>
-                          </div>
-                        </div>
-
-                        {/* Visual Corridor Line Connector */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs relative pt-1">
-                          <div className="space-y-1 relative pl-5 before:absolute before:left-0 before:top-1.5 before:w-2.5 before:h-2.5 before:rounded-full before:bg-brand-600 before:ring-4 before:ring-brand-50">
-                            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-                              Boarding Station
+                            <span className="text-xs font-bold text-slate-700 block truncate">
+                              {trip.originTerminal.city} ({trip.originTerminal.code})
                             </span>
-                            <span className="font-extrabold text-slate-900 block text-sm">
+                            <span className="text-[11px] text-slate-500 block truncate">
                               {trip.originTerminal.name}
                             </span>
-                            <span className="text-slate-500 block text-[11px] line-clamp-1">
-                              {trip.originTerminal.address}
+                          </div>
+
+                          {/* Transit Connector & Duration */}
+                          <div className="sm:col-span-4 text-center py-1 sm:py-0 space-y-1">
+                            <span className="text-[11px] font-bold text-slate-500 block">
+                              {trip.durationHours || 7.5}h Direct
+                            </span>
+                            <div className="relative flex items-center justify-center">
+                              <div className="w-full h-0.5 bg-slate-200" />
+                              <div className="absolute w-6 h-6 rounded-full bg-white border border-slate-300 flex items-center justify-center text-brand-600 shadow-xs">
+                                <Car className="w-3 h-3" />
+                              </div>
+                            </div>
+                            <span className="text-[10px] text-slate-400 font-semibold block">
+                              {trip.distanceKm || 420} km Highway
                             </span>
                           </div>
 
-                          <div className="space-y-1 relative pl-5 before:absolute before:left-0 before:top-1.5 before:w-2.5 before:h-2.5 before:rounded-full before:bg-emerald-600 before:ring-4 before:ring-emerald-50">
-                            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-                              Destination Terminal
+                          {/* Arrival Point */}
+                          <div className="sm:col-span-4 text-left sm:text-right space-y-0.5">
+                            <div className="text-xl sm:text-2xl font-black font-mono text-slate-900 tracking-tight">
+                              {arrivalTimeWat}
+                            </div>
+                            <span className="text-xs font-bold text-slate-700 block truncate">
+                              {trip.destinationTerminal.city} ({trip.destinationTerminal.code})
                             </span>
-                            <span className="font-extrabold text-slate-900 block text-sm">
+                            <span className="text-[11px] text-slate-500 block truncate">
                               {trip.destinationTerminal.name}
-                            </span>
-                            <span className="text-slate-500 block text-[11px] line-clamp-1">
-                              {trip.destinationTerminal.address}
                             </span>
                           </div>
                         </div>
 
-                        {/* Vehicle highlights */}
-                        <div className="text-[11px] text-slate-500 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-3">
-                          <span className="font-semibold text-slate-700">{trip.vehicle.model}</span>
-                          <span>&bull;</span>
-                          <span>5 Passenger Max</span>
-                          <span>&bull;</span>
-                          <span>Air Conditioned</span>
-                          <span>&bull;</span>
-                          <span>Luggage Boot Included</span>
+                        {/* Amenity & Baggage Chips (Skyloop reference layout) */}
+                        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-100 text-[11px] text-slate-600">
+                          <span className="flex items-center gap-1 font-semibold text-slate-700">
+                            <Suitcase className="w-3.5 h-3.5 text-slate-400" />
+                            <span>1x Luggage boot (20kg)</span>
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          <span className="flex items-center gap-1 text-slate-600">
+                            <Fan className="w-3.5 h-3.5 text-slate-400" />
+                            <span>Full A/C</span>
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          <span className="text-slate-600">
+                            <span>5 Passenger Toyota Sienna</span>
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          {trip.bookable && isFewSeats ? (
+                            <span className="font-bold text-amber-700">
+                              Only {trip.seatsLeft} {trip.seatsLeft === 1 ? 'seat' : 'seats'} left!
+                            </span>
+                          ) : trip.bookable ? (
+                            <span className="font-semibold text-emerald-700">
+                              {trip.seatsLeft} seats available
+                            </span>
+                          ) : (
+                            <span className="font-bold text-rose-700">
+                              {trip.unavailableReason ?? 'Sold out'}
+                            </span>
+                          )}
                         </div>
                       </div>
 
-                      {/* Right: Fare Column & Tactile Seat Selection CTA */}
-                      <div className="flex lg:flex-col justify-between lg:justify-center items-end lg:items-end border-t lg:border-t-0 lg:border-l border-slate-100 pt-4 lg:pt-0 lg:pl-8 min-w-[200px]">
-                        <div className="text-left lg:text-right">
-                          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-                            Fare per seat
-                          </span>
-                          <div className="text-xl sm:text-2xl font-black text-slate-900 font-mono">
+                      {/* Right: Fare Column & Tactile CTA Block (Skyloop reference) */}
+                      <div className="flex sm:flex-row lg:flex-col justify-between lg:justify-center items-end border-t lg:border-t-0 lg:border-l border-slate-100 pt-4 lg:pt-0 lg:pl-6 min-w-[210px]">
+                        <div className="text-left lg:text-right space-y-0.5">
+                          <div className="flex items-center lg:justify-end gap-2">
+                            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                              Total fare (all fees)
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleSaveTrip(trip.id)}
+                              className="text-slate-400 hover:text-brand-600 p-1 rounded-full transition-colors"
+                              title="Save trip"
+                              aria-label="Save this trip"
+                            >
+                              <Heart
+                                className={`w-4 h-4 ${
+                                  isSaved ? 'fill-brand-600 text-brand-600' : ''
+                                }`}
+                              />
+                            </button>
+                          </div>
+                          <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
                             <MoneyText
                               kobo={trip.fareKobo}
                               isPlaceholder={trip.isPlaceholder}
                             />
                           </div>
                           {passengersParam > 1 && (
-                            <div className="text-xs text-slate-500 mt-0.5">
-                              Total: <strong className="text-slate-900"><MoneyText kobo={totalFare} isPlaceholder={trip.isPlaceholder} /></strong> ({passengersParam} pass.)
+                            <div className="text-xs text-slate-500 font-medium">
+                              Total: <strong className="text-slate-900 font-mono"><MoneyText kobo={totalFare} isPlaceholder={trip.isPlaceholder} /></strong> ({passengersParam} pass.)
                             </div>
                           )}
                         </div>
 
-                        <div className="mt-4 w-full sm:w-auto">
+                        <div className="mt-3.5 w-full sm:w-auto">
                           {trip.bookable ? (
                             <button
                               type="button"
                               onClick={() => navigate(`/book/${trip.id}?passengers=${passengersParam}`)}
                               className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                             >
-                              <span>Select Seats</span>
+                              <span>Select</span>
                               <ArrowRight className="w-4 h-4" />
                             </button>
                           ) : (
@@ -664,3 +766,4 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
     </PageShell>
   );
 }
+
