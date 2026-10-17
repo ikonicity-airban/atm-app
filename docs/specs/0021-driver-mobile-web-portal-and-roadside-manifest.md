@@ -1,7 +1,7 @@
 # 0021. Driver Mobile Web Portal and Roadside Manifest
 
 **Date**: 2026-10-17
-**Status**: Proposed
+**Status**: Accepted
 
 ## Summary
 

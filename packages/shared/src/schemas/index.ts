@@ -13,6 +13,7 @@ export * from './auth.ts';
 export * from './customer.ts';
 export * from './charter.ts';
 export * from './seo.ts';
+export * from './driver.ts';
 
 const phoneSchema = z
   .string()

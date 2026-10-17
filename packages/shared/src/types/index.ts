@@ -97,3 +97,4 @@ export * from './inquiries.ts';
 export * from './customer.ts';
 export * from './charter.ts';
 export * from './seo.ts';
+export * from './driver.ts';
