@@ -48,7 +48,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   useEffect(() => {
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
-        setIsScrolled(window.scrollY > -1);
+        setIsScrolled(window.scrollY > 20);
       }
     };
 
