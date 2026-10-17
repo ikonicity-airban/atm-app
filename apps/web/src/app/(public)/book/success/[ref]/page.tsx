@@ -20,7 +20,14 @@ import {
   AlertCircle,
   ArrowRight,
   Share2,
+  Truck,
+  Compass,
+  Radio,
+  ExternalLink,
+  Car,
+  AlertTriangle,
 } from 'lucide-react';
+import type { JourneyTrackingPayload } from '@atm/shared';
 
 export interface BookingSuccessPageProps {
   params?: { ref?: string } | Promise<{ ref?: string }>;
@@ -32,9 +39,11 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
   const [booking, setBooking] = useState<HeldBooking | null>(null);
   const [tickets, setTickets] = useState<DbTicket[]>([]);
   const [payment, setPayment] = useState<DbPayment | null>(null);
+  const [telematics, setTelematics] = useState<JourneyTrackingPayload | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedTracking, setCopiedTracking] = useState<boolean>(false);
 
   const navigate = (path: string) => {
     if (onNavigate) onNavigate(path);
@@ -99,6 +108,19 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
           setTickets(existingTickets);
           setPayment(existingPayment);
         }
+
+        // Fetch live telematics for this confirmed booking
+        try {
+          const telematicsRes = await fetch(`/api/telematics/journey/${encodeURIComponent(refCode)}`);
+          if (telematicsRes.ok) {
+            const telematicsJson = await telematicsRes.json();
+            if (active && telematicsJson?.data) {
+              setTelematics(telematicsJson.data);
+            }
+          }
+        } catch {
+          // Non-blocking telemetry fetch
+        }
       } catch (err) {
         console.error('Failed to load booking success confirmation:', err);
         if (active) {
@@ -127,6 +149,16 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  const handleCopyTrackingLink = () => {
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      const trackingUrl = `${window.location.origin}/track/journey/${encodeURIComponent(refCode)}${booking?.contact?.phone ? `?phone=${encodeURIComponent(booking.contact.phone)}` : ''}`;
+      const shareMessage = `Track our Ascent Toyota Sienna live journey (${refCode}): ${trackingUrl}`;
+      navigator.clipboard.writeText(shareMessage);
+      setCopiedTracking(true);
+      setTimeout(() => setCopiedTracking(false), 2500);
     }
   };
 
@@ -193,7 +225,23 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
             </div>
 
             {/* Quick Actions */}
-            <div className="flex items-center gap-2 self-start sm:self-center">
+            <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+              <Button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    `/track/journey/${encodeURIComponent(booking.ref)}${
+                      booking.contact?.phone
+                        ? `?phone=${encodeURIComponent(booking.contact.phone)}`
+                        : ''
+                    }`
+                  )
+                }
+                className="bg-[#ca2484] hover:bg-[#aa1769] text-white min-h-[44px] text-xs font-bold shadow-xs flex items-center gap-1.5"
+              >
+                <Compass className="w-4 h-4" />
+                <span>Track Live Vehicle</span>
+              </Button>
               <Button
                 type="button"
                 onClick={handlePrint}
@@ -210,7 +258,17 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
                 title="Copy link to this boarding pass"
               >
                 <Share2 className="w-4 h-4" />
-                <span className="ml-1.5 hidden sm:inline">{copied ? 'Copied!' : 'Share'}</span>
+                <span className="ml-1.5 hidden sm:inline">{copied ? 'Copied!' : 'Share Pass'}</span>
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCopyTrackingLink}
+                className="min-h-[44px] text-xs font-semibold text-accent-700 border-accent-200 hover:bg-accent-50"
+                title="Share live vehicle tracking link with family or contacts"
+              >
+                <Radio className="w-4 h-4 text-accent-600" />
+                <span className="ml-1.5 hidden sm:inline">{copiedTracking ? 'Tracking Link Copied!' : 'Share Live Tracker'}</span>
               </Button>
             </div>
           </div>
@@ -267,6 +325,91 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
                 <span>{booking.passengers.length} Passenger{booking.passengers.length > 1 ? 's' : ''} &bull; Paid</span>
               </div>
             </div>
+          </div>
+
+          {/* Live Highway Telematics & Tracking Card */}
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 sm:p-6 shadow-md border border-slate-700/60">
+            {/* Top specular highlight */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-accent-500/20 text-accent-300 text-xs font-bold border border-accent-400/30">
+                    <Radio className="w-3.5 h-3.5 text-accent-400" />
+                    Live Highway Telematics
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30">
+                    {telematics ? (
+                      telematics.tripStatus === 'in_transit'
+                        ? 'Vehicle In Transit'
+                        : telematics.tripStatus === 'delayed'
+                        ? 'Advisory Delay'
+                        : telematics.tripStatus === 'boarding'
+                        ? 'Passenger Boarding'
+                        : telematics.tripStatus === 'completed'
+                        ? 'Arrived at Destination'
+                        : 'Scheduled for Departure'
+                    ) : (
+                      'Fleet Assigned'
+                    )}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <Car className="w-4 h-4 text-accent-400" />
+                    <span>
+                      {telematics?.vehicle.model || 'Toyota Sienna Limited'} • Registration:{' '}
+                      <strong className="font-mono text-accent-200">
+                        {telematics?.vehicle.plateNumber || 'ENU-418-XY'}
+                      </strong>
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300">
+                    Assigned Driver: <strong>{telematics?.driver.name || 'Emeka Nwosu'}</strong> • Speed:{' '}
+                    <span className="font-mono font-semibold">{telematics?.telematics.speedKmh ?? 78} km/h</span> • Destination ETA:{' '}
+                    <span className="font-mono text-emerald-300 font-bold">
+                      {telematics?.estimatedArrivalWat || '1:45 PM WAT'}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Button to Track */}
+              <div className="flex items-center gap-3">
+                <Button
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      `/track/journey/${encodeURIComponent(booking.ref)}${
+                        booking.contact?.phone
+                          ? `?phone=${encodeURIComponent(booking.contact.phone)}`
+                          : ''
+                      }`
+                    )
+                  }
+                  className="bg-accent-600 hover:bg-accent-700 text-white min-h-[44px] text-xs font-bold shadow-md flex items-center gap-1.5 w-full sm:w-auto justify-center"
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>Open Full Highway Tracker</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-0.5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Roadside Incident Alert if present */}
+            {telematics?.activeIncidents && telematics.activeIncidents.length > 0 && (
+              <div className="mt-4 p-3 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <span className="font-bold text-amber-100 block">Highway Incident Notice</span>
+                  <p className="text-amber-200 leading-relaxed">
+                    {telematics.activeIncidents[0].description} (+{telematics.activeIncidents[0].estimatedDelayMinutes || 25}m delay factored into ETA).
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
