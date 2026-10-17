@@ -23,8 +23,8 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 | 10 | Admin logistics, CRM, and fleet maintenance | Phase 9 | done |
 | 11 | Customer accounts and credit ledger | Phase 10 | done |
 | 12 | Charter and corporate logistics | Phase 11 | done |
-| 13 | SEO landing pages and launch preparation | Phase 12 | in-progress |
-| 14 | Driver mobile web portal and roadside manifest | Phase 13 | planned |
+| 13 | SEO landing pages and launch preparation | Phase 12 | done |
+| 14 | Driver mobile web portal and roadside manifest | Phase 13 | in-progress |
 | 15 | Real time fleet telematics and journey tracking | Phase 14 | planned |
 
 ## Foundations
@@ -207,7 +207,7 @@ Request workflow for private Toyota Sienna charters, intercity corporate transpo
 - [x] Test it: `/test charter and corporate logistics`
 [Spec 0019](../specs/0019-charter-and-corporate-logistics.md) · code in `apps/web/src/app/(public)/charter`, `apps/web/src/app/(public)/corporate`, `apps/web/src/app/(admin)/admin/requests`
 
-### 13. SEO landing pages and launch preparation · in-progress
+### 13. SEO landing pages and launch preparation · done
 Dynamic corridor landing pages, XML sitemaps, structured metadata, rate limiting, and production readiness checks.
 **Done when:** search engines index key corridor routes (such as Enugu to Abuja), Open Graph cards render cleanly, and route security audits pass.
 - [x] Design it (spec): `/architect seo landing pages and launch preparation`
@@ -222,10 +222,21 @@ Dynamic corridor landing pages, XML sitemaps, structured metadata, rate limiting
 - [x] Test it: `/test seo landing pages and launch preparation`
 [Spec 0020](../specs/0020-seo-landing-pages-and-launch-preparation.md) · code in `apps/web/src/app/(public)/routes`, `apps/web/src/app/sitemap.ts`, `apps/web/src/app/robots.ts`, `apps/web/src/app/api/health`, `apps/web/next.config.mjs`
 
-### 14. Driver mobile web portal and roadside manifest · planned
+### 14. Driver mobile web portal and roadside manifest · in-progress
 Driver facing mobile web application for digital manifest verification, passenger boarding marks, departure status, and roadside incident reporting.
 **Done when:** assigned drivers can authenticate via mobile phone number, access their daily passenger manifest, mark boardings, and record arrival times.
-- [ ] Design it (spec): `/architect driver mobile web portal and roadside manifest`
+- [x] Design it (spec): `/architect driver mobile web portal and roadside manifest`
+- [ ] Build it: `/develop driver mobile web portal and roadside manifest`
+   - [ ] Define driver schemas, incident types, and domain models in shared package (AC-2, AC-6)
+   - [ ] Build driver repository with multi-method auth, trip resolution, and incident logger (AC-2, AC-3, AC-6, AC-7)
+   - [ ] Implement driver API route handlers for auth, trip data, boarding, and incidents (AC-2, AC-3, AC-4, AC-6, AC-7)
+   - [ ] Build driver mobile authentication screen `/driver/login` with OTP and PIN tabs (AC-1, AC-2)
+   - [ ] Build active trip dashboard `/driver` with roster and emergency contacts (AC-1, AC-3, AC-4, AC-8)
+   - [ ] Implement offline-resilient roadside manifest `/driver/manifest` with FRSC inspection mode (AC-1, AC-5)
+   - [ ] Build roadside incident advisory reporter with status update dispatch (AC-1, AC-6, AC-7)
+- [ ] Verify it: `/check verify driver mobile web portal and roadside manifest`
+- [ ] Test it: `/test driver mobile web portal and roadside manifest`
+[Spec 0021](../specs/0021-driver-mobile-web-portal-and-roadside-manifest.md) · code in `apps/web/src/app/(driver)`, `apps/web/src/app/api/driver`, `apps/web/src/server/repositories/driver.ts`, `packages/shared/src/schemas/driver.ts`
 
 ### 15. Real time fleet telematics and journey tracking · planned
 Live transit tracking, GPS coordinates, estimated arrival calculation, and emergency roadside breakdown assistance for passengers and operations staff.
