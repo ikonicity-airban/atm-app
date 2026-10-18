@@ -8,7 +8,7 @@ import {
   searchParamsSchema,
   type ServedCity,
 } from '@atm/shared';
-import { ArrowLeftRight, Users, Calendar, MapPin, Search } from 'lucide-react';
+import { ArrowLeftRight, Users, Calendar, MapPin, Search, ChevronDown } from 'lucide-react';
 import { DateField } from '../ui/DateField.tsx';
 import { Button } from '../ui/Button.tsx';
 import { cn } from '../../lib/utils.ts';
@@ -140,23 +140,18 @@ export function SearchForm({
       method="GET"
       onSubmit={handleSubmit}
       className={cn(
-        'bg-white rounded-xl border border-slate-200 shadow-md p-4 sm:p-6 transition-all',
+        compact
+          ? 'bg-transparent border-0 shadow-none p-0'
+          : 'bg-white rounded-2xl border border-slate-200/80 shadow-md p-5 sm:p-6 transition-all',
         className
       )}
     >
-      <div
-        className={cn(
-          'grid gap-4 items-end',
-          compact
-            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-5'
-            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-12'
-        )}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 items-end">
         {/* Origin City Select */}
-        <div className={compact ? 'lg:col-span-1' : 'lg:col-span-3'}>
+        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <label
             htmlFor="from-select"
-            className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5"
+            className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
           >
             Travelling From
           </label>
@@ -166,7 +161,7 @@ export function SearchForm({
               name="from"
               value={fromCity}
               onChange={(e) => handleFromChange(e.target.value)}
-              className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded bg-white text-slate-900 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#ca2484] focus:border-[#ca2484] min-h-[44px] appearance-none"
+              className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border border-slate-200/90 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-h-[46px] appearance-none transition-all cursor-pointer"
             >
               {SERVED_CITIES.map((city) => (
                 <option key={city} value={city}>
@@ -175,32 +170,55 @@ export function SearchForm({
               ))}
             </select>
             <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+
+            {/* Inline floating swap button on desktop when compact */}
+            {compact && (
+              <button
+                type="button"
+                onClick={handleSwap}
+                aria-label="Swap origin and destination cities"
+                title="Swap cities"
+                className="hidden lg:flex absolute -right-3.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white border border-slate-200 shadow-xs hover:border-brand-500 hover:text-brand-600 text-slate-500 items-center justify-center cursor-pointer transition-all active:scale-[0.92]"
+              >
+                <ArrowLeftRight className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
           {errors.from && <p className="text-xs text-red-600 mt-1">{errors.from}</p>}
         </div>
 
-        {/* Swap Button (between From and To) */}
-        <div
-          className={cn(
-            'flex items-center justify-center',
-            compact ? 'hidden lg:flex lg:col-span-0' : 'lg:col-span-1'
-          )}
-        >
-          <button
-            type="button"
-            onClick={handleSwap}
-            aria-label="Swap origin and destination cities"
-            className="p-2.5 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-[#ca2484] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus:ring-2 focus:ring-[#ca2484]"
-          >
-            <ArrowLeftRight className="w-4 h-4" />
-          </button>
-        </div>
+        {/* Swap Button (mobile / full layout) */}
+        {!compact ? (
+          <div className="flex items-center justify-center lg:col-span-1">
+            <button
+              type="button"
+              onClick={handleSwap}
+              aria-label="Swap origin and destination cities"
+              className="p-2.5 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-brand-600 transition-all min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus:ring-2 focus:ring-brand-500 active:scale-[0.95]"
+            >
+              <ArrowLeftRight className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex sm:hidden justify-center my-0.5">
+            <button
+              type="button"
+              onClick={handleSwap}
+              aria-label="Swap origin and destination cities"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer active:scale-[0.95]"
+            >
+              <ArrowLeftRight className="w-3.5 h-3.5 text-brand-600" />
+              <span>Swap Cities</span>
+            </button>
+          </div>
+        )}
 
         {/* Destination City Select (filtered by origin) */}
-        <div className={compact ? 'lg:col-span-1' : 'lg:col-span-3'}>
+        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <label
             htmlFor="to-select"
-            className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5"
+            className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
           >
             Travelling To
           </label>
@@ -210,7 +228,7 @@ export function SearchForm({
               name="to"
               value={toCity}
               onChange={(e) => setToCity(e.target.value)}
-              className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded bg-white text-slate-900 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#ca2484] focus:border-[#ca2484] min-h-[44px] appearance-none"
+              className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border border-slate-200/90 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-h-[46px] appearance-none transition-all cursor-pointer"
             >
               {servedDestinations.map((dest) => (
                 <option key={dest} value={dest}>
@@ -218,13 +236,14 @@ export function SearchForm({
                 </option>
               ))}
             </select>
-            <MapPin className="w-4 h-4 text-[#ca2484] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <MapPin className="w-4 h-4 text-brand-600 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
           {errors.to && <p className="text-xs text-red-600 mt-1">{errors.to}</p>}
         </div>
 
         {/* Travel Date Field */}
-        <div className={compact ? 'lg:col-span-1' : 'lg:col-span-3'}>
+        <div className={compact ? 'lg:col-span-2' : 'lg:col-span-3'}>
           <DateField
             label="Departure Date"
             name="date"
@@ -236,17 +255,17 @@ export function SearchForm({
         </div>
 
         {/* Passengers Stepper (1 to 5) */}
-        <div className={compact ? 'lg:col-span-1' : 'lg:col-span-2'}>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+        <div className={compact ? 'lg:col-span-2' : 'lg:col-span-2'}>
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
             Passengers
           </label>
-          <div className="flex items-center border border-slate-300 rounded bg-white min-h-[44px]">
+          <div className="flex items-center border border-slate-200/90 rounded-xl bg-slate-50/70 min-h-[46px] overflow-hidden">
             <input type="hidden" name="passengers" value={passengers} />
             <button
               type="button"
               disabled={passengers <= 1}
               onClick={() => handlePassengerChange(-1)}
-              className="px-3 py-2 text-slate-600 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[40px] flex items-center justify-center cursor-pointer"
+              className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[46px] min-w-[38px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
               aria-label="Decrease passenger count"
             >
               -
@@ -259,40 +278,24 @@ export function SearchForm({
               type="button"
               disabled={passengers >= 5}
               onClick={() => handlePassengerChange(1)}
-              className="px-3 py-2 text-slate-600 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[40px] flex items-center justify-center cursor-pointer"
+              className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[46px] min-w-[38px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
               aria-label="Increase passenger count"
             >
               +
             </button>
           </div>
-          {errors.passengers ? (
+          {errors.passengers && (
             <p className="text-xs text-red-600 mt-1">{errors.passengers}</p>
-          ) : (
-            <p className="text-[11px] text-slate-500 mt-1">
-              Groups over 5?{' '}
-              <a
-                href="/corporate"
-                className="text-[#ca2484] hover:underline font-semibold"
-                onClick={(e) => {
-                  if (onNavigate) {
-                    e.preventDefault();
-                    onNavigate('/corporate');
-                  }
-                }}
-              >
-                Group booking
-              </a>
-            </p>
           )}
         </div>
 
         {/* Submit Search Button */}
-        <div className={compact ? 'lg:col-span-1' : 'lg:col-span-12 lg:mt-2'}>
+        <div className={compact ? 'lg:col-span-2 sm:col-span-2' : 'lg:col-span-12 lg:mt-2'}>
           <Button
             type="submit"
             variant="primary"
             size="lg"
-            className="w-full text-base font-bold shadow-md"
+            className="w-full min-h-[46px] rounded-xl text-sm font-bold shadow-md shadow-brand-600/20 active:scale-[0.97]"
             leftIcon={<Search className="w-4 h-4" />}
           >
             Find Trips

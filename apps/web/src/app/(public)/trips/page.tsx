@@ -128,7 +128,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
 
   // Client side state
   const [timeFilter, setTimeFilter] = useState<TimeWindowFilter>('all');
-  const [isEditingSearch, setIsEditingSearch] = useState<boolean>(false);
+  const [isEditingSearch, setIsEditingSearch] = useState<boolean>(true);
   const [savedTrips, setSavedTrips] = useState<Set<string>>(new Set());
 
   const [loading, setLoading] = useState(true);
