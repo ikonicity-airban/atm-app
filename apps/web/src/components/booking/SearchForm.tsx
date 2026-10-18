@@ -217,12 +217,12 @@ export function SearchForm({
       <div
         className={cn(
           compact
-            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 items-end'
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 lg:gap-4 items-end'
             : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 items-end'
         )}
       >
         {/* Origin City Select */}
-        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-3'}>
+        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <label
             htmlFor="from-select"
             className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
@@ -289,7 +289,7 @@ export function SearchForm({
         )}
 
         {/* Destination City Select (filtered by origin) */}
-        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-3'}>
+        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <label
             htmlFor="to-select"
             className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
@@ -317,7 +317,7 @@ export function SearchForm({
         </div>
 
         {/* Travel Date Field */}
-        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-3'}>
+        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <DateField
             label="Departure Date"
             name="date"
@@ -329,7 +329,7 @@ export function SearchForm({
         </div>
 
         {/* Passengers Stepper (1 to 5) */}
-        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-2'}>
+        <div className={compact ? 'lg:col-span-2' : 'lg:col-span-2'}>
           <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
             Passengers
           </label>
@@ -363,16 +363,20 @@ export function SearchForm({
           )}
         </div>
 
-        {/* Submit Search Button (hidden on desktop when compact, per user design direction) */}
-        <div className={compact ? 'sm:col-span-2 lg:hidden' : 'lg:col-span-12 lg:mt-2'}>
+        {/* Submit Search Button (icon only on desktop when compact, icon + text on mobile) */}
+        <div className={compact ? 'sm:col-span-2 lg:col-span-1' : 'lg:col-span-12 lg:mt-2'}>
           <Button
             type="submit"
             variant="primary"
-            size="lg"
-            className="w-full min-h-[46px] rounded-xl text-sm font-bold shadow-md shadow-brand-600/20 active:scale-[0.97]"
-            leftIcon={<Search className="w-4 h-4" />}
+            size="md"
+            aria-label="Find Trips"
+            title="Find Trips"
+            className="w-full min-h-[46px] rounded-xl text-sm font-bold shadow-md shadow-brand-600/20 active:scale-[0.97] flex items-center justify-center p-0 lg:px-0"
           >
-            Find Trips
+            <div className="flex items-center justify-center gap-2">
+              <Search className="w-4 h-4 shrink-0" />
+              <span className={compact ? 'lg:hidden' : ''}>Find Trips</span>
+            </div>
           </Button>
         </div>
       </div>
