@@ -21,6 +21,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { Logo } from '../ui/Logo.tsx';
+import { ThemeToggle } from '../theme/ThemeToggle.tsx';
 
 interface PublicHeaderProps {
   currentPath: string;
@@ -442,13 +443,16 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           </div>
         </nav>
 
-        {/* Action CTAs: Track Parcel + Manage Booking */}
+        {/* Action CTAs: Track Parcel + Manage Booking + Theme Changer */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Theme Changer */}
+          <ThemeToggle />
+
           {/* Track Parcel Fast Utility Link */}
           <button
             type="button"
             onClick={() => handleNav('/track')}
-            className={`hidden lg:flex px-3.5 py-2 text-xs font-bold rounded-full min-h-[44px] items-center gap-1.5 transition-colors cursor-pointer ${currentPath === '/track' ? 'text-[#ca2484] bg-pink-50' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+            className={`hidden lg:flex px-3.5 py-2 text-xs font-bold rounded-full min-h-[44px] items-center gap-1.5 transition-colors cursor-pointer ${currentPath === '/track' ? 'text-[#ca2484] bg-pink-50 dark:bg-pink-950/40' : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
           >
             <Search className="w-3.5 h-3.5 text-[#ca2484]" />
@@ -459,7 +463,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           <button
             type="button"
             onClick={() => handleNav('/manage')}
-            className={`px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold text-slate-900 border border-slate-900/80 rounded-full hover:bg-slate-900 hover:text-white transition-all shadow-2xs min-h-10 flex items-center cursor-pointer ${isScrolled && "bg-primary border-white text-white border-2"}`}
+            className={`px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold text-slate-900 dark:text-white border border-slate-900/80 dark:border-white/30 rounded-full hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-950 transition-all shadow-2xs min-h-10 flex items-center cursor-pointer ${isScrolled && "bg-primary border-white text-white border-2"}`}
           >
             Manage Booking
           </button>
@@ -477,7 +481,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => handleNav('/account')}
-              className="hidden sm:flex px-3.5 py-2 text-xs font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-full min-h-[44px] items-center gap-1.5 cursor-pointer"
+              className="hidden sm:flex px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full min-h-[44px] items-center gap-1.5 cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               <span>Account</span>
@@ -488,7 +492,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden w-11 h-11 rounded-full flex items-center justify-center text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="md:hidden w-11 h-11 rounded-full flex items-center justify-center text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             aria-label="Toggle mobile navigation menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -505,7 +509,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-20 left-4 right-4 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] ring-1 ring-slate-900/10 p-5 z-50 max-h-[85vh] overflow-y-auto"
+            className="md:hidden fixed top-20 left-4 right-4 bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] ring-1 ring-slate-900/10 dark:ring-white/10 p-5 z-50 max-h-[85vh] overflow-y-auto text-slate-900 dark:text-slate-100"
           >
             <div className="space-y-6">
               {/* High Visibility "Book Trip" Button */}
@@ -528,7 +532,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 <button
                   type="button"
                   onClick={() => handleNav('/routes')}
-                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 text-xs font-bold ${currentPath.startsWith('/routes') ? 'bg-pink-50 text-[#ca2484] border-pink-200' : 'text-slate-800'}`}
+                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 dark:border-slate-700 text-xs font-bold ${currentPath.startsWith('/routes') ? 'bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] border-pink-200 dark:border-pink-800' : 'text-slate-800 dark:text-slate-200'}`}
                 >
                   <Bus className="w-4 h-4 text-[#ca2484]" />
                   <span>Routes</span>
@@ -536,11 +540,17 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 <button
                   type="button"
                   onClick={() => handleNav('/terminals')}
-                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 text-xs font-bold ${currentPath.startsWith('/terminals') ? 'bg-pink-50 text-[#ca2484] border-pink-200' : 'text-slate-800'}`}
+                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 dark:border-slate-700 text-xs font-bold ${currentPath.startsWith('/terminals') ? 'bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] border-pink-200 dark:border-pink-800' : 'text-slate-800 dark:text-slate-200'}`}
                 >
                   <MapPin className="w-4 h-4 text-[#ca2484]" />
                   <span>Terminals</span>
                 </button>
+              </div>
+
+              {/* Theme Switcher Row in Mobile Menu */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Appearance</span>
+                <ThemeToggle showLabel={true} />
               </div>
 
               {/* Services Section */}
@@ -557,14 +567,14 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                         type="button"
                         onClick={() => handleNav(item.path)}
                         className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-pink-50 text-[#ca2484] font-bold'
-                          : 'text-slate-800 hover:bg-slate-50'
+                          ? 'bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] font-bold'
+                          : 'text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                           }`}
                       >
                         <Icon className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
                         <div>
                           <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-slate-500 leading-tight">{item.sub}</div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">{item.sub}</div>
                         </div>
                       </button>
                     );
@@ -584,8 +594,8 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                       type="button"
                       onClick={() => handleNav(item.path)}
                       className={`text-left px-3 py-2 rounded-lg min-h-[44px] flex items-center cursor-pointer ${currentPath.startsWith(item.path)
-                        ? 'text-[#ca2484] font-bold bg-pink-50'
-                        : 'text-slate-700 hover:bg-slate-50'
+                        ? 'text-[#ca2484] font-bold bg-pink-50 dark:bg-pink-950/40'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                         }`}
                     >
                       {item.label}
@@ -595,11 +605,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
               </div>
 
               {/* Self-Service Action Bar at Bottom of Mobile Menu */}
-              <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
                 <button
                   type="button"
                   onClick={() => handleNav('/track')}
-                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 hover:bg-slate-50 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Search className="w-3.5 h-3.5 text-[#ca2484]" />
                   <span>Track Waybill Parcel</span>
@@ -607,7 +617,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 <button
                   type="button"
                   onClick={() => handleNav('/manage')}
-                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Manage / Cancel Booking</span>
                 </button>

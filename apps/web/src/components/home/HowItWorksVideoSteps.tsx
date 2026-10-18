@@ -213,20 +213,20 @@ function StepCard({ step }: { step: Step }) {
       </div>
 
       {/* Step Description Content */}
-      <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
+      <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3 bg-card text-card-foreground">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-accent text-[#ca2484] flex items-center justify-center">
               <Icon className="w-4 h-4" />
             </div>
             <span className="text-xs font-bold text-[#ca2484] tracking-wide uppercase">
               Step {step.number}
             </span>
           </div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="text-lg font-bold font-heading text-foreground">
             {step.title}
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mt-2">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mt-2">
             {step.description}
           </p>
         </div>
@@ -239,13 +239,13 @@ export function HowItWorksVideoSteps() {
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-pink-50 dark:bg-pink-950/40 px-3 py-1 rounded-full inline-block">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
           Simple Reservation Flow
         </span>
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight text-balance">
+        <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
           How Ascent Booking Works
         </h2>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-pretty">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
           Book your seat in three straightforward steps. Hover on each card to preview the traveler experience.
         </p>
       </div>

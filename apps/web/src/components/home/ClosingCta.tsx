@@ -16,7 +16,7 @@ export function ClosingCta({ onNavigate }: { onNavigate?: (path: string) => void
           <span>Daily Fixed Departures Across Nigeria</span>
         </div>
 
-        <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight max-w-3xl mx-auto text-balance">
+        <h2 className="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight max-w-3xl mx-auto text-balance">
           Ready to Experience Executive 5 Seat Travel?
         </h2>
 

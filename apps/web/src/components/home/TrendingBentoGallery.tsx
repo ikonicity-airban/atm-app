@@ -138,19 +138,19 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
         <div className="space-y-2 max-w-2xl">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-pink-50 dark:bg-pink-950/40 px-3 py-1 rounded-full inline-block">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
             Trending Travel Corridors
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight text-balance">
+          <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
             Explore Popular Interstate Routes
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-pretty">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
             Fixed departure times and direct terminal connections with no road pickups.
           </p>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-muted rounded-full border border-border">
           {[
             { id: 'all', label: 'All Corridors' },
             { id: 'enugu-abuja', label: 'Enugu ↔ Abuja' },
@@ -163,8 +163,8 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
               className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all cursor-pointer min-h-[36px] ${
                 activeFilter === tab.id
-                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
+                  ? 'bg-card text-foreground shadow-xs border border-border'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {tab.label}
@@ -254,7 +254,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
         {rest.map((corridor) => (
           <div
             key={corridor.id}
-            className="relative rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 flex flex-col justify-between p-5 group"
+            className="relative rounded-3xl overflow-hidden bg-card text-card-foreground border border-border shadow-sm hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 flex flex-col justify-between p-5 group"
           >
             <div>
               <div className="relative h-40 w-full rounded-2xl overflow-hidden mb-4">
@@ -274,21 +274,21 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               </div>
 
               <div className="space-y-1">
-                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                <div className="text-[11px] text-muted-foreground font-medium truncate">
                   {corridor.fromHub} → {corridor.toHub}
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                <h4 className="text-lg font-heading font-bold text-foreground">
                   {corridor.from} to {corridor.to}
                 </h4>
               </div>
             </div>
 
-            <div className="pt-4 mt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div className="pt-4 mt-3 border-t border-border flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-400 block uppercase font-medium">
+                <span className="text-[10px] text-muted-foreground block uppercase font-medium">
                   From
                 </span>
-                <span className="text-base font-extrabold text-slate-900 dark:text-white">
+                <span className="text-base font-extrabold text-foreground">
                   {formatNaira(corridor.baseFareKobo)}
                 </span>
               </div>
@@ -296,7 +296,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               <button
                 type="button"
                 onClick={() => handleBook(corridor.from, corridor.to)}
-                className="px-4 py-2 bg-pink-50 dark:bg-pink-950/40 hover:bg-[#ca2484] text-[#ca2484] hover:text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+                className="px-4 py-2 bg-accent hover:bg-[#ca2484] text-[#ca2484] hover:text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
               >
                 <span>Select</span>
                 <ArrowRight className="w-3.5 h-3.5" />

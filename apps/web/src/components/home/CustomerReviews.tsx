@@ -50,13 +50,13 @@ export function CustomerReviews() {
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-pink-50 dark:bg-pink-950/40 px-3 py-1 rounded-full inline-block">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
           Verified Passenger Testimonials
         </span>
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight text-balance">
+        <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
           Loved by Over 5,000 Travelers
         </h2>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-pretty">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
           Real feedback from Nigerian executives, medical professionals, and business commuters.
         </p>
       </div>
@@ -65,7 +65,7 @@ export function CustomerReviews() {
         {REVIEWS.map((rev) => (
           <div
             key={rev.name}
-            className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 relative group"
+            className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card text-card-foreground border border-border shadow-sm hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 relative group"
           >
             <div>
               {/* Rating Stars & Route Tag */}
@@ -78,30 +78,30 @@ export function CustomerReviews() {
                     />
                   ))}
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 truncate max-w-[150px]">
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground truncate max-w-[150px]">
                   {rev.route}
                 </span>
               </div>
 
               {/* Review Text */}
-              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
+              <p className="text-xs sm:text-sm text-foreground leading-relaxed italic">
                 "{rev.review}"
               </p>
             </div>
 
             {/* Commuter Avatar and Name */}
-            <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+            <div className="pt-6 mt-6 border-t border-border flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-full bg-gradient-to-br ${rev.avatarColor} text-white font-black text-xs flex items-center justify-center flex-shrink-0 shadow-md`}
+                className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${rev.avatarColor} text-white font-black text-xs flex items-center justify-center flex-shrink-0 shadow-md`}
               >
                 {rev.initials}
               </div>
               <div className="overflow-hidden">
-                <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <div className="text-xs sm:text-sm font-bold font-heading text-foreground flex items-center gap-1.5">
                   <span className="truncate">{rev.name}</span>
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
                 </div>
-                <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                <div className="text-[11px] text-muted-foreground truncate">
                   {rev.role}
                 </div>
               </div>

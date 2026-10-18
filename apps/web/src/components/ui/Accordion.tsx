@@ -36,7 +36,7 @@ export function Accordion({
   };
 
   return (
-    <div className={cn('divide-y divide-slate-200 border-y border-slate-200', className)}>
+    <div className={cn('divide-y divide-border border-y border-border', className)}>
       {items.map((item) => {
         const isOpen = openIds.includes(item.id);
         return (
@@ -45,18 +45,18 @@ export function Accordion({
               type="button"
               onClick={() => toggleItem(item.id)}
               aria-expanded={isOpen}
-              className="w-full py-3.5 flex items-center justify-between text-left font-semibold text-slate-900 hover:text-[#ca2484] transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-[#ca2484] rounded px-1"
+              className="w-full py-3.5 flex items-center justify-between text-left font-semibold text-foreground hover:text-[#ca2484] transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-[#ca2484] rounded px-1 cursor-pointer"
             >
               <span className="text-sm sm:text-base pr-4">{item.title}</span>
               <ChevronDown
                 className={cn(
-                  'w-4 h-4 text-slate-500 flex-shrink-0 transition-transform duration-200',
+                  'w-4 h-4 text-muted-foreground flex-shrink-0 transition-transform duration-200',
                   isOpen && 'transform rotate-180 text-[#ca2484]'
                 )}
               />
             </button>
             {isOpen && (
-              <div className="pb-4 pt-1 px-1 text-sm text-slate-600 leading-relaxed">
+              <div className="pb-4 pt-1 px-1 text-sm text-muted-foreground leading-relaxed">
                 {item.content}
               </div>
             )}

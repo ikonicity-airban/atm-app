@@ -60,13 +60,13 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-pink-50 dark:bg-pink-950/40 px-3 py-1 rounded-full inline-block">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
           Executive Mobility Standards
         </span>
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight text-balance">
+        <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
           Experience Seamless Intercity Transit
         </h2>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-pretty">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
           Engineered for Nigerian professionals and commuters who demand punctuality, safety, and personal space on interstate corridors.
         </p>
       </div>
@@ -77,14 +77,14 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
           return (
             <div
               key={pillar.title}
-              className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 hover:-translate-y-1"
+              className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card text-card-foreground border border-border shadow-xs hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 hover:-translate-y-1"
             >
               <div>
                 <div className="flex items-center justify-between mb-5">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${pillar.accentColor} text-white flex items-center justify-center shadow-md`}>
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${pillar.accentColor} text-white flex items-center justify-center shadow-md`}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground">
                     {pillar.stats}
                   </span>
                 </div>
@@ -92,19 +92,19 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
                 <div className="text-xs font-bold text-[#ca2484] mb-1">
                   {pillar.tagline}
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                <h3 className="text-lg font-bold font-heading text-foreground mb-2">
                   {pillar.title}
                 </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   {pillar.description}
                 </p>
               </div>
 
-              <div className="pt-6 mt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="pt-6 mt-4 border-t border-border">
                 <button
                   type="button"
                   onClick={() => onNavigate ? onNavigate(pillar.href) : (window.location.href = pillar.href)}
-                  className="w-full flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#ca2484] transition-colors cursor-pointer min-h-[44px]"
+                  className="w-full flex items-center justify-between text-xs font-bold text-foreground group-hover:text-[#ca2484] transition-colors cursor-pointer min-h-[44px]"
                 >
                   <span>Explore service</span>
                   <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />

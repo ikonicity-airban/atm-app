@@ -88,13 +88,13 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-pink-50 dark:bg-pink-950/40 px-3 py-1 rounded-full inline-block">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
           Digital Ticketing &amp; Direct Reservation
         </span>
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight text-balance">
+        <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
           Smart Ticketing &amp; Instant Fare Calculator
         </h2>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed text-pretty">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
           Transparent integer pricing with zero hidden surcharges. Receive your verified digital pass immediately after booking.
         </p>
       </div>
@@ -201,17 +201,17 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
         </div>
 
         {/* Right Side: Interactive Quick Checkout & Fare Calculator */}
-        <div className="lg:col-span-6 bg-white dark:bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-xl space-y-6">
+        <div className="lg:col-span-6 bg-card text-card-foreground rounded-3xl p-6 sm:p-8 border border-border shadow-xl space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h3 className="text-xl font-heading font-black text-foreground">
                 Live Fare Calculator
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Calculate total kobo fare and reserve your seat instantly
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded-full bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] text-xs font-bold">
+            <span className="px-2.5 py-1 rounded-full bg-accent text-[#ca2484] text-xs font-bold">
               Instant Hold
             </span>
           </div>
@@ -220,13 +220,13 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           <div className="space-y-4">
             {/* Corridor Select */}
             <div>
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
+              <label className="text-xs font-bold font-heading text-foreground block mb-1.5">
                 Select Corridor
               </label>
               <select
                 value={selectedRouteIndex}
                 onChange={(e) => setSelectedRouteIndex(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[48px]"
+                className="w-full px-4 py-3 rounded-2xl bg-muted border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[48px]"
               >
                 {CHECKOUT_ROUTES.map((route, idx) => (
                   <option key={route.label} value={idx}>
@@ -239,38 +239,38 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
             {/* Travel Date & Passengers Count Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
+                <label className="text-xs font-bold font-heading text-foreground block mb-1.5">
                   Departure Date
                 </label>
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[48px]"
+                  className="w-full px-4 py-3 rounded-2xl bg-muted border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[48px]"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
+                <label className="text-xs font-bold font-heading text-foreground block mb-1.5">
                   Passengers (Max 5)
                 </label>
-                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 min-h-[48px]">
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-2xl bg-muted border border-border min-h-[48px]">
                   <button
                     type="button"
                     onClick={() => setPassengerCount(Math.max(1, passengerCount - 1))}
                     disabled={passengerCount <= 1}
-                    className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-white disabled:opacity-30 cursor-pointer shadow-2xs"
+                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-2xs border border-border"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
-                  <span className="text-sm font-black text-slate-900 dark:text-white">
+                  <span className="text-sm font-black text-foreground">
                     {passengerCount} {passengerCount === 1 ? 'Seat' : 'Seats'}
                   </span>
                   <button
                     type="button"
                     onClick={() => setPassengerCount(Math.min(5, passengerCount + 1))}
                     disabled={passengerCount >= 5}
-                    className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-white disabled:opacity-30 cursor-pointer shadow-2xs"
+                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-2xs border border-border"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -280,18 +280,18 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           </div>
 
           {/* Fare Summary Breakdown Box */}
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+          <div className="p-4 rounded-2xl bg-muted/40 border border-border space-y-2">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Base Fare ({passengerCount} × {formatNaira(currentRoute.baseFareKobo)})</span>
-              <span className="font-bold text-slate-900 dark:text-white">{formatNaira(subtotalKobo)}</span>
+              <span className="font-bold text-foreground">{formatNaira(subtotalKobo)}</span>
             </div>
-            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Terminal &amp; Luggage Fee ({passengerCount} × {formatNaira(TERMINAL_SERVICE_FEE_KOBO)})</span>
-              <span className="font-bold text-slate-900 dark:text-white">{formatNaira(feesKobo)}</span>
+              <span className="font-bold text-foreground">{formatNaira(feesKobo)}</span>
             </div>
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div className="pt-2 border-t border-border flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-slate-900 dark:text-white block">
+                <span className="text-xs font-bold font-heading text-foreground block">
                   Total Fare
                 </span>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">

@@ -61,7 +61,7 @@ export default function HomePage({ onNavigate }: HomePageProps = {}) {
   };
 
   return (
-    <div className="space-y-12 sm:space-y-20 pb-16 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="space-y-12 sm:space-y-20 pb-16 bg-background text-foreground transition-colors">
       {/* Structured SEO Data Script */}
       <script
         type="application/ld+json"
@@ -103,12 +103,12 @@ export default function HomePage({ onNavigate }: HomePageProps = {}) {
 
       {/* FREQUENTLY ASKED QUESTIONS SUMMARY */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-        <div className="flex justify-between items-end border-b border-slate-200 dark:border-slate-800 pb-3 mb-6">
+        <div className="flex justify-between items-end border-b border-border pb-3 mb-6">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight text-balance">
+            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground tracking-tight text-balance">
               Frequently Asked Questions
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
               Direct information on schedules, seat holds, and terminal arrivals.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function HomePage({ onNavigate }: HomePageProps = {}) {
           </button>
         </div>
 
-        <div className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 shadow-xs">
+        <div className="bg-card border border-border rounded-3xl p-6 shadow-xs">
           <Accordion items={FAQ_ITEMS} defaultOpenId="faq-1" />
         </div>
       </section>

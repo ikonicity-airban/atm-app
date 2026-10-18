@@ -20,7 +20,7 @@ export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) =>
               <span>Mobile First Progressive Web App</span>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight text-balance">
+            <h2 className="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight text-balance">
               Take Ascent Travel Everywhere
             </h2>
 
