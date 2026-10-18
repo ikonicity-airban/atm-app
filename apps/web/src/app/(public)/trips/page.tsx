@@ -270,7 +270,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
   const canGoPrev = dateParam > todayLagos;
 
   return (
-    <PageShell width="compact" density="compact" className="pb-20 space-y-6">
+    <PageShell width="compact" density="compact" className="pb-24 space-y-8">
       <SEOHead
         title={`${fromParam} to ${toParam} Scheduled Sienna Trips | Ascent Transport`}
         description={`Daily executive 5-passenger Toyota Sienna departures from ${fromParam} to ${toParam}. Real-time seat availability, departure times, and fixed kobo fares.`}
@@ -317,28 +317,43 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
         </div>
       </div>
 
-      {/* Collapsible Search Modification Drawer with decelerating fluid entrance */}
+      {/* Collapsible Search Modification Card (Coss Frame / Particle Pattern) */}
       {isEditingSearch && (
-        <div className="p-5 rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-all animate-fluid-drawer">
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Modify Route &amp; Travel Date
-            </h3>
+        <div className="rounded-2xl border border-slate-200/90 bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] overflow-hidden transition-all animate-fluid-drawer">
+          {/* Header Action Bar */}
+          <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-50/80 via-white to-slate-50/50 border-b border-slate-100">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600">
+                <SlidersHorizontal className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+                  Update Route &amp; Travel Date
+                </h3>
+                <p className="text-[11px] text-slate-500 font-medium">
+                  Select your preferred corridor, travel day, and passenger headcount
+                </p>
+              </div>
+            </div>
             <button
               type="button"
               onClick={() => setIsEditingSearch(false)}
-              className="text-xs text-slate-400 hover:text-slate-600 font-semibold min-h-[32px] px-2 active:scale-[0.97] transition-transform"
+              className="text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-100/80 hover:bg-slate-200/80 min-h-[36px] px-3.5 py-1.5 rounded-xl active:scale-[0.97] transition-all cursor-pointer"
             >
               Cancel
             </button>
           </div>
-          <SearchForm
-            compact
-            initialFrom={fromParam}
-            initialTo={toParam}
-            initialDate={dateParam}
-            initialPassengers={passengersParam}
-          />
+
+          {/* Search Form Body */}
+          <div className="p-6">
+            <SearchForm
+              compact
+              initialFrom={fromParam}
+              initialTo={toParam}
+              initialDate={dateParam}
+              initialPassengers={passengersParam}
+            />
+          </div>
         </div>
       )}
 
@@ -531,7 +546,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           {/* 5. Trip Results List (Horizontal High-Craft Cards based on Skyloop Reference) */}
           {loading ? (
             /* Static modern skeleton surfaces (Zero animate-pulse per design guidelines) */
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="h-44 bg-white border border-slate-200/70 rounded-2xl p-6 shadow-xs relative overflow-hidden">
                 <div className="w-48 h-5 bg-slate-100 rounded mb-4" />
                 <div className="w-full h-8 bg-slate-100 rounded mb-3" />
@@ -591,7 +606,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {sortedTrips.map((trip, idx) => {
                 const totalFare = trip.fareKobo * passengersParam;
                 const isFewSeats = trip.seatsLeft <= 2 && trip.seatsLeft > 0;
