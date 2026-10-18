@@ -114,8 +114,8 @@
 ### Coss UI Font Variable Contract
 | Variable | Font Family Stack | Purpose / Usage |
 |---|---|---|
-| `--font-sans` | `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` | Default body copy, form controls, navigation, and interactive buttons |
-| `--font-heading` | `var(--font-sans)` | High impact section headings, hero titles, display metrics |
+| `--font-sans` | `var(--font-inter), 'Inter', 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` | Default body copy, form controls, navigation, and interactive buttons |
+| `--font-heading` | `'Frutiger', 'Frutiger Linotype', 'Univers', var(--font-overpass), 'Overpass', var(--font-sans)` | High impact section headings, highway signage titles, corridor banners, display metrics |
 | `--font-mono` | `ui-monospace, "SF Mono", Menlo, Consolas, monospace` | Tracking numbers (`ATM-EXP-XXXXXX`), booking codes, integer kobo currency tables |
 
 ### Fluid Typography Scale
