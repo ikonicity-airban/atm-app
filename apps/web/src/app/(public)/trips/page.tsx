@@ -270,7 +270,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
   const canGoPrev = dateParam > todayLagos;
 
   return (
-    <PageShell width="compact" density="compact" className="pb-24 flex flex-col gap-6 sm:gap-8">
+    <PageShell width="compact" density="comfortable" className="pb-32 flex flex-col gap-10 sm:gap-12">
       <SEOHead
         title={`${fromParam} to ${toParam} Scheduled Sienna Trips | Ascent Transport`}
         description={`Daily executive 5-passenger Toyota Sienna departures from ${fromParam} to ${toParam}. Real-time seat availability, departure times, and fixed kobo fares.`}
@@ -278,7 +278,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
       />
 
       {/* 1. Airline-Grade Clean Corridor Header (Skyloop reference layout) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 border-b border-slate-100 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 border-b border-slate-100 pb-6">
         <div>
           {/* Main Title rests directly on page background per ATM rules */}
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-balance flex items-center gap-2.5">
@@ -393,9 +393,9 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           </div>
         </div>
       ) : (
-        <>
+        <div className="flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* 3. Elevated 7-Day Calendar Navigation Strip (Skyloop Reference Pattern) */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-2.5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 sm:p-4 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
             {/* Subtle Specular Top Highlight */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-200/70 to-transparent" />
             <div className="flex items-center gap-2">
@@ -409,7 +409,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                 <ChevronLeft className="w-5 h-5" />
               </button>
 
-              <div className="flex-1 flex gap-2 overflow-x-auto py-1 scrollbar-none">
+              <div className="flex-1 flex gap-2.5 overflow-x-auto py-1 scrollbar-none">
                 {dateQuickPick.map((item) => {
                   const isSelected = item.dateStr === dateParam;
                   return (
@@ -417,7 +417,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                       key={item.dateStr}
                       type="button"
                       onClick={() => handleDateChange(item.dateStr)}
-                      className={`flex-1 min-w-[85px] sm:min-w-[105px] px-3 py-2 rounded-xl text-center transition-all min-h-[44px] flex flex-col items-center justify-center cursor-pointer active:scale-[0.97] ${
+                      className={`flex-1 min-w-[90px] sm:min-w-[110px] px-3.5 py-2.5 rounded-xl text-center transition-all min-h-[48px] flex flex-col items-center justify-center cursor-pointer active:scale-[0.97] ${
                         isSelected
                           ? 'bg-brand-600 text-white font-bold shadow-md shadow-brand-600/20'
                           : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/60'
@@ -446,7 +446,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           </div>
 
           {/* 4. Coss-Inspired Segmented Filter & Sort Toolbar */}
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="rounded-2xl border border-slate-200/60 bg-slate-50/70 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             {/* Filter Pills with Segmented Control styling */}
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">
@@ -526,19 +526,19 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           </div>
 
           {/* AC Comfort Guarantee Banner (Skyloop greener choices reference pattern) */}
-          <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between gap-3 text-xs text-emerald-950">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+          <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex items-center justify-between gap-4 text-xs text-emerald-950 shadow-xs animate-fluid-fade">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
-                <strong className="block text-emerald-950 font-bold">Guaranteed 5-Passenger Executive Cabin</strong>
-                <span className="text-emerald-800 text-[11px]">
+                <strong className="block text-emerald-950 font-bold text-sm">Guaranteed 5-Passenger Executive Cabin</strong>
+                <span className="text-emerald-800 text-xs">
                   Zero overcrowding. Clean air conditioning, extra legroom, and rear luggage boot on every departure.
                 </span>
               </div>
             </div>
-            <span className="hidden sm:inline-block px-2.5 py-1 rounded-full bg-emerald-100/80 text-emerald-800 text-[11px] font-bold">
+            <span className="hidden sm:inline-block px-3 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-bold shrink-0">
               Standard On All Trips
             </span>
           </div>
@@ -546,13 +546,13 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           {/* 5. Trip Results List (Horizontal High-Craft Cards based on Skyloop Reference) */}
           {loading ? (
             /* Static modern skeleton surfaces (Zero animate-pulse per design guidelines) */
-            <div className="flex flex-col gap-6 sm:gap-8">
-              <div className="h-44 bg-white border border-slate-200/70 rounded-2xl p-6 shadow-xs relative overflow-hidden">
+            <div className="flex flex-col gap-8 sm:gap-10">
+              <div className="h-48 bg-white border border-slate-200/70 rounded-2xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
                 <div className="w-48 h-5 bg-slate-100 rounded mb-4" />
                 <div className="w-full h-8 bg-slate-100 rounded mb-3" />
                 <div className="w-32 h-4 bg-slate-100 rounded" />
               </div>
-              <div className="h-44 bg-white border border-slate-200/70 rounded-2xl p-6 shadow-xs relative overflow-hidden">
+              <div className="h-48 bg-white border border-slate-200/70 rounded-2xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
                 <div className="w-48 h-5 bg-slate-100 rounded mb-4" />
                 <div className="w-full h-8 bg-slate-100 rounded mb-3" />
                 <div className="w-32 h-4 bg-slate-100 rounded" />
@@ -606,7 +606,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-6 sm:gap-8">
+            <div className="flex flex-col gap-8 sm:gap-10">
               {sortedTrips.map((trip, idx) => {
                 const totalFare = trip.fareKobo * passengersParam;
                 const isFewSeats = trip.seatsLeft <= 2 && trip.seatsLeft > 0;
@@ -617,7 +617,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
                 return (
                   <div
                     key={trip.id}
-                    className={`relative overflow-hidden rounded-2xl border bg-white p-5 sm:p-6 transition-all shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)] animate-fluid-fade ${
+                    className={`relative overflow-hidden rounded-2xl border bg-white p-6 sm:p-8 transition-all shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_36px_-6px_rgba(0,0,0,0.09)] animate-fluid-fade ${
                       trip.bookable
                         ? 'border-slate-200/80 hover:border-slate-300'
                         : 'border-slate-200/60 opacity-60 bg-slate-50/50'
@@ -776,7 +776,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               })}
             </div>
           )}
-        </>
+        </div>
       )}
 
       {/* Guidelines Footer Notice */}
