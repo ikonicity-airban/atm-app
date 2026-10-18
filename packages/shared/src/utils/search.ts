@@ -9,6 +9,7 @@ import {
  * Returns the list of served destination cities for a given origin city.
  */
 export function getServedDestinations(originCity: string): ServedCity[] {
+  if (!originCity || typeof originCity !== 'string') return [];
   const norm = originCity.trim().toLowerCase();
   const matched = SERVED_CORRIDORS.filter(
     (c) => c.from.toLowerCase() === norm
@@ -20,6 +21,9 @@ export function getServedDestinations(originCity: string): ServedCity[] {
  * Checks whether an origin and destination city form a served transport corridor.
  */
 export function isServedPair(originCity: string, destinationCity: string): boolean {
+  if (!originCity || !destinationCity || typeof originCity !== 'string' || typeof destinationCity !== 'string') {
+    return false;
+  }
   const fromNorm = originCity.trim().toLowerCase();
   const toNorm = destinationCity.trim().toLowerCase();
   return SERVED_CORRIDORS.some(

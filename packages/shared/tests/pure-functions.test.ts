@@ -149,6 +149,13 @@ test('served destination filtering and validation', () => {
   assert.equal(isServedPair('Abuja', 'Lagos'), false);
   assert.equal(isServedPair('Abuja', 'Owerri'), false);
   assert.equal(isServedPair('Enugu', 'Owerri'), false);
+
+  // Defensive handling against undefined / null / malformed inputs
+  assert.equal(isServedPair(undefined as any, undefined as any), false);
+  assert.equal(isServedPair('Enugu', undefined as any), false);
+  assert.equal(isServedPair(null as any, 'Abuja'), false);
+  assert.deepEqual(getServedDestinations(undefined as any), []);
+  assert.deepEqual(getServedDestinations(null as any), []);
 });
 
 test('searchParamsSchema enforces business rules', () => {

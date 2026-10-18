@@ -54,8 +54,10 @@ export interface TripSearchResult {
 }
 
 export interface SearchTripsQuery {
-  originCity: string;
-  destinationCity: string;
+  originCity?: string;
+  destinationCity?: string;
+  from?: string;
+  to?: string;
   date: string; // YYYY-MM-DD
   passengers?: number;
 }
@@ -223,10 +225,12 @@ function getTerminalById(id: string) {
 
 export class StaticTripRepository implements ITripRepository {
   async searchTrips(query: SearchTripsQuery): Promise<TripSearchResult[]> {
-    const { originCity, destinationCity, date, passengers = 1 } = query;
+    const origCity = query.originCity || query.from || '';
+    const destCity = query.destinationCity || query.to || '';
+    const { date, passengers = 1 } = query;
 
     // Served pair check
-    if (!isServedPair(originCity, destinationCity)) {
+    if (!isServedPair(origCity, destCity)) {
       return [];
     }
 
@@ -245,8 +249,8 @@ export class StaticTripRepository implements ITripRepository {
       const dest = getTerminalById(item.destinationTerminalId);
 
       if (
-        orig.city.toLowerCase() === originCity.toLowerCase() &&
-        dest.city.toLowerCase() === destinationCity.toLowerCase()
+        orig.city.toLowerCase() === origCity.toLowerCase() &&
+        dest.city.toLowerCase() === destCity.toLowerCase()
       ) {
         // Evaluate bookable status
         const bookableStatus = isBookable(item.departureTimeUtc, now, cutoffMinutes);

@@ -211,7 +211,7 @@ export default function HomePage({ onNavigate }: HomePageProps = {}) {
       />
 
       {/* 1. HERO SECTION: Framed Showcase Container with 3D Perspective Scroll & Chamfered Bottom */}
-      <div className="px-2 sm:px-4 lg:px-6 pt-20 sm:pt-16">
+      <div className="px-2 sm:px-4 lg:px-6 pt-20 sm:pt-[10vh]">
         <section
           ref={heroRef}
           className="relative rounded-3xl lg:rounded-[2.5rem] overflow-hidden text-white pt-8 sm:pt-12 pb-10 sm:pb-14 px-4 sm:px-6 lg:px-10"

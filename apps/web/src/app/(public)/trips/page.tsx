@@ -159,6 +159,8 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
 
     tripRepository
       .searchTrips({
+        originCity: fromParam,
+        destinationCity: toParam,
         from: fromParam,
         to: toParam,
         date: dateParam,
