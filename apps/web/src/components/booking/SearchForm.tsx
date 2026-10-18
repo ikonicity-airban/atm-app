@@ -60,14 +60,62 @@ export function SearchForm({
     }
   }, [initialFrom]);
 
+  // Sync state when props change (from URL or 7-day strip)
+  useEffect(() => {
+    if (initialFrom) setFromCity(initialFrom);
+  }, [initialFrom]);
+
+  useEffect(() => {
+    if (initialTo) setToCity(initialTo);
+  }, [initialTo]);
+
+  useEffect(() => {
+    if (initialDate) setDate(initialDate);
+  }, [initialDate]);
+
+  useEffect(() => {
+    if (initialPassengers) setPassengers(initialPassengers);
+  }, [initialPassengers]);
+
   // When From city changes, ensure To city is one of the served destinations
   const servedDestinations = getServedDestinations(fromCity);
+
+  const triggerAutoNavigate = (
+    nextFrom: string,
+    nextTo: string,
+    nextDate: string,
+    nextPassengers: number
+  ) => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ from: nextFrom, to: nextTo, passengers: nextPassengers })
+        );
+      } catch {
+        // Ignore storage write failure
+      }
+    }
+    if (onNavigate) {
+      onNavigate(
+        `/trips?from=${encodeURIComponent(nextFrom)}&to=${encodeURIComponent(
+          nextTo
+        )}&date=${encodeURIComponent(nextDate)}&passengers=${nextPassengers}`
+      );
+    }
+  };
 
   const handleFromChange = (newFrom: string) => {
     setFromCity(newFrom);
     const validDests = getServedDestinations(newFrom);
-    if (!validDests.includes(toCity as ServedCity)) {
-      setToCity(validDests[0] || 'Lagos');
+    const nextTo = validDests.includes(toCity as ServedCity)
+      ? toCity
+      : (validDests[0] || 'Lagos');
+    if (nextTo !== toCity) {
+      setToCity(nextTo);
+    }
+    if (compact && onNavigate) {
+      triggerAutoNavigate(newFrom, nextTo, date, passengers);
     }
   };
 
@@ -77,17 +125,37 @@ export function SearchForm({
 
     // Only swap if the reverse route is served
     const reverseServed = getServedDestinations(prevTo);
-    if (reverseServed.includes(prevFrom as ServedCity)) {
-      setFromCity(prevTo);
-      setToCity(prevFrom);
-    } else {
-      setFromCity(prevTo);
-      setToCity(reverseServed[0] || 'Lagos');
+    const nextTo = reverseServed.includes(prevFrom as ServedCity)
+      ? prevFrom
+      : (reverseServed[0] || 'Lagos');
+    setFromCity(prevTo);
+    setToCity(nextTo);
+
+    if (compact && onNavigate) {
+      triggerAutoNavigate(prevTo, nextTo, date, passengers);
+    }
+  };
+
+  const handleToChange = (newTo: string) => {
+    setToCity(newTo);
+    if (compact && onNavigate) {
+      triggerAutoNavigate(fromCity, newTo, date, passengers);
+    }
+  };
+
+  const handleDateChange = (newDate: string) => {
+    setDate(newDate);
+    if (compact && onNavigate) {
+      triggerAutoNavigate(fromCity, toCity, newDate, passengers);
     }
   };
 
   const handlePassengerChange = (delta: number) => {
-    setPassengers((prev) => Math.min(5, Math.max(1, prev + delta)));
+    const nextCount = Math.min(5, Math.max(1, passengers + delta));
+    setPassengers(nextCount);
+    if (compact && onNavigate) {
+      triggerAutoNavigate(fromCity, toCity, date, nextCount);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -146,9 +214,15 @@ export function SearchForm({
         className
       )}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 items-end">
+      <div
+        className={cn(
+          compact
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 items-end'
+            : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 sm:gap-4 items-end'
+        )}
+      >
         {/* Origin City Select */}
-        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
+        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-3'}>
           <label
             htmlFor="from-select"
             className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
@@ -179,7 +253,7 @@ export function SearchForm({
                 onClick={handleSwap}
                 aria-label="Swap origin and destination cities"
                 title="Swap cities"
-                className="hidden lg:flex absolute -right-3.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white border border-slate-200 shadow-xs hover:border-brand-500 hover:text-brand-600 text-slate-500 items-center justify-center cursor-pointer transition-all active:scale-[0.92]"
+                className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white border border-slate-200 shadow-xs hover:border-brand-500 hover:text-brand-600 text-slate-500 items-center justify-center cursor-pointer transition-all active:scale-[0.92]"
               >
                 <ArrowLeftRight className="w-3.5 h-3.5" />
               </button>
@@ -195,7 +269,7 @@ export function SearchForm({
               type="button"
               onClick={handleSwap}
               aria-label="Swap origin and destination cities"
-              className="p-2.5 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-brand-600 transition-all min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus:ring-2 focus:ring-brand-500 active:scale-[0.95]"
+              className="p-2 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-brand-600 transition-all min-h-[36px] min-w-[36px] w-9 h-9 flex items-center justify-center cursor-pointer focus:ring-2 focus:ring-brand-500 active:scale-[0.95]"
             >
               <ArrowLeftRight className="w-4 h-4" />
             </button>
@@ -215,7 +289,7 @@ export function SearchForm({
         )}
 
         {/* Destination City Select (filtered by origin) */}
-        <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
+        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-3'}>
           <label
             htmlFor="to-select"
             className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
@@ -227,7 +301,7 @@ export function SearchForm({
               id="to-select"
               name="to"
               value={toCity}
-              onChange={(e) => setToCity(e.target.value)}
+              onChange={(e) => handleToChange(e.target.value)}
               className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border border-slate-200/90 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-h-[46px] appearance-none transition-all cursor-pointer"
             >
               {servedDestinations.map((dest) => (
@@ -243,19 +317,19 @@ export function SearchForm({
         </div>
 
         {/* Travel Date Field */}
-        <div className={compact ? 'lg:col-span-2' : 'lg:col-span-3'}>
+        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-3'}>
           <DateField
             label="Departure Date"
             name="date"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(e) => handleDateChange(e.target.value)}
             hasError={Boolean(errors.date)}
             errorMessage={errors.date}
           />
         </div>
 
         {/* Passengers Stepper (1 to 5) */}
-        <div className={compact ? 'lg:col-span-2' : 'lg:col-span-2'}>
+        <div className={compact ? 'w-full min-w-0' : 'lg:col-span-2'}>
           <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
             Passengers
           </label>
@@ -265,7 +339,7 @@ export function SearchForm({
               type="button"
               disabled={passengers <= 1}
               onClick={() => handlePassengerChange(-1)}
-              className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[46px] min-w-[38px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
+              className="px-2.5 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[36px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
               aria-label="Decrease passenger count"
             >
               -
@@ -278,7 +352,7 @@ export function SearchForm({
               type="button"
               disabled={passengers >= 5}
               onClick={() => handlePassengerChange(1)}
-              className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[46px] min-w-[38px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
+              className="px-2.5 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[36px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
               aria-label="Increase passenger count"
             >
               +
@@ -289,8 +363,8 @@ export function SearchForm({
           )}
         </div>
 
-        {/* Submit Search Button */}
-        <div className={compact ? 'lg:col-span-2 sm:col-span-2' : 'lg:col-span-12 lg:mt-2'}>
+        {/* Submit Search Button (hidden on desktop when compact, per user design direction) */}
+        <div className={compact ? 'sm:col-span-2 lg:hidden' : 'lg:col-span-12 lg:mt-2'}>
           <Button
             type="submit"
             variant="primary"

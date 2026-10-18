@@ -319,7 +319,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
 
       {/* Collapsible Search Modification Card (Coss Frame / Particle Pattern) */}
       {isEditingSearch && (
-        <div className="rounded-2xl border border-slate-200/90 bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] overflow-hidden transition-all animate-fluid-drawer">
+        <div className="my-8 sm:my-10 rounded-2xl border border-slate-200/90 bg-white shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] overflow-hidden transition-all animate-fluid-drawer">
           {/* Header Action Bar */}
           <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-50/80 via-white to-slate-50/50 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
@@ -345,13 +345,14 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           </div>
 
           {/* Search Form Body */}
-          <div className="p-6">
+          <div className="p-6 sm:p-8">
             <SearchForm
               compact
               initialFrom={fromParam}
               initialTo={toParam}
               initialDate={dateParam}
               initialPassengers={passengersParam}
+              onNavigate={navigate}
             />
           </div>
         </div>
