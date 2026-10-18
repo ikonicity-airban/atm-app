@@ -38,7 +38,7 @@ interface DropdownLink {
 export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<'travel' | 'courier' | 'charter' | 'support' | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<'services' | 'support' | null>(null);
   const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
 
   const headerRef = useRef<HTMLElement>(null);
@@ -80,83 +80,63 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // 1. Travel Links (Passenger Transport)
-  const travelLinks: DropdownLink[] = [
+  // Services Links (Courier, Tracking, Charter, Corporate)
+  const serviceLinks: DropdownLink[] = [
     {
-      label: 'Corridors & Schedules',
-      sub: 'Daily fixed schedule Toyota Sienna departures',
-      path: '/routes',
-      icon: Bus,
-    },
-    {
-      label: 'Terminal Directory',
-      sub: 'Official departure and arrival hubs across Nigeria',
-      path: '/terminals',
-      icon: MapPin,
-    },
-  ];
-
-  // 2. Courier Links (Freight Logistics)
-  const courierLinks: DropdownLink[] = [
-    {
-      label: 'Send Express Parcel',
-      sub: 'Same day intercity freight and waybills',
+      label: 'Express Courier',
+      sub: 'Same day intercity parcel and waybill delivery',
       path: '/courier',
       icon: Package,
     },
     {
-      label: 'Track Waybill Shipment',
-      sub: 'Real time chain of custody by ATM tracking code',
+      label: 'Track Waybill',
+      sub: 'Real time chain of custody tracking code lookup',
       path: '/track',
       icon: Search,
     },
-  ];
-
-  // 3. Charter & Fleet Links (Vehicle Hire & B2B)
-  const charterLinks: DropdownLink[] = [
     {
-      label: 'Private Sienna Charter',
-      sub: 'Dedicated 5 seat executive vehicle hire',
+      label: 'Private Charter',
+      sub: 'Dedicated 5 passenger executive Sienna hire',
       path: '/charter',
       icon: Calendar,
     },
     {
-      label: 'Corporate Fleet Logistics',
-      sub: 'Bespoke staff transit and intercity contracts',
+      label: 'Corporate Fleet',
+      sub: 'Contracted staff transit and business logistics',
       path: '/corporate',
       icon: Building2,
     },
   ];
 
-  // 4. Support & Governance Links
+  // Support & Information Links
   const supportLinks: DropdownLink[] = [
     {
       label: 'Frequently Asked Questions',
-      sub: 'Seat selection, 15 minute holds, and luggage rules',
+      sub: 'Seat selection, 15 minute holds, and luggage limits',
       path: '/faq',
       icon: HelpCircle,
     },
     {
       label: 'Contact & Helplines',
-      sub: 'Terminal phone desks and customer support',
+      sub: 'Terminal phone desks and 24/7 WhatsApp dispatch',
       path: '/contact',
       icon: Phone,
     },
     {
       label: 'About Ascent Fleet',
-      sub: 'Executive Sienna travel standards and safety mission',
+      sub: 'Executive 5 seat standard and safety mission',
       path: '/about',
       icon: Info,
     },
     {
       label: 'Terms of Carriage',
-      sub: 'Passenger rights, baggage, and cancellation policies',
+      sub: 'Passenger rights, luggage guidelines, and policies',
       path: '/terms',
       icon: FileText,
     },
     {
       label: 'Privacy Policy',
-      sub: 'Data protection and passenger security',
+      sub: 'Data protection and passenger security guidelines',
       path: '/privacy',
       icon: Shield,
     },
@@ -165,9 +145,9 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   // Determine active nav index for magnetic hover tracking pill
   const getActiveNavIndex = () => {
     if (currentPath === '/trips' || currentPath.startsWith('/book')) return 0;
-    if (travelLinks.some((l) => currentPath.startsWith(l.path))) return 1;
-    if (courierLinks.some((l) => currentPath.startsWith(l.path))) return 2;
-    if (charterLinks.some((l) => currentPath.startsWith(l.path))) return 3;
+    if (currentPath.startsWith('/routes')) return 1;
+    if (currentPath.startsWith('/terminals')) return 2;
+    if (serviceLinks.some((l) => currentPath.startsWith(l.path))) return 3;
     if (supportLinks.some((l) => currentPath.startsWith(l.path))) return 4;
     return null;
   };
@@ -181,7 +161,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     setActiveDropdown(null);
   };
 
-  const handleMouseEnter = (type: 'travel' | 'courier' | 'charter' | 'support', index: number) => {
+  const handleMouseEnter = (type: 'services' | 'support', index: number) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     setActiveDropdown(type);
     setHoveredNavIndex(index);
@@ -224,7 +204,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           aria-label="Main navigation"
           onMouseLeave={handleMouseLeave}
         >
-          {/* 1. Direct "Find Trips" Link */}
+          {/* 1. Direct "Book Trip" Link */}
           <div
             className="relative"
             onMouseEnter={() => {
@@ -242,7 +222,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 }`}
             >
               <Bus className="w-4 h-4 text-[#ca2484]" />
-              <span>Find Trips</span>
+              <span>Book Trip</span>
             </button>
             {highlightedIndex === 0 && (
               <motion.span
@@ -253,26 +233,24 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             )}
           </div>
 
-          {/* 2. Travel Dropdown (Routes & Terminals) */}
+          {/* 2. Direct "Routes" Link */}
           <div
             className="relative"
-            onMouseEnter={() => handleMouseEnter('travel', 1)}
+            onMouseEnter={() => {
+              if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+              setActiveDropdown(null);
+              setHoveredNavIndex(1);
+            }}
           >
             <button
               type="button"
-              onClick={() => setActiveDropdown(activeDropdown === 'travel' ? null : 'travel')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${travelLinks.some((l) => currentPath.startsWith(l.path))
+              onClick={() => handleNav('/routes')}
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${currentPath.startsWith('/routes')
                 ? 'text-[#ca2484]'
                 : 'text-slate-700 hover:text-slate-950'
                 }`}
-              aria-expanded={activeDropdown === 'travel'}
-              aria-haspopup="true"
             >
-              <span>Travel</span>
-              <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'travel' ? 'rotate-180 text-[#ca2484]' : 'text-slate-400'
-                  }`}
-              />
+              <span>Routes</span>
             </button>
             {highlightedIndex === 1 && (
               <motion.span
@@ -281,74 +259,26 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
-
-            <AnimatePresence>
-              {activeDropdown === 'travel' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                  className="absolute top-full left-0 mt-2 w-72 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-[0_12px_36px_rgba(0,0,0,0.12)] ring-1 ring-slate-900/10 p-2 z-50 overflow-hidden"
-                  onMouseEnter={() => {
-                    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Passenger Transit
-                  </div>
-                  <div className="space-y-1">
-                    {travelLinks.map((item) => {
-                      const Icon = item.icon;
-                      const isItemActive = currentPath.startsWith(item.path);
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${isItemActive ? 'bg-pink-50 text-[#ca2484]' : 'hover:bg-slate-50 text-slate-800'
-                            }`}
-                        >
-                          <div
-                            className={`p-1.5 rounded-lg mt-0.5 ${isItemActive ? 'bg-[#ca2484] text-white' : 'bg-slate-100 text-slate-600'
-                              }`}
-                          >
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold leading-tight">{item.label}</div>
-                            <div className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
-          {/* 3. Courier Dropdown (Freight & Tracking) */}
+          {/* 3. Direct "Terminals" Link */}
           <div
             className="relative"
-            onMouseEnter={() => handleMouseEnter('courier', 2)}
+            onMouseEnter={() => {
+              if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+              setActiveDropdown(null);
+              setHoveredNavIndex(2);
+            }}
           >
             <button
               type="button"
-              onClick={() => setActiveDropdown(activeDropdown === 'courier' ? null : 'courier')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${courierLinks.some((l) => currentPath.startsWith(l.path))
+              onClick={() => handleNav('/terminals')}
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${currentPath.startsWith('/terminals')
                 ? 'text-[#ca2484]'
                 : 'text-slate-700 hover:text-slate-950'
                 }`}
-              aria-expanded={activeDropdown === 'courier'}
-              aria-haspopup="true"
             >
-              <span>Courier</span>
-              <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'courier' ? 'rotate-180 text-[#ca2484]' : 'text-slate-400'
-                  }`}
-              />
+              <span>Terminals</span>
             </button>
             {highlightedIndex === 2 && (
               <motion.span
@@ -357,72 +287,26 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
-
-            <AnimatePresence>
-              {activeDropdown === 'courier' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                  className="absolute top-full left-0 mt-2 w-72 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-[0_12px_36px_rgba(0,0,0,0.12)] ring-1 ring-slate-900/10 p-2 z-50 overflow-hidden"
-                  onMouseEnter={() => {
-                    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Intercity Waybill Freight
-                  </div>
-                  <div className="space-y-1">
-                    {courierLinks.map((item) => {
-                      const Icon = item.icon;
-                      const isItemActive = currentPath.startsWith(item.path);
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${isItemActive ? 'bg-pink-50 text-[#ca2484]' : 'hover:bg-slate-50 text-slate-800'
-                            }`}
-                        >
-                          <div
-                            className={`p-1.5 rounded-lg mt-0.5 ${isItemActive ? 'bg-[#ca2484] text-white' : 'bg-slate-100 text-slate-600'
-                              }`}
-                          >
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold leading-tight">{item.label}</div>
-                            <div className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
-          {/* 4. Charter & Fleet Dropdown */}
+          {/* 4. Services Dropdown (Courier, Tracking, Charter, Corporate) */}
           <div
             className="relative"
-            onMouseEnter={() => handleMouseEnter('charter', 3)}
+            onMouseEnter={() => handleMouseEnter('services', 3)}
           >
             <button
               type="button"
-              onClick={() => setActiveDropdown(activeDropdown === 'charter' ? null : 'charter')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${charterLinks.some((l) => currentPath.startsWith(l.path))
+              onClick={() => setActiveDropdown(activeDropdown === 'services' ? null : 'services')}
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${serviceLinks.some((l) => currentPath.startsWith(l.path))
                 ? 'text-[#ca2484]'
                 : 'text-slate-700 hover:text-slate-950'
                 }`}
-              aria-expanded={activeDropdown === 'charter'}
+              aria-expanded={activeDropdown === 'services'}
               aria-haspopup="true"
             >
-              <span>Charter &amp; Fleet</span>
+              <span>Services</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'charter' ? 'rotate-180 text-[#ca2484]' : 'text-slate-400'
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'services' ? 'rotate-180 text-[#ca2484]' : 'text-slate-400'
                   }`}
               />
             </button>
@@ -435,7 +319,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             )}
 
             <AnimatePresence>
-              {activeDropdown === 'charter' && (
+              {activeDropdown === 'services' && (
                 <motion.div
                   initial={{ opacity: 0, y: 8, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -448,10 +332,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Dedicated Vehicle Hire
+                    Logistics &amp; Private Fleet
                   </div>
                   <div className="space-y-1">
-                    {charterLinks.map((item) => {
+                    {serviceLinks.map((item) => {
                       const Icon = item.icon;
                       const isItemActive = currentPath.startsWith(item.path);
                       return (
@@ -624,7 +508,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             className="md:hidden fixed top-20 left-4 right-4 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] ring-1 ring-slate-900/10 p-5 z-50 max-h-[85vh] overflow-y-auto"
           >
             <div className="space-y-6">
-              {/* High Visibility "Find Trips" Button */}
+              {/* High Visibility "Book Trip" Button */}
               <button
                 type="button"
                 onClick={() => handleNav('/trips')}
@@ -632,20 +516,40 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
               >
                 <div className="flex items-center gap-2.5">
                   <Bus className="w-4 h-4 text-white" />
-                  <span>Find Scheduled Trips</span>
+                  <span>Book Trip</span>
                 </div>
                 <span className="text-xs bg-white/20 px-2 py-0.5 rounded-md font-semibold">
                   5 Seat Sienna
                 </span>
               </button>
 
-              {/* 1. Passenger Travel Section */}
+              {/* Direct Links Grid: Routes & Terminals */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleNav('/routes')}
+                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 text-xs font-bold ${currentPath.startsWith('/routes') ? 'bg-pink-50 text-[#ca2484] border-pink-200' : 'text-slate-800'}`}
+                >
+                  <Bus className="w-4 h-4 text-[#ca2484]" />
+                  <span>Routes</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleNav('/terminals')}
+                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 text-xs font-bold ${currentPath.startsWith('/terminals') ? 'bg-pink-50 text-[#ca2484] border-pink-200' : 'text-slate-800'}`}
+                >
+                  <MapPin className="w-4 h-4 text-[#ca2484]" />
+                  <span>Terminals</span>
+                </button>
+              </div>
+
+              {/* Services Section */}
               <div className="space-y-2">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1">
-                  Passenger Travel
+                  Services
                 </span>
                 <div className="grid grid-cols-1 gap-1">
-                  {travelLinks.map((item) => {
+                  {serviceLinks.map((item) => {
                     const Icon = item.icon;
                     return (
                       <button
@@ -668,68 +572,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 </div>
               </div>
 
-              {/* 2. Express Courier Section */}
+              {/* Support & Policies Section */}
               <div className="space-y-2">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1">
-                  Express Courier
-                </span>
-                <div className="grid grid-cols-1 gap-1">
-                  {courierLinks.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.path}
-                        type="button"
-                        onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-pink-50 text-[#ca2484] font-bold'
-                          : 'text-slate-800 hover:bg-slate-50'
-                          }`}
-                      >
-                        <Icon className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-slate-500 leading-tight">{item.sub}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 3. Charter & Fleet Section */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1">
-                  Charter &amp; Corporate
-                </span>
-                <div className="grid grid-cols-1 gap-1">
-                  {charterLinks.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.path}
-                        type="button"
-                        onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-pink-50 text-[#ca2484] font-bold'
-                          : 'text-slate-800 hover:bg-slate-50'
-                          }`}
-                      >
-                        <Icon className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-slate-500 leading-tight">{item.sub}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 4. Support & Policies Section */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1">
-                  Customer Support &amp; Policies
+                  Support &amp; Policies
                 </span>
                 <div className="grid grid-cols-2 gap-1 text-xs">
                   {supportLinks.map((item) => (

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" role="img" aria-labelledby="title-dark desc-dark">
+  <title id="title-dark">Ascent Transport Management</title>
+  <desc id="desc-dark">ATM logo dark mode variant with luminous violet-white styling.</desc>
+  <defs>
+    <linearGradient id="roof-gradient-dark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ca2484" />
+      <stop offset="50%" stop-color="#c084fc" />
+      <stop offset="100%" stop-color="#f3e8ff" />
+    </linearGradient>
+  </defs>
+  <!-- Toyota Sienna Silhouette Roofline Stroke -->
+  <g fill="none" stroke="url(#roof-gradient-dark)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M72 142 C98 94 142 48 240 38 C338 28 412 58 560 62 C680 66 740 120 782 174" stroke-width="14"/>
+    <path d="M72 142 C64 165 62 186 68 202" stroke-width="14"/>
+  </g>
+  <!-- Bold ATM Lettermark -->
+  <g fill="#ffffff" font-family="'Overpass', Arial, Helvetica, sans-serif" font-weight="900">
+    <text x="580" y="184" font-size="172" letter-spacing="-8" text-anchor="middle">ATM</text>
+  </g>
+  <!-- Thin Underline Rule -->
+  <path d="M100 216 H800" stroke="#c084fc" stroke-width="2" opacity="0.6"/>
+  <!-- Subtitle -->
+  <text x="450" y="262" text-anchor="middle" fill="#e9d5ff" font-family="'Overpass', Arial, Helvetica, sans-serif" font-size="30" font-weight="700" letter-spacing="8">ASCENT TRANSPORT MANAGEMENT</text>
+</svg>

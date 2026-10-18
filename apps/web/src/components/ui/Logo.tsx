@@ -1,46 +1,84 @@
 import React from 'react';
 import { BRAND } from '@atm/shared';
 
-interface LogoProps {
+export interface LogoProps {
   variant?: 'full' | 'mark';
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  themeMode?: 'light' | 'dark' | 'auto';
 }
 
-export function Logo({ variant = 'full', className = '', size = 'md' }: LogoProps) {
+export function Logo({
+  variant = 'full',
+  className = '',
+  size = 'md',
+  themeMode = 'auto',
+}: LogoProps) {
+  const heightClass =
+    size === 'sm'
+      ? 'h-7'
+      : size === 'lg'
+      ? 'h-11'
+      : size === 'xl'
+      ? 'h-14'
+      : 'h-9';
+
   if (variant === 'mark') {
     return (
       <div className={`inline-flex items-center ${className}`}>
         <img
-          src="/favicon.ico"
+          src="/favicon.svg"
           alt="Ascent Transport Management Mark"
-          className="w-9 h-9 object-contain"
-          width={36}
-          height={36}
-          onError={(e) => {
-            // Fallback to stylized monogram if asset is delayed
-            (e.currentTarget as HTMLElement).style.display = 'none';
-          }}
+          className={`${heightClass} w-auto object-contain rounded-xl`}
+          width={40}
+          height={40}
         />
       </div>
     );
   }
 
+  // If explicitly light or dark
+  if (themeMode === 'dark') {
+    return (
+      <div className={`inline-flex items-center ${className}`}>
+        <img
+          src="/logo-dark.svg"
+          alt="Ascent Transport Management (ATM Nigeria)"
+          className={`${heightClass} w-auto object-contain`}
+          height={40}
+        />
+      </div>
+    );
+  }
+
+  if (themeMode === 'light') {
+    return (
+      <div className={`inline-flex items-center ${className}`}>
+        <img
+          src="/logo.svg"
+          alt="Ascent Transport Management (ATM Nigeria)"
+          className={`${heightClass} w-auto object-contain`}
+          height={40}
+        />
+      </div>
+    );
+  }
+
+  // Automatic mode: show light logo on light theme, dark logo on dark theme
   return (
-    <div className={`inline-flex items-center gap-3 ${className}`}>
+    <div className={`inline-flex items-center ${className}`}>
       <img
         src="/logo.svg"
         alt="Ascent Transport Management (ATM Nigeria)"
-        className={`object-contain ${
-          size === 'sm' ? 'h-7 w-auto' : size === 'lg' ? 'h-11 w-auto' : 'h-9 w-auto'
-        }`}
-        height={36}
-        onError={(e) => {
-          // If SVG fails to load, gracefully fallback to text branding
-          (e.currentTarget as HTMLElement).style.display = 'none';
-        }}
+        className={`dark:hidden ${heightClass} w-auto object-contain`}
+        height={40}
+      />
+      <img
+        src="/logo-dark.svg"
+        alt="Ascent Transport Management (ATM Nigeria)"
+        className={`hidden dark:block ${heightClass} w-auto object-contain`}
+        height={40}
       />
     </div>
   );
 }
-

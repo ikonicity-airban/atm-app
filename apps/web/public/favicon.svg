@@ -1,4 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#ca2484"/>
-  <text x="50%" y="54%" font-family="system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" dominant-baseline="middle" text-anchor="middle">A</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="atm-bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a0845" />
+      <stop offset="100%" stop-color="#4a0e68" />
+    </linearGradient>
+  </defs>
+  <!-- Background with smooth rounded squircle -->
+  <rect width="256" height="256" rx="56" fill="url(#atm-bg-grad)" />
+  
+  <!-- Sleek Toyota Sienna Car Roofline Silhouette Curve -->
+  <path
+    d="M 38 126 C 45 85, 78 55, 116 52 C 158 48, 178 72, 222 76"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 38 126 C 36 138, 38 148, 42 158"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="14"
+    stroke-linecap="round"
+  />
+  
+  <!-- Bold ATM Monogram -->
+  <text
+    x="128"
+    y="196"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Overpass', sans-serif"
+    font-weight="900"
+    font-size="92"
+    fill="#ffffff"
+    letter-spacing="-3"
+    text-anchor="middle"
+  >ATM</text>
 </svg>
