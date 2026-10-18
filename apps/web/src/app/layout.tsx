@@ -1,5 +1,17 @@
-import React from 'react';
+import { Overpass, Inter } from 'next/font/google';
 import './globals.css';
+
+const overpass = Overpass({
+  subsets: ['latin'],
+  variable: '--font-overpass',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export interface Metadata {
   title: string;
@@ -27,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${overpass.variable}`}>
       <body className="antialiased min-h-screen bg-white text-slate-900 font-sans">
         {children}
       </body>

@@ -84,10 +84,12 @@
 @layer base {
   :root {
     /* -------------------------------------------------------------------------
-       Font Variable Contract (Coss UI)
+       Font Variable Contract (Coss UI & ATM Nigeria)
+       Headers: 'Frutiger', 'Frutiger Linotype', 'Overpass' (fallback), system signage
+       Body: 'Inter', 'Roboto', system sans-serif
        ------------------------------------------------------------------------- */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-heading: 'Montserrat', var(--font-sans);
+    --font-sans: var(--font-inter), 'Inter', 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: 'Frutiger', 'Frutiger Linotype', 'Univers', var(--font-overpass), 'Overpass', var(--font-sans);
     --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
     /* -------------------------------------------------------------------------
@@ -221,6 +223,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
   }
 }
 
