@@ -270,7 +270,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
   const canGoPrev = dateParam > todayLagos;
 
   return (
-    <PageShell width="compact" density="compact" className="pb-24 space-y-8">
+    <PageShell width="compact" density="compact" className="pb-24 flex flex-col gap-6 sm:gap-8">
       <SEOHead
         title={`${fromParam} to ${toParam} Scheduled Sienna Trips | Ascent Transport`}
         description={`Daily executive 5-passenger Toyota Sienna departures from ${fromParam} to ${toParam}. Real-time seat availability, departure times, and fixed kobo fares.`}
@@ -546,7 +546,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
           {/* 5. Trip Results List (Horizontal High-Craft Cards based on Skyloop Reference) */}
           {loading ? (
             /* Static modern skeleton surfaces (Zero animate-pulse per design guidelines) */
-            <div className="space-y-6">
+            <div className="flex flex-col gap-6 sm:gap-8">
               <div className="h-44 bg-white border border-slate-200/70 rounded-2xl p-6 shadow-xs relative overflow-hidden">
                 <div className="w-48 h-5 bg-slate-100 rounded mb-4" />
                 <div className="w-full h-8 bg-slate-100 rounded mb-3" />
@@ -606,7 +606,7 @@ export default function TripsSearchPage({ onNavigate }: { onNavigate?: (path: st
               </div>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="flex flex-col gap-6 sm:gap-8">
               {sortedTrips.map((trip, idx) => {
                 const totalFare = trip.fareKobo * passengersParam;
                 const isFewSeats = trip.seatsLeft <= 2 && trip.seatsLeft > 0;
