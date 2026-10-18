@@ -42,9 +42,9 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
       })();
 
     return (
-      <div className="space-y-1 w-full">
+      <div className="w-full">
         {label && (
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
             {label}
           </label>
         )}
@@ -54,11 +54,11 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
           min={effectiveMin}
           max={effectiveMax}
           className={cn(
-            'w-full px-3.5 py-2.5 text-sm rounded bg-white text-slate-900 border transition-colors min-h-[44px]',
-            'focus:outline-none focus:ring-2 focus:ring-offset-1',
+            'w-full px-3.5 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border transition-all min-h-[46px]',
+            'focus:outline-none focus:ring-2 focus:ring-offset-0',
             hasError
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 focus:border-[#ca2484] focus:ring-[#ca2484]',
+              ? 'border-red-500 focus:ring-red-500/20'
+              : 'border-slate-200/90 focus:border-brand-500 focus:ring-brand-500/20',
             'disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed',
             className
           )}
