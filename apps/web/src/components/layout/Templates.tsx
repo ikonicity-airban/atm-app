@@ -1,7 +1,7 @@
 import React from 'react';
-import { cn } from '@/lib/utils.ts';
-import { Breadcrumb, type BreadcrumbItem } from '@/components/ui/Separator.tsx';
-import { SEOHead } from '@/components/seo/SEOHead.tsx';
+import { cn } from '@/lib/utils';
+import { Breadcrumb, type BreadcrumbItem } from '@/components/ui/Separator';
+import { SEOHead } from '@/components/seo/SEOHead';
 import { BRAND } from '@atm/shared';
 
 /**
@@ -60,15 +60,15 @@ export function PageShell({
             title={`${title} | ${BRAND.name}`}
             description={description}
           />
-          <div className="mb-8 pb-6 border-b border-slate-200">
+          <div className="mb-8 pb-6 border-b border-border">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div className="min-w-0">
                 {/* Hard ban: Heading is plain typography on background (no pills or cards) */}
-                <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight text-balance">
+                <h1 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight leading-tight text-balance">
                   {title}
                 </h1>
                 {description && (
-                  <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed text-pretty">
+                  <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed text-pretty">
                     {description}
                   </p>
                 )}
@@ -83,7 +83,6 @@ export function PageShell({
     </div>
   );
 }
-
 
 /**
  * 2. ContentPage: Readable prose-width layout for legal, terms, privacy, and text guidelines
@@ -115,23 +114,23 @@ export function ContentPage({
         </div>
       )}
 
-      <header className="mb-10 pb-6 border-b border-slate-200">
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight text-balance">
+      <header className="mb-10 pb-6 border-b border-border">
+        <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight leading-tight text-balance">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-2 text-base text-slate-600 leading-relaxed text-pretty">
+          <p className="mt-2 text-base text-muted-foreground leading-relaxed text-pretty">
             {subtitle}
           </p>
         )}
         {lastUpdated && (
-          <p className="mt-3 text-xs font-mono text-slate-400">
+          <p className="mt-3 text-xs font-mono text-muted-foreground/75">
             Last Updated: {lastUpdated}
           </p>
         )}
       </header>
 
-      <div className="prose prose-slate max-w-none text-sm leading-relaxed text-slate-700 space-y-6">
+      <div className="prose dark:prose-invert max-w-none text-sm leading-relaxed text-foreground space-y-6">
         {children}
       </div>
     </article>

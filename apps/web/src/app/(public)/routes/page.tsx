@@ -5,7 +5,8 @@ import { routeRepository, STATIC_ROUTES, type RouteDetail } from '../../../serve
 import { RouteCard, SectionBanner } from '../../../components/atm/AtmBlocks.tsx';
 import { PageShell } from '../../../components/layout/Templates.tsx';
 
-export default function RoutesPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
+export default function RoutesPage(props?: any) {
+  const onNavigate = props?.onNavigate;
   const [routes, setRoutes] = useState<RouteDetail[]>(STATIC_ROUTES);
 
   useEffect(() => {

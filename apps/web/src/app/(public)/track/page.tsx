@@ -63,7 +63,8 @@ function formatWatDateTime(utcIso: string): string {
   }
 }
 
-export default function TrackHubPage({ onNavigate }: { onNavigate?: (path: string) => void }) {
+export default function TrackHubPage(props?: any) {
+  const onNavigate = (props as { onNavigate?: (path: string) => void } | undefined)?.onNavigate;
   const navigate = (path: string) => {
     if (onNavigate) onNavigate(path);
     else if (typeof window !== 'undefined') window.location.href = path;

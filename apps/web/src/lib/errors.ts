@@ -7,7 +7,23 @@ export class AppError extends Error {
   public readonly code: string;
   public readonly details?: unknown;
 
-  constructor(message: string, statusCode = 400, code = 'BAD_REQUEST', details?: unknown) {
+  constructor(
+    messageOrStatusCode: string | number,
+    statusCodeOrMessage?: number | string,
+    code = 'BAD_REQUEST',
+    details?: unknown
+  ) {
+    let message: string;
+    let statusCode: number;
+
+    if (typeof messageOrStatusCode === 'number') {
+      statusCode = messageOrStatusCode;
+      message = typeof statusCodeOrMessage === 'string' ? statusCodeOrMessage : 'An error occurred';
+    } else {
+      message = messageOrStatusCode;
+      statusCode = typeof statusCodeOrMessage === 'number' ? statusCodeOrMessage : 400;
+    }
+
     super(message);
     this.name = 'AppError';
     this.statusCode = statusCode;

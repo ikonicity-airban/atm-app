@@ -21,6 +21,7 @@ import {
 import { cn } from '../../lib/utils.ts';
 import type { Terminal } from '../../server/repositories/terminals.ts';
 import type { RouteDetail } from '../../server/repositories/routes.ts';
+import { Badge, type BadgeProps } from '../ui/Badge.tsx';
 
 /**
  * 1. PhoneInput: Nigeria (+234) formatted phone input
@@ -55,12 +56,12 @@ export function PhoneInput({
   return (
     <div className={cn('space-y-1', className)}>
       {label && (
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
           {label}
         </label>
       )}
       <div className="relative flex rounded-md">
-        <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-slate-300 bg-slate-50 text-slate-600 text-xs font-mono">
+        <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-muted-foreground text-xs font-mono">
           +234
         </span>
         <input
@@ -69,21 +70,21 @@ export function PhoneInput({
           onChange={handleChange}
           placeholder={placeholder}
           className={cn(
-            'flex-1 min-w-0 block w-full px-3 py-2.5 text-sm rounded-none rounded-r-md border bg-white min-h-[44px]',
-            'focus:outline-none focus:ring-2 focus:ring-offset-1',
+            'flex-1 min-w-0 block w-full px-3 py-2.5 text-sm rounded-none rounded-r-md border bg-card text-foreground min-h-[44px]',
+            'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
             hasError
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 focus:border-[#ca2484] focus:ring-[#ca2484]'
+              ? 'border-destructive focus-visible:ring-destructive'
+              : 'border-input focus-visible:border-primary focus-visible:ring-primary'
           )}
         />
       </div>
       {isCompleteAndValid && (
-        <p className="text-[11px] text-emerald-600 font-medium">
+        <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
           Normalised: {normalisePhone(value)}
         </p>
       )}
       {errorMessage && (
-        <p className="text-xs text-red-600 font-medium mt-1">{errorMessage}</p>
+        <p className="text-xs text-destructive font-medium mt-1">{errorMessage}</p>
       )}
     </div>
   );
@@ -104,7 +105,7 @@ export function MoneyText({
 }) {
   const isProd = typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'production';
   if (isPlaceholder && isProd) {
-    return <span className={cn('text-xs text-slate-500 font-medium', className)}>Fare confirmed at booking</span>;
+    return <span className={cn('text-xs text-muted-foreground font-medium', className)}>Fare confirmed at booking</span>;
   }
   if (kobo == null) return <span className={className}>—</span>;
   return <span className={cn('font-bold tracking-tight', className)}>{formatNaira(kobo)}</span>;
@@ -171,12 +172,12 @@ export function Stepper({
               <div className="flex items-center gap-2">
                 <span
                   className={cn(
-                    'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold',
+                    'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors',
                     isDone
                       ? 'bg-emerald-600 text-white'
                       : isCurrent
-                      ? 'bg-[#ca2484] text-white ring-2 ring-pink-100'
-                      : 'bg-slate-200 text-slate-600'
+                      ? 'bg-primary text-primary-foreground ring-2 ring-primary/20'
+                      : 'bg-muted text-muted-foreground'
                   )}
                 >
                   {isDone ? '✓' : idx + 1}
@@ -184,7 +185,7 @@ export function Stepper({
                 <span
                   className={cn(
                     'text-xs hidden sm:inline font-medium',
-                    isCurrent ? 'text-slate-900 font-bold' : 'text-slate-500'
+                    isCurrent ? 'text-foreground font-bold' : 'text-muted-foreground'
                   )}
                 >
                   {step}
@@ -194,7 +195,7 @@ export function Stepper({
                 <div
                   className={cn(
                     'flex-1 h-0.5 mx-3',
-                    idx < currentStep ? 'bg-emerald-500' : 'bg-slate-200'
+                    idx < currentStep ? 'bg-emerald-500' : 'bg-border'
                   )}
                 />
               )}
@@ -208,6 +209,7 @@ export function Stepper({
 
 /**
  * 5. StatusBadge: Semantic status pill (used inside tables/cards to label state, NEVER on titles)
+ * Wraps Badge primitive with brand status mapping.
  */
 export function StatusBadge({
   status,
@@ -216,32 +218,26 @@ export function StatusBadge({
   status: TripStatus | BookingStatus | ParcelStatus | string;
   className?: string;
 }) {
-  const styles: Record<string, string> = {
-    scheduled: 'bg-blue-50 text-blue-700 border-blue-200',
-    boarding: 'bg-amber-50 text-amber-700 border-amber-200',
-    in_transit: 'bg-purple-50 text-purple-700 border-purple-200',
-    arrived_at_destination: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    delivered: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    confirmed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    held: 'bg-amber-50 text-amber-700 border-amber-200',
-    cancelled: 'bg-slate-100 text-slate-600 border-slate-200',
-    failed: 'bg-red-50 text-red-700 border-red-200',
+  const statusToVariant: Record<string, NonNullable<BadgeProps['variant']>> = {
+    scheduled: 'info',
+    boarding: 'warning',
+    in_transit: 'secondary',
+    arrived_at_destination: 'info',
+    delivered: 'success',
+    completed: 'success',
+    confirmed: 'success',
+    held: 'warning',
+    cancelled: 'destructive',
+    failed: 'destructive',
   };
 
-  const currentStyle = styles[status] ?? 'bg-slate-100 text-slate-700 border-slate-200';
+  const variant = statusToVariant[status] ?? 'outline';
   const label = status.replace(/_/g, ' ');
 
   return (
-    <span
-      className={cn(
-        'inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider border',
-        currentStyle,
-        className
-      )}
-    >
+    <Badge variant={variant} className={cn('uppercase tracking-wider text-[11px]', className)}>
       {label}
-    </span>
+    </Badge>
   );
 }
 
@@ -261,14 +257,14 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn('py-8 border-b border-slate-200', className)}>
+    <div className={cn('py-8 border-b border-border', className)}>
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
             {title}
           </h1>
           {description && (
-            <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
+            <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
               {description}
             </p>
           )}
@@ -294,14 +290,14 @@ export function SectionBanner({
   return (
     <div
       className={cn(
-        'bg-[#ca2484] text-white p-6 sm:p-8 rounded-lg shadow-sm',
+        'bg-primary text-primary-foreground p-6 sm:p-8 rounded-xl shadow-xs',
         className
       )}
     >
-      <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white mb-2">
+      <h3 className="text-lg sm:text-xl font-bold tracking-tight text-primary-foreground mb-2">
         {title}
       </h3>
-      <div className="text-xs sm:text-sm text-pink-50 leading-relaxed max-w-3xl">
+      <div className="text-xs sm:text-sm text-primary-foreground/90 leading-relaxed max-w-3xl">
         {children}
       </div>
     </div>
@@ -321,32 +317,32 @@ export function TerminalCard({
   return (
     <div
       className={cn(
-        'p-5 border border-slate-200 rounded-lg bg-white shadow-xs flex flex-col justify-between space-y-4',
+        'p-5 border border-border rounded-xl bg-card text-card-foreground shadow-xs flex flex-col justify-between space-y-4',
         className
       )}
     >
       <div>
         <div className="flex items-center justify-between mb-2">
-          <span className="font-bold text-slate-900 text-base">{terminal.name}</span>
-          <span className="text-[11px] font-mono bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200">
+          <span className="font-bold text-foreground text-base">{terminal.name}</span>
+          <span className="text-[11px] font-mono bg-muted text-muted-foreground px-2 py-0.5 rounded border border-border">
             {terminal.code}
           </span>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed flex items-start gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+        <p className="text-xs text-muted-foreground leading-relaxed flex items-start gap-1.5">
+          <MapPin className="w-3.5 h-3.5 text-muted-foreground mt-0.5 shrink-0" />
           <span>{terminal.address}</span>
         </p>
       </div>
 
-      <div className="pt-3 border-t border-slate-100 space-y-2">
+      <div className="pt-3 border-t border-border space-y-2">
         <div className="flex flex-wrap gap-2 text-xs">
           {terminal.phones.map((phone) => (
             <a
               key={phone}
               href={`tel:${phone}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-50 text-slate-800 hover:bg-slate-100 border border-slate-200 font-medium min-h-[44px]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border font-medium min-h-[44px]"
             >
-              <Phone className="w-3.5 h-3.5 text-[#ca2484]" />
+              <Phone className="w-3.5 h-3.5 text-primary" />
               <span>{phone}</span>
             </a>
           ))}
@@ -357,7 +353,7 @@ export function TerminalCard({
             href={terminal.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-[#ca2484] hover:text-[#aa1769] font-semibold min-h-[36px]"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold min-h-[36px]"
           >
             <span>Get Directions (Google Maps)</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -386,41 +382,41 @@ export function RouteCard({
   return (
     <div
       className={cn(
-        'p-5 border border-slate-200 rounded-lg bg-white shadow-xs flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors',
+        'p-5 border border-border rounded-xl bg-card text-card-foreground shadow-xs flex flex-col justify-between space-y-4 hover:border-border/80 transition-colors',
         className
       )}
     >
       <div>
         {showMetrics && (
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+          <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
             <span>{route.durationHours} hrs estimated</span>
             <span>{route.distanceKm} km</span>
           </div>
         )}
-        <h3 className="text-lg font-bold text-slate-900 tracking-tight">
+        <h3 className="text-lg font-bold text-foreground tracking-tight">
           {route.title}
         </h3>
-        <p className="text-xs text-slate-600 mt-1 line-clamp-2">
+        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
           {route.description}
         </p>
       </div>
 
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+      <div className="pt-3 border-t border-border flex items-center justify-between">
         <div>
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Fare</span>
+          <span className="text-[10px] uppercase font-bold text-muted-foreground block">Fare</span>
           {route.baseFareKobo ? (
-            <div className="text-base font-bold text-slate-900">
+            <div className="text-base font-bold text-foreground">
               <MoneyText kobo={route.baseFareKobo} isPlaceholder={route.isPlaceholder} />
             </div>
           ) : (
-            <span className="text-xs text-slate-500 italic">Call for current rate</span>
+            <span className="text-xs text-muted-foreground italic">Call for current rate</span>
           )}
         </div>
 
         <button
           type="button"
           onClick={onSelect}
-          className="px-3.5 py-2 text-xs font-bold text-white bg-[#ca2484] hover:bg-[#aa1769] rounded min-h-[44px] flex items-center gap-1.5 cursor-pointer"
+          className="px-3.5 py-2 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg min-h-[44px] flex items-center gap-1.5 cursor-pointer"
         >
           <span>View Route</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -435,8 +431,8 @@ export function RouteCard({
  */
 export function VehicleCard({ className }: { className?: string }) {
   return (
-    <div className={cn('p-5 border border-slate-200 rounded-lg bg-white shadow-xs space-y-4', className)}>
-      <div className="w-full h-36 bg-slate-100 rounded flex items-center justify-center overflow-hidden border border-slate-200">
+    <div className={cn('p-5 border border-border rounded-xl bg-card text-card-foreground shadow-xs space-y-4', className)}>
+      <div className="w-full h-36 bg-muted rounded-lg flex items-center justify-center overflow-hidden border border-border">
         <img
           src="/placeholder-vehicle.svg"
           alt="Toyota Sienna Fleet"
@@ -444,28 +440,28 @@ export function VehicleCard({ className }: { className?: string }) {
         />
       </div>
       <div>
-        <h4 className="font-bold text-slate-900 text-sm">
+        <h4 className="font-bold text-foreground text-sm">
           Toyota Sienna
         </h4>
-        <p className="text-xs text-slate-600 mt-0.5">
+        <p className="text-xs text-muted-foreground mt-0.5">
           Toyota Sienna, 5 seats, A/C, extra legroom, refreshments.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
+      <div className="grid grid-cols-2 gap-2 text-xs text-foreground">
         <div className="flex items-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>5 Seats</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>Air Conditioning</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>Extra Legroom</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>Refreshments</span>
         </div>
       </div>
@@ -492,7 +488,7 @@ export function WhatsAppButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded bg-emerald-600 text-white font-semibold text-xs hover:bg-emerald-700 transition-colors min-h-[44px]',
+        'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold text-xs hover:bg-emerald-700 transition-colors min-h-[44px]',
         className
       )}
     >
@@ -515,7 +511,7 @@ export function CallButton({
     <a
       href={`tel:${phone}`}
       className={cn(
-        'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors min-h-[44px]',
+        'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-foreground text-background font-semibold text-xs hover:bg-foreground/90 transition-colors min-h-[44px]',
         className
       )}
     >
@@ -540,9 +536,9 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn('py-12 px-4 text-center border border-slate-200 rounded-lg bg-slate-50', className)}>
-      <h3 className="text-base font-bold text-slate-900">{title}</h3>
-      <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">{description}</p>
+    <div className={cn('py-12 px-4 text-center border border-border rounded-xl bg-muted/40 text-foreground', className)}>
+      <h3 className="text-base font-bold text-foreground">{title}</h3>
+      <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">{description}</p>
       {action && <div className="mt-4">{action}</div>}
     </div>
   );
@@ -560,15 +556,15 @@ export function ErrorState({
   className?: string;
 }) {
   return (
-    <div className={cn('p-6 text-center border border-red-200 rounded-lg bg-red-50 text-red-900', className)}>
-      <AlertCircle className="w-6 h-6 text-red-600 mx-auto mb-2" />
+    <div className={cn('p-6 text-center border border-destructive/25 rounded-xl bg-destructive/10 text-destructive', className)}>
+      <AlertCircle className="w-6 h-6 text-destructive mx-auto mb-2" />
       <h3 className="text-sm font-bold">{title}</h3>
-      <p className="text-xs text-red-700 mt-1 max-w-sm mx-auto">{description}</p>
+      <p className="text-xs text-destructive/80 mt-1 max-w-sm mx-auto">{description}</p>
       {onRetry && (
         <button
           type="button"
           onClick={onRetry}
-          className="mt-4 px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded min-h-[44px]"
+          className="mt-4 px-4 py-2 text-xs font-bold text-destructive-foreground bg-destructive hover:bg-destructive/90 rounded-lg min-h-[44px]"
         >
           Retry
         </button>

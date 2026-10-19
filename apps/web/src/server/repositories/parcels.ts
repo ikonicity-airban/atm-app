@@ -24,7 +24,7 @@ export interface IParcelRepository {
     trackingCode: string,
     pickupCode: string,
     staffId: string
-  ): Promise<{ parcel: DbParcel; timeline: DbParcelEvent[] }>;
+  ): Promise<{ success: boolean; parcel: DbParcel; message: string; timeline?: DbParcelEvent[] }>;
   getAllParcels(): Promise<DbParcel[]>;
 }
 
@@ -326,7 +326,7 @@ export class StaticParcelRepository implements IParcelRepository {
     trackingCode: string,
     pickupCode: string,
     staffId: string
-  ): Promise<{ success: boolean; parcel: DbParcel; message: string }> {
+  ): Promise<{ success: boolean; parcel: DbParcel; message: string; timeline?: DbParcelEvent[] }> {
     const record = await this.getParcelByTrackingCode(trackingCode);
     if (!record) {
       throw new Error(`Waybill ${trackingCode} was not found.`);
@@ -352,6 +352,7 @@ export class StaticParcelRepository implements IParcelRepository {
       success: true,
       parcel: updated!.parcel,
       message: 'Package successfully verified and marked delivered.',
+      timeline: updated?.timeline,
     };
   }
 

@@ -63,10 +63,10 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
   const [passengerCount, setPassengerCount] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    return today.toISOString().split('T')[0] ?? '';
   });
 
-  const currentRoute = CHECKOUT_ROUTES[selectedRouteIndex];
+  const currentRoute = CHECKOUT_ROUTES[selectedRouteIndex] ?? CHECKOUT_ROUTES[0]!;
 
   // Pure integer kobo calculations
   const subtotalKobo = currentRoute.baseFareKobo * passengerCount;

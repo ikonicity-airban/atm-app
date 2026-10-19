@@ -47,7 +47,9 @@ export interface BookTripPageProps {
 
 const STEP_NAMES = ['Seats', 'Passengers', 'Review'];
 
-export default function BookTripPage({ params, onNavigate }: BookTripPageProps) {
+export default function BookTripPage(props?: any) {
+  const params = props?.params;
+  const onNavigate = props?.onNavigate;
   const [resolvedTripId, setResolvedTripId] = useState<string>('trip-enugu-abuja-01');
   const [trip, setTrip] = useState<TripSearchResult | null>(null);
   const [loadingTrip, setLoadingTrip] = useState<boolean>(true);

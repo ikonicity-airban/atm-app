@@ -14,7 +14,8 @@ import {
   HelpCircle,
 } from 'lucide-react';
 
-export default function CancelBookingPage({ onNavigate }: { onNavigate?: (path: string) => void }) {
+export default function CancelBookingPage(props?: any) {
+  const onNavigate = (props as { onNavigate?: (path: string) => void } | undefined)?.onNavigate;
   const [fareNaira, setFareNaira] = useState<number>(32000);
   const [selectedHours, setSelectedHours] = useState<number>(28);
 

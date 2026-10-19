@@ -48,6 +48,14 @@ const TOKEN_PAIRS: ColorPair[] = [
   { name: 'Success Green on White', fg: '#15803d', bg: '#ffffff', requiredRatio: 4.5 },
   { name: 'Danger Red on White', fg: '#b91c1c', bg: '#ffffff', requiredRatio: 4.5 },
   { name: 'Warning Brown on White', fg: '#b45309', bg: '#ffffff', requiredRatio: 4.5 },
+  // Dark mode token pairs (Atm Dark Theme tokens #07030f and #120a22)
+  { name: 'White on Dark Background', fg: '#ffffff', bg: '#07030f', requiredRatio: 4.5 },
+  { name: 'Foreground on Dark Card', fg: '#f8fafc', bg: '#120a22', requiredRatio: 4.5 },
+  { name: 'Muted Foreground on Dark Background', fg: '#94a3b8', bg: '#07030f', requiredRatio: 4.5 },
+  { name: 'Success Emerald on Dark Card', fg: '#4ade80', bg: '#120a22', requiredRatio: 4.5 },
+  { name: 'Warning Amber on Dark Card', fg: '#fbbf24', bg: '#120a22', requiredRatio: 4.5 },
+  { name: 'Destructive Rose on Dark Card', fg: '#f87171', bg: '#120a22', requiredRatio: 4.5 },
+  { name: 'Brand Light Pink on Dark Background', fg: '#f472b6', bg: '#07030f', requiredRatio: 4.5 },
 ];
 
 export function runContrastCheck(): boolean {

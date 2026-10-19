@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../lib/utils.ts';
+import { cn } from '@/lib/utils';
 
 export interface RadioOption {
   value: string;
@@ -31,10 +31,10 @@ export function RadioGroup({
           <label
             key={opt.value}
             className={cn(
-              'flex items-start gap-3 p-3 rounded-lg border transition-colors cursor-pointer min-h-[44px]',
+              'flex items-start gap-3 p-3 rounded-xl border transition-colors cursor-pointer min-h-[44px]',
               isChecked
-                ? 'border-[#ca2484] bg-pink-50/40 text-slate-900'
-                : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700',
+                ? 'border-primary bg-primary/10 text-foreground'
+                : 'border-border bg-card hover:bg-muted text-muted-foreground',
               opt.disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
@@ -45,12 +45,12 @@ export function RadioGroup({
               checked={isChecked}
               disabled={opt.disabled}
               onChange={() => onChange(opt.value)}
-              className="w-4 h-4 mt-0.5 text-[#ca2484] border-slate-300 focus:ring-[#ca2484] cursor-pointer"
+              className="w-4 h-4 mt-0.5 text-primary accent-primary border-border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             <div className="flex-1 text-xs">
-              <span className="font-semibold block text-slate-900">{opt.label}</span>
+              <span className="font-medium block text-foreground">{opt.label}</span>
               {opt.description && (
-                <span className="text-slate-500 block mt-0.5">{opt.description}</span>
+                <span className="text-muted-foreground block mt-0.5">{opt.description}</span>
               )}
             </div>
           </label>
@@ -90,18 +90,18 @@ export function Switch({
         disabled={disabled}
         onClick={() => onChange(!checked)}
         className={cn(
-          'w-11 h-6 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-[#ca2484] focus:ring-offset-2',
-          checked ? 'bg-[#ca2484]' : 'bg-slate-300'
+          'w-11 h-6 rounded-full transition-colors relative cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          checked ? 'bg-primary' : 'bg-muted'
         )}
       >
         <span
           className={cn(
-            'inline-block w-4 h-4 rounded-full bg-white transition-transform transform shadow-sm',
+            'inline-block w-4 h-4 rounded-full bg-card transition-transform transform shadow-sm',
             checked ? 'translate-x-6' : 'translate-x-1'
           )}
         />
       </button>
-      {label && <span className="text-xs font-semibold text-slate-700 select-none">{label}</span>}
+      {label && <span className="text-xs text-foreground font-medium select-none">{label}</span>}
     </label>
   );
 }

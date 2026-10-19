@@ -616,7 +616,7 @@ export default function AdminParcelsPage() {
 
                     {/* Tariff / Fee */}
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-white">{formatNaira(parcel.totalFeeKobo)}</div>
+                      <div className="font-semibold text-white">{formatNaira(parcel.totalFeeKobo ?? 0)}</div>
                       <div className="text-[11px] text-slate-400">
                         {parcel.paid ? (
                           <span className="text-emerald-400 font-medium">Paid</span>

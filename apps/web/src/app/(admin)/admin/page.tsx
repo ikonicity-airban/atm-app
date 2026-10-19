@@ -64,7 +64,8 @@ const MOCK_RECENT_BOOKINGS = [
   },
 ];
 
-export default function AdminDashboardPage({ onNavigate }: { onNavigate?: (path: string) => void }) {
+export default function AdminDashboardPage(props?: any) {
+  const onNavigate = (props as { onNavigate?: (path: string) => void } | undefined)?.onNavigate;
   const navigate = (path: string) => {
     if (onNavigate) onNavigate(path);
     else if (typeof window !== 'undefined') window.location.href = path;

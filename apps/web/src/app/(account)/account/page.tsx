@@ -518,7 +518,7 @@ export default function CustomerAccountDashboard() {
                       {ledger.map((item) => (
                         <tr key={item.id} className="hover:bg-slate-50/50">
                           <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">
-                            {formatWatDateTime(item.createdAt)}
+                            {formatWatDateTime(item.createdAt).fullStr}
                           </td>
                           <td className="py-3.5 px-4 font-medium text-slate-800">
                             {item.reason}
@@ -581,7 +581,7 @@ export default function CustomerAccountDashboard() {
                       {b.trip?.originCity} → {b.trip?.destinationCity}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Departure: {formatWatDateTime(b.trip?.departureTimeUtc)}
+                      Departure: {b.trip?.departureTimeUtc ? formatWatDateTime(b.trip.departureTimeUtc).fullStr : '—'}
                     </p>
                     <p className="text-xs text-slate-500">
                       Seats: <span className="font-mono font-medium">{b.seats?.join(', ')}</span> (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../lib/utils.ts';
+import { cn } from '@/lib/utils';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   hasError?: boolean;
@@ -11,12 +11,12 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         ref={ref}
         className={cn(
-          'w-full px-3.5 py-2.5 text-sm rounded bg-white text-slate-900 border transition-colors min-h-[96px]',
-          'placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-offset-1',
+          'w-full px-3.5 py-2.5 text-xs rounded-xl bg-card text-foreground border transition-colors min-h-[96px]',
+          'placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0',
           hasError
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-slate-300 focus:border-[#ca2484] focus:ring-[#ca2484]',
-          'disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed',
+            ? 'border-destructive focus-visible:ring-destructive'
+            : 'border-border focus-visible:border-primary',
+          'disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed',
           className
         )}
         {...props}

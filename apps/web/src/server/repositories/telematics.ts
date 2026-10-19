@@ -157,15 +157,15 @@ export class TelematicsRepository implements ITelematicsRepository {
       passengerName: firstPassenger ? firstPassenger.passengerName : checkIn.bookerName,
       seatNumber: firstPassenger ? firstPassenger.seatNo : 1,
       vehicle: {
-        plateNumber: checkIn.vehicle.registrationNumber || 'ENU-418-XY',
-        model: `${checkIn.vehicle.make} ${checkIn.vehicle.model}`,
+        plateNumber: checkIn.vehicle?.registrationNumber || 'ENU-418-XY',
+        model: checkIn.vehicle ? `${checkIn.vehicle.make} ${checkIn.vehicle.model}` : 'Toyota Sienna',
         cabinDescription: 'Toyota Sienna 5-Seat Executive Cabin, Air Conditioned',
       },
       driver: {
-        name: checkIn.driver.fullName || 'Emeka Nwosu',
+        name: checkIn.driver?.fullName || 'Emeka Nwosu',
         badgeId: 'DRV-ENU-01',
         rating: 4.9,
-        phone: checkIn.driver.phone || '+2349070000210',
+        phone: checkIn.driver?.phone || '+2349070000210',
       },
       originTerminal: {
         id: originTerm.id,

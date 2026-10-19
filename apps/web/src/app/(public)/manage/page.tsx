@@ -9,6 +9,7 @@ import type { ManageBookingDetails } from '@/server/repositories/manage-booking.
 import {
   formatNaira,
   formatWatDateTime,
+  calculateIncidentDelayMinutes,
   type CancellationExecutionResult,
 } from '@atm/shared';
 import {
@@ -31,7 +32,8 @@ import {
   Truck,
 } from 'lucide-react';
 
-export default function ManageBookingPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
+export default function ManageBookingPage(props?: any) {
+  const onNavigate = props?.onNavigate;
   const [refInput, setRefInput] = useState('');
   const [phoneInput, setPhoneInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -426,13 +428,13 @@ export default function ManageBookingPage({ onNavigate }: { onNavigate?: (path: 
             </div>
 
             {/* Roadside Incident Notice on Manage Portal if active */}
-            {bookingDetails.telematics?.activeIncidents && bookingDetails.telematics.activeIncidents.length > 0 && (
-              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
-                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            {bookingDetails.telematics?.activeIncidents && bookingDetails.telematics.activeIncidents.length > 0 && bookingDetails.telematics.activeIncidents[0] && (
+              <div className="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/25 text-amber-700 dark:text-amber-400 text-xs flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
-                  <span className="font-bold text-amber-950 block">Active Highway Advisory Notice</span>
-                  <p className="text-amber-800 leading-relaxed text-pretty">
-                    {bookingDetails.telematics.activeIncidents[0].description} (Estimated delay of +{bookingDetails.telematics.activeIncidents[0].estimatedDelayMinutes || 25} minutes).
+                  <span className="font-bold text-foreground block">Active Highway Advisory Notice</span>
+                  <p className="text-muted-foreground leading-relaxed text-pretty">
+                    {bookingDetails.telematics.activeIncidents[0].description} (Estimated delay of +{calculateIncidentDelayMinutes(bookingDetails.telematics.activeIncidents)} minutes).
                   </p>
                 </div>
               </div>

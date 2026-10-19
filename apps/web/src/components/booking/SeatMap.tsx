@@ -79,10 +79,10 @@ export function SeatMap({
   return (
     <div className={cn('space-y-6', className)}>
       {/* Visual Sienna Cabin Frame */}
-      <div className="bg-slate-50 border-2 border-slate-300 rounded-3xl p-6 sm:p-8 max-w-sm mx-auto shadow-inner">
+      <div className="bg-card border-2 border-border rounded-3xl p-6 sm:p-8 max-w-sm mx-auto shadow-inner">
         {/* Windshield / Vehicle Front indicator */}
-        <div className="text-center pb-4 border-b border-dashed border-slate-300 mb-6">
-          <div className="inline-block px-4 py-1 rounded-full bg-slate-200 text-slate-700 text-[11px] font-bold tracking-wider uppercase">
+        <div className="text-center pb-4 border-b border-dashed border-border mb-6">
+          <div className="inline-block px-4 py-1 rounded-full bg-muted text-muted-foreground text-[11px] font-bold tracking-wider uppercase">
             ▲ Front Windshield (Direction of Travel)
           </div>
         </div>
@@ -96,13 +96,13 @@ export function SeatMap({
                 {row.isDriverRow ? (
                   // Driver Seat (Blocked)
                   <div
-                    className="h-20 w-full rounded-xl border border-slate-300 bg-slate-200/80 text-slate-500 flex flex-col items-center justify-center p-2 text-center select-none"
+                    className="h-20 w-full rounded-xl border border-border bg-muted/60 text-muted-foreground flex flex-col items-center justify-center p-2 text-center select-none"
                     aria-label="Driver position, unavailable"
                     title="Driver position"
                   >
-                    <User className="w-5 h-5 mb-1 text-slate-400" />
+                    <User className="w-5 h-5 mb-1 text-muted-foreground" />
                     <span className="text-xs font-bold leading-tight">Driver</span>
-                    <span className="text-[10px] text-slate-400">(Blocked)</span>
+                    <span className="text-[10px] text-muted-foreground/70">(Blocked)</span>
                   </div>
                 ) : row.left ? (
                   renderSeatButton(row.left)
@@ -110,7 +110,7 @@ export function SeatMap({
               </div>
 
               {/* Aisle Spacer */}
-              <div className="w-6 text-center select-none text-slate-300 font-mono text-xs">
+              <div className="w-6 text-center select-none text-muted-foreground/30 font-mono text-xs">
                 |
               </div>
 
@@ -123,8 +123,8 @@ export function SeatMap({
         </div>
 
         {/* Rear Trunk Indicator */}
-        <div className="text-center pt-6 mt-6 border-t border-dashed border-slate-300">
-          <span className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">
+        <div className="text-center pt-6 mt-6 border-t border-dashed border-border">
+          <span className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase">
             ▼ Rear Luggage Compartment
           </span>
         </div>
@@ -132,27 +132,27 @@ export function SeatMap({
 
       {/* Accessible Legend */}
       <div
-        className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-700 pt-2 border-t border-slate-200"
+        className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-foreground pt-2 border-t border-border"
         role="region"
         aria-label="Seat map legend"
       >
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded border-2 border-slate-300 bg-white inline-block" />
+          <span className="w-4 h-4 rounded border-2 border-border bg-card inline-block" />
           <span>Available</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded bg-[#ca2484] border-2 border-[#ca2484] inline-block" />
-          <span className="font-semibold text-slate-900">Selected</span>
+          <span className="w-4 h-4 rounded bg-primary border-2 border-primary inline-block" />
+          <span className="font-semibold text-foreground">Selected</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded bg-slate-200 border-2 border-slate-300 inline-block text-center text-slate-400 leading-none">
+          <span className="w-4 h-4 rounded bg-muted border-2 border-border inline-block text-center text-muted-foreground leading-none">
             ✕
           </span>
-          <span className="text-slate-500">Taken</span>
+          <span className="text-muted-foreground">Taken</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-4 h-4 rounded bg-slate-300 border-2 border-slate-400 inline-block" />
-          <span className="text-slate-500">Driver</span>
+          <span className="w-4 h-4 rounded bg-muted/80 border-2 border-border inline-block" />
+          <span className="text-muted-foreground">Driver</span>
         </div>
       </div>
     </div>
@@ -179,17 +179,17 @@ export function SeatMap({
         aria-label={accessibleLabel}
         aria-pressed={isSelected}
         className={cn(
-          'h-20 w-full rounded-xl border-2 transition-all flex flex-col items-center justify-center p-2 text-center relative focus:outline-none focus:ring-2 focus:ring-[#ca2484] focus:ring-offset-2 min-h-[44px]',
+          'h-20 w-full rounded-xl border-2 transition-all flex flex-col items-center justify-center p-2 text-center relative focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 min-h-[44px]',
           // Occupied state
           isOccupied &&
-            'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed opacity-75',
+            'bg-muted border-border text-muted-foreground cursor-not-allowed opacity-75',
           // Selected state
           isSelected &&
-            'bg-[#ca2484] border-[#ca2484] text-white shadow-md font-bold cursor-pointer scale-102',
+            'bg-primary border-primary text-primary-foreground shadow-md font-bold cursor-pointer scale-102',
           // Available state
           !isOccupied &&
             !isSelected &&
-            'bg-white border-slate-300 text-slate-800 hover:border-[#ca2484] hover:bg-pink-50/50 cursor-pointer',
+            'bg-card border-border text-foreground hover:border-primary hover:bg-primary/10 cursor-pointer',
           // At capacity state
           isAtCapacity && !isOccupied && 'opacity-60 cursor-not-allowed'
         )}
@@ -197,12 +197,12 @@ export function SeatMap({
         <div className="flex items-center justify-center gap-1 mb-0.5">
           <span className="text-base font-black tracking-tight">Seat {seat.seatNo}</span>
           {isSelected && <Check className="w-4 h-4 stroke-[3]" />}
-          {isOccupied && <Lock className="w-3.5 h-3.5 text-slate-400" />}
+          {isOccupied && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
         </div>
         <span
           className={cn(
             'text-[10px] leading-tight line-clamp-1',
-            isSelected ? 'text-pink-100' : isOccupied ? 'text-slate-400' : 'text-slate-500'
+            isSelected ? 'text-primary-foreground/80' : isOccupied ? 'text-muted-foreground' : 'text-muted-foreground'
           )}
         >
           {seat.label.replace(`Seat ${seat.seatNo}`, '').trim() || 'Passenger'}
@@ -210,7 +210,7 @@ export function SeatMap({
         <span
           className={cn(
             'text-[9px] font-bold uppercase mt-1 tracking-wider',
-            isSelected ? 'text-white' : isOccupied ? 'text-slate-400' : 'text-emerald-700'
+            isSelected ? 'text-primary-foreground' : isOccupied ? 'text-muted-foreground' : 'text-emerald-600 dark:text-emerald-400'
           )}
         >
           {status}

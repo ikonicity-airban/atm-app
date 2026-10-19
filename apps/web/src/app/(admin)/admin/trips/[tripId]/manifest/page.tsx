@@ -27,8 +27,9 @@ export default function HighwayManifestPrintPage({ params }: HighwayManifestPrin
     } else if (typeof window !== 'undefined') {
       const parts = window.location.pathname.split('/');
       const manifestIdx = parts.indexOf('manifest');
-      if (manifestIdx > 0 && parts[manifestIdx - 1]) {
-        setTripId(parts[manifestIdx - 1]);
+      const prev = manifestIdx > 0 ? parts[manifestIdx - 1] : undefined;
+      if (prev) {
+        setTripId(prev);
       }
     }
   }, [params]);

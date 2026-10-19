@@ -46,7 +46,8 @@ const CATEGORIES: Array<{
     { id: 'fragile', name: 'Fragile / Glass', desc: 'Glassware, ceramics, delicate instruments', icon: ShieldAlert },
   ];
 
-export default function CourierPage({ onNavigate }: { onNavigate?: (path: string) => void }) {
+export default function CourierPage(props?: any) {
+  const onNavigate = (props as { onNavigate?: (path: string) => void } | undefined)?.onNavigate;
   const navigate = (path: string) => {
     if (onNavigate) onNavigate(path);
     else if (typeof window !== 'undefined') window.location.href = path;

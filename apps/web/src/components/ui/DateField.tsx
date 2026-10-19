@@ -1,5 +1,7 @@
-import React from 'react';
-import { cn } from '../../lib/utils.ts';
+'use client';
+
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 import { getLagosDate, DEFAULT_BOOKING_SETTINGS } from '@atm/shared';
 
 export interface DateFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
@@ -12,7 +14,7 @@ export interface DateFieldProps extends Omit<React.InputHTMLAttributes<HTMLInput
 /**
  * Native DateField component
  * Native <input type="date"> provides the optimal mobile picker experience on iOS & Android.
- * Enforces Africa/Lagos WAT date bounds (today -> today + maxAdvanceDays).
+ * Enforces Africa/Lagos WAT date bounds (today -> today + maxAdvanceDays) with Coss semantic tokens.
  */
 export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
   (
@@ -44,7 +46,7 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-1.5">
             {label}
           </label>
         )}
@@ -54,18 +56,18 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
           min={effectiveMin}
           max={effectiveMax}
           className={cn(
-            'w-full px-3.5 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border transition-all min-h-[46px]',
-            'focus:outline-none focus:ring-2 focus:ring-offset-0',
+            'w-full px-3.5 py-2.5 text-xs font-normal rounded-xl bg-card text-foreground border transition-colors min-h-[44px]',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0',
             hasError
-              ? 'border-red-500 focus:ring-red-500/20'
-              : 'border-slate-200/90 focus:border-brand-500 focus:ring-brand-500/20',
-            'disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed',
+              ? 'border-destructive focus-visible:ring-destructive'
+              : 'border-border focus-visible:border-primary',
+            'disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed',
             className
           )}
           {...props}
         />
         {errorMessage && (
-          <p className="text-xs text-red-600 font-medium mt-1">{errorMessage}</p>
+          <p className="text-xs text-destructive font-medium mt-1">{errorMessage}</p>
         )}
       </div>
     );

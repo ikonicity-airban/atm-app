@@ -27,14 +27,16 @@ import {
   Car,
   AlertTriangle,
 } from 'lucide-react';
-import type { JourneyTrackingPayload } from '@atm/shared';
+import { calculateIncidentDelayMinutes, type JourneyTrackingPayload } from '@atm/shared';
 
 export interface BookingSuccessPageProps {
   params?: { ref?: string } | Promise<{ ref?: string }>;
   onNavigate?: (path: string) => void;
 }
 
-export default function BookingSuccessPage({ params, onNavigate }: BookingSuccessPageProps) {
+export default function BookingSuccessPage(props?: any) {
+  const params = props?.params;
+  const onNavigate = props?.onNavigate;
   const [refCode, setRefCode] = useState<string>('ATM-7K9W2P');
   const [booking, setBooking] = useState<HeldBooking | null>(null);
   const [tickets, setTickets] = useState<DbTicket[]>([]);
@@ -399,13 +401,13 @@ export default function BookingSuccessPage({ params, onNavigate }: BookingSucces
             </div>
 
             {/* Roadside Incident Alert if present */}
-            {telematics?.activeIncidents && telematics.activeIncidents.length > 0 && (
+            {telematics?.activeIncidents && telematics.activeIncidents.length > 0 && telematics.activeIncidents[0] && (
               <div className="mt-4 p-3 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs flex items-start gap-2.5">
                 <AlertTriangle className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
                   <span className="font-bold text-amber-100 block">Highway Incident Notice</span>
                   <p className="text-amber-200 leading-relaxed">
-                    {telematics.activeIncidents[0].description} (+{telematics.activeIncidents[0].estimatedDelayMinutes || 25}m delay factored into ETA).
+                    {telematics.activeIncidents[0].description} (+{calculateIncidentDelayMinutes(telematics.activeIncidents)}m delay factored into ETA).
                   </p>
                 </div>
               </div>

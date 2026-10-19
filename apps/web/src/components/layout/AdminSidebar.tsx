@@ -55,17 +55,17 @@ export function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col min-h-screen border-r border-slate-800">
-      <div className="p-4 border-b border-slate-800">
+    <aside className="w-64 bg-card text-card-foreground flex-shrink-0 flex flex-col min-h-screen border-r border-border">
+      <div className="p-4 border-b border-border">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded bg-[#ca2484] flex items-center justify-center text-white font-black text-sm">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black text-sm shadow-xs">
             A
           </div>
           <div>
-            <span className="font-bold text-white text-sm block leading-none">
+            <span className="font-bold text-foreground text-sm block leading-none">
               {BRAND.shortName} Staff
             </span>
-            <span className="text-[10px] text-pink-400 font-medium tracking-wider uppercase block mt-1">
+            <span className="text-[10px] text-primary font-medium tracking-wider uppercase block mt-1">
               Operations &amp; Admin
             </span>
           </div>
@@ -75,7 +75,7 @@ export function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
         {navSections.map((section) => (
           <div key={section.title}>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 px-3 block mb-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground px-3 block mb-2">
               {section.title}
             </span>
             <div className="space-y-1">
@@ -87,10 +87,10 @@ export function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
                     key={item.path}
                     type="button"
                     onClick={() => onNavigate(item.path)}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded transition-colors text-left min-h-[38px] ${
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-xl transition-colors text-left min-h-[44px] cursor-pointer ${
                       isActive
-                        ? 'bg-[#ca2484] text-white font-semibold'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     }`}
                   >
                     <Icon className="w-4 h-4 flex-shrink-0 opacity-80" />
@@ -103,11 +103,11 @@ export function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
         ))}
       </div>
 
-      <div className="p-3 border-t border-slate-800">
+      <div className="p-3 border-t border-border">
         <button
           type="button"
           onClick={() => onNavigate('/')}
-          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white hover:bg-slate-800 rounded min-h-[38px]"
+          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl min-h-[44px] transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Exit to Public Site</span>

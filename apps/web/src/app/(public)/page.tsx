@@ -46,7 +46,8 @@ const FAQ_ITEMS: AccordionItem[] = [
   },
 ];
 
-export default function HomePage({ onNavigate }: HomePageProps = {}) {
+export default function HomePage(props?: any) {
+  const onNavigate = props?.onNavigate;
   const orgJsonLd = getOrganizationJsonLd();
   const webSiteJsonLd = {
     '@context': 'https://schema.org',

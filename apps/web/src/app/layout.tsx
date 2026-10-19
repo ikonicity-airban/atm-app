@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Overpass, Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '../components/theme/ThemeProvider.tsx';
@@ -13,16 +14,6 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
 });
-
-export interface Metadata {
-  title: string;
-  description: string;
-  openGraph: {
-    title: string;
-    description: string;
-    type: string;
-  };
-}
 
 export const metadata: Metadata = {
   title: 'Ascent Transport Management (ATM Nigeria)',

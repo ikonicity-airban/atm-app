@@ -17,7 +17,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const STORAGE_KEY = 'atm_theme';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
+  const [theme, setThemeState] = useState<Theme>('system');
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('light');
   const [mounted, setMounted] = useState(false);
 
@@ -26,12 +26,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
       if (saved && ['light', 'dark', 'system'].includes(saved)) {
         setThemeState(saved);
+        const isDark = saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        setResolvedTheme(isDark ? 'dark' : 'light');
       } else {
-        // Default to light as specified in requirements
-        setThemeState('light');
+        const hasDarkClass = document.documentElement.classList.contains('dark');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setThemeState('system');
+        setResolvedTheme(hasDarkClass || systemPrefersDark ? 'dark' : 'light');
       }
     } catch {
-      setThemeState('light');
+      setThemeState('system');
     }
     setMounted(true);
   }, []);
