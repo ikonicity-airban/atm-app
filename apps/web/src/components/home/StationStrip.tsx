@@ -21,14 +21,14 @@ const STATIONS: Station[] = [
 export function StationStrip({ onSelectStation }: { onSelectStation?: (city: string) => void }) {
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-      <div className="bg-card text-card-foreground rounded-3xl p-5 sm:p-8 border border-border shadow-xs backdrop-blur-md">
+      <div className="bg-card/75 text-card-foreground rounded-3xl p-5 sm:p-8 border border-border shadow-lg backdrop-blur-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-5 mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-accent text-[#ca2484] flex items-center justify-center font-bold shadow-2xs">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-heading font-black text-foreground">
+              <h2 className="text-base sm:text-lg font-heading font-semibold text-foreground">
                 Official Departure Hubs Across Nigeria
               </h2>
               <p className="text-xs text-muted-foreground">
@@ -38,15 +38,15 @@ export function StationStrip({ onSelectStation }: { onSelectStation?: (city: str
           </div>
 
           <div className="flex items-center gap-5 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5 font-medium">
+            <span className="inline-flex items-center gap-1.5 font-normal">
               <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Prompt Departures</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 font-medium">
+            <span className="inline-flex items-center gap-1.5 font-normal">
               <Users className="w-3.5 h-3.5 text-[#ca2484]" />
               <span>5 Seats Only</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 font-medium">
+            <span className="inline-flex items-center gap-1.5 font-normal">
               <ShieldCheck className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>Verified Drivers</span>
             </span>
@@ -60,22 +60,22 @@ export function StationStrip({ onSelectStation }: { onSelectStation?: (city: str
               key={`${station.city}-${station.hub}`}
               type="button"
               onClick={() => onSelectStation?.(station.city)}
-              className="group text-left p-3.5 rounded-2xl bg-muted/40 hover:bg-accent/40 border border-border hover:border-[#ca2484]/40 transition-all duration-200 cursor-pointer min-h-[50px] shadow-2xs"
+              className="group text-left p-3.5 rounded-2xl bg-card/60 backdrop-blur-md hover:bg-card/90 border border-border hover:border-primary/40 transition-all duration-200 cursor-pointer min-h-[50px] shadow-xs"
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground font-mono">
+                <span className="text-[10px] font-normal px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground font-mono">
                   {station.code}
                 </span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-[#ca2484] transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
               <div className="mt-2.5">
-                <div className="text-xs sm:text-sm font-heading font-bold text-foreground group-hover:text-[#ca2484] transition-colors">
+                <div className="text-xs sm:text-sm font-heading font-medium text-foreground group-hover:text-primary transition-colors">
                   {station.city}
                 </div>
-                <div className="text-[11px] text-muted-foreground truncate">
+                <div className="text-xs text-muted-foreground truncate">
                   {station.hub}
                 </div>
-                <div className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1">
+                <div className="text-[10px] font-normal text-emerald-600 dark:text-emerald-400 mt-1">
                   {station.status}
                 </div>
               </div>

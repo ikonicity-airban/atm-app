@@ -81,7 +81,7 @@ function StepCard({ step }: { step: Step }) {
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group flex flex-col rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 overflow-hidden"
+      className="group flex flex-col rounded-3xl bg-card/75 dark:bg-slate-900/75 backdrop-blur-xl border border-border shadow-lg hover:shadow-xl hover:border-primary/40 transition-all duration-300 overflow-hidden"
     >
       {/* Interactive Media Container with Hover-to-Play Video & Fallback Simulator */}
       <div className="relative h-56 sm:h-64 w-full bg-slate-950 overflow-hidden flex items-center justify-center">
@@ -239,13 +239,13 @@ export function HowItWorksVideoSteps() {
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
+        <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
           Simple Reservation Flow
         </span>
-        <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
+        <h2 className="text-2xl sm:text-3xl font-bold font-heading text-foreground tracking-tight text-balance">
           How Ascent Booking Works
         </h2>
-        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty font-normal">
           Book your seat in three straightforward steps. Hover on each card to preview the traveler experience.
         </p>
       </div>

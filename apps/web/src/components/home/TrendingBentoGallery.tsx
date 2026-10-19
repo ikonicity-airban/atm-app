@@ -138,19 +138,19 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
         <div className="space-y-2 max-w-2xl">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
+          <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
             Trending Travel Corridors
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
+          <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
             Explore Popular Interstate Routes
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty font-normal">
             Fixed departure times and direct terminal connections with no road pickups.
           </p>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-muted rounded-full border border-border">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-muted/50 rounded-full border border-border">
           {[
             { id: 'all', label: 'All Corridors' },
             { id: 'enugu-abuja', label: 'Enugu ↔ Abuja' },
@@ -161,7 +161,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               key={tab.id}
               type="button"
               onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all cursor-pointer min-h-[36px] ${
+              className={`px-3.5 py-1.5 text-xs font-normal rounded-full transition-colors cursor-pointer min-h-[36px] ${
                 activeFilter === tab.id
                   ? 'bg-card text-foreground shadow-xs border border-border'
                   : 'text-muted-foreground hover:text-foreground'
@@ -240,7 +240,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                 <button
                   type="button"
                   onClick={() => handleBook(featured.from, featured.to)}
-                  className="px-6 py-3 bg-[#ca2484] hover:bg-[#aa1769] text-white font-bold text-sm rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
+                  className="px-6 py-3 bg-[#ca2484] hover:opacity-90 text-white font-normal text-xs sm:text-sm rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
                 >
                   <span>Book Seat Now</span>
                   <ArrowRight className="w-4 h-4" />
@@ -254,7 +254,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
         {rest.map((corridor) => (
           <div
             key={corridor.id}
-            className="relative rounded-3xl overflow-hidden bg-card text-card-foreground border border-border shadow-sm hover:shadow-xl hover:border-[#ca2484]/40 transition-all duration-300 flex flex-col justify-between p-5 group"
+            className="relative rounded-3xl overflow-hidden bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-md hover:shadow-xl hover:border-primary/40 transition-all duration-300 flex flex-col justify-between p-5 group"
           >
             <div>
               <div className="relative h-40 w-full rounded-2xl overflow-hidden mb-4">
@@ -264,20 +264,20 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[10px] font-bold">
+                <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[10px] font-normal">
                   {corridor.dailyDepartures} Departures
                 </div>
-                <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white text-xs font-bold">
+                <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white text-xs font-normal">
                   <span>{corridor.durationHours}</span>
                   <span>{corridor.distanceKm} km</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-[11px] text-muted-foreground font-medium truncate">
+                <div className="text-xs text-muted-foreground font-normal truncate">
                   {corridor.fromHub} → {corridor.toHub}
                 </div>
-                <h4 className="text-lg font-heading font-bold text-foreground">
+                <h4 className="text-base font-heading font-semibold text-foreground">
                   {corridor.from} to {corridor.to}
                 </h4>
               </div>
@@ -285,10 +285,10 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
 
             <div className="pt-4 mt-3 border-t border-border flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-muted-foreground block uppercase font-medium">
+                <span className="text-[10px] text-muted-foreground block uppercase font-normal">
                   From
                 </span>
-                <span className="text-base font-extrabold text-foreground">
+                <span className="text-sm font-semibold text-foreground">
                   {formatNaira(corridor.baseFareKobo)}
                 </span>
               </div>
@@ -296,7 +296,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               <button
                 type="button"
                 onClick={() => handleBook(corridor.from, corridor.to)}
-                className="px-4 py-2 bg-accent hover:bg-[#ca2484] text-[#ca2484] hover:text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+                className="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-xs font-normal rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
               >
                 <span>Select</span>
                 <ArrowRight className="w-3.5 h-3.5" />

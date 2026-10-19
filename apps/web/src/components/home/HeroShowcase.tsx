@@ -120,14 +120,14 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const availableDestinations = getServedDestinations(fromCity);
 
   return (
-    <div className="relative w-full overflow-hidden bg-[#07030f] text-white pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8">
-      {/* Cinematic Cosmic Background with Streaks of Violet Light */}
+    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40">
+      {/* Ambient background glows matching theme */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Deep ambient radial glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-purple-900/30 via-[#ca2484]/20 to-indigo-900/30 rounded-full blur-[120px]" />
+        {/* Subtle radial ambient light */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-purple-500/10 via-[#ca2484]/15 to-indigo-500/10 dark:from-purple-900/30 dark:via-[#ca2484]/20 dark:to-indigo-900/30 rounded-full blur-[100px]" />
         
-        {/* Subtle vehicle highway silhouette in the dusk distance */}
-        <div className="absolute inset-0 opacity-25 mix-blend-screen">
+        {/* Background visual image in dark mode */}
+        <div className="hidden dark:block absolute inset-0 opacity-20 mix-blend-screen">
           <img
             src="/images/hero/highway-sunset.jpg"
             alt="Interstate Highway Corridor"
@@ -135,51 +135,47 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#07030f] via-transparent to-[#07030f]" />
         </div>
-
-        {/* Diagonal violet speed streaks matching reference graphic */}
-        <div className="absolute top-1/3 -left-20 w-[140%] h-[2px] bg-gradient-to-r from-transparent via-[#b77bfb]/50 to-transparent transform -rotate-12 blur-[1px]" />
-        <div className="absolute top-1/2 -left-20 w-[140%] h-[3px] bg-gradient-to-r from-transparent via-[#ca2484]/40 to-transparent transform -rotate-6 blur-[1.5px]" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto z-10 space-y-6 sm:space-y-8">
+      <div className="relative max-w-5xl mx-auto z-10 space-y-6 sm:space-y-8">
         {/* 1. Centered Top Pill Badge */}
         <div className="flex justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1b1030]/80 border border-purple-500/30 text-purple-200 text-xs font-semibold backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-            <Sparkles className="w-3.5 h-3.5 text-[#ca2484]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-muted/60 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span>Nigeria Executive Interstate Fleet 2026</span>
           </div>
         </div>
 
-        {/* 2. Centered Main Typographic Headline */}
-        <div className="text-center space-y-3 sm:space-y-4 max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.08] text-balance">
-            <span className="block text-white">Your Journey Begins in</span>
-            <span className="block bg-gradient-to-r from-[#e9d5ff] via-[#c084fc] to-[#ca2484] bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(168,85,247,0.5)]">
+        {/* 2. Main Typographic Headline */}
+        <div className="text-center space-y-3 max-w-3xl mx-auto">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-bold tracking-tight leading-[1.1] text-balance">
+            <span className="block text-foreground">Your Journey Begins in</span>
+            <span className="block bg-gradient-to-r from-purple-600 via-pink-600 to-[#ca2484] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#ca2484] bg-clip-text text-transparent">
               One Click
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base md:text-lg text-purple-200/80 max-w-2xl mx-auto leading-relaxed text-pretty font-normal">
-            Experience the future of interstate travel. Book air conditioned 5 passenger Toyota Siennas across Lagos, Abuja, Enugu, and Owerri from a single, unified interface.
+          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-normal">
+            Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
           </p>
         </div>
 
-        {/* 3. Floating Translucent Glass Search Card */}
+        {/* 3. Floating Glassmorphism Search Island */}
         <div
           ref={containerRef}
-          className="w-full max-w-5xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] bg-[#120a22]/80 backdrop-blur-2xl border border-white/10 p-4 sm:p-6 shadow-[0_20px_60px_rgba(0,0,0,0.7),0_0_50px_rgba(168,85,247,0.15)] relative"
+          className="w-full max-w-4xl mx-auto rounded-3xl bg-card/75 dark:bg-[#120a22]/80 backdrop-blur-xl border border-border shadow-xl p-4 sm:p-6 relative"
         >
-          {/* Top Bar inside Card: Mode Tabs (Left) + Secondary Options (Right) */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/5">
+          {/* Top Bar: Mode Tabs (Left) + Utility Options (Right) */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
             {/* Trip Mode Segmented Pills */}
-            <div className="inline-flex items-center p-1 rounded-full bg-black/40 border border-white/10">
+            <div className="inline-flex items-center p-1 rounded-full bg-muted/50 dark:bg-black/40 border border-border">
               <button
                 type="button"
                 onClick={() => setTripMode('one-way')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${
                   tripMode === 'one-way'
-                    ? 'bg-[#2b1c47] text-white shadow-inner border border-purple-500/30'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 One Way
@@ -187,10 +183,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setTripMode('round-trip')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${
                   tripMode === 'round-trip'
-                    ? 'bg-[#2b1c47] text-white shadow-inner border border-purple-500/30'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 Round Trip
@@ -198,10 +194,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setTripMode('charter')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer min-h-[36px] ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${
                   tripMode === 'charter'
-                    ? 'bg-[#2b1c47] text-white shadow-inner border border-purple-500/30'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 Private Charter
@@ -213,32 +209,32 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'promo' ? null : 'promo')}
-                className="px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                className="px-3 py-1.5 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
-                <Tag className="w-3.5 h-3.5 text-purple-400" />
+                <Tag className="w-3.5 h-3.5 text-primary" />
                 <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => onNavigate ? onNavigate('/terminals') : (window.location.href = '/terminals')}
-                className="px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                className="px-3 py-1.5 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
-                <span>Terminal Directory</span>
+                <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+                <span>Terminals</span>
               </button>
             </div>
           </div>
 
           {/* Promo Code Popover */}
           {openDropdown === 'promo' && (
-            <div className="absolute top-16 right-6 z-50 w-72 p-4 rounded-2xl bg-[#1b1030] border border-purple-500/40 shadow-2xl space-y-3">
-              <div className="flex items-center justify-between text-xs font-bold text-white">
-                <span>Enter Discount Voucher</span>
+            <div className="absolute top-16 right-6 z-50 w-72 p-4 rounded-2xl bg-popover/95 backdrop-blur-xl border border-border shadow-2xl space-y-3">
+              <div className="flex items-center justify-between text-xs font-normal text-foreground">
+                <span>Enter Promo Voucher</span>
                 <button
                   type="button"
                   onClick={() => setOpenDropdown(null)}
-                  className="text-slate-400 hover:text-white"
+                  className="text-muted-foreground hover:text-foreground cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -249,7 +245,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                   placeholder="e.g. ASCENT2026"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                  className="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/10 text-xs text-white uppercase placeholder:text-slate-500 focus:outline-none focus:border-purple-400"
+                  className="w-full px-3 py-2 rounded-xl bg-background border border-border text-xs text-foreground uppercase placeholder:text-muted-foreground focus:outline-none focus:border-primary"
                 />
                 <button
                   type="button"
@@ -259,7 +255,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       setOpenDropdown(null);
                     }
                   }}
-                  className="px-3 py-2 rounded-xl bg-[#ca2484] hover:bg-[#aa1769] text-white text-xs font-bold min-h-[36px]"
+                  className="px-3 py-2 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-xs font-normal min-h-[36px] cursor-pointer"
                 >
                   Apply
                 </button>
@@ -267,35 +263,38 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
           )}
 
-          {/* Search Inputs Row: 5 Recessed Dark Capsules */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 pt-4">
-            {/* 1. FROM City Capsule */}
-            <div
-              onClick={() => setOpenDropdown(openDropdown === 'from' ? null : 'from')}
-              className="lg:col-span-3 bg-[#0a0414]/90 rounded-2xl p-3 border border-white/5 hover:border-purple-500/40 transition-colors relative cursor-pointer min-h-[66px] flex flex-col justify-between"
-            >
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                FROM
-              </span>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#c084fc] flex-shrink-0" />
-                <div className="overflow-hidden">
-                  <span className="text-sm font-bold text-white truncate block">
-                    {fromCity} ({CITY_DETAILS[fromCity]?.code})
-                  </span>
-                  <span className="text-[10px] text-slate-400 truncate block">
-                    {CITY_DETAILS[fromCity]?.terminal}
-                  </span>
+          {/* Search Inputs Row with Distinct Labels Above Inputs */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 pt-4 items-end">
+            {/* 1. FROM City */}
+            <div className="lg:col-span-3 space-y-1 relative">
+              <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
+                From
+              </label>
+              <div
+                onClick={() => setOpenDropdown(openDropdown === 'from' ? null : 'from')}
+                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                  <div className="overflow-hidden">
+                    <span className="text-sm font-normal text-foreground truncate block">
+                      {fromCity} ({CITY_DETAILS[fromCity]?.code})
+                    </span>
+                    <span className="text-[10px] text-muted-foreground truncate block">
+                      {CITY_DETAILS[fromCity]?.terminal}
+                    </span>
+                  </div>
                 </div>
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               </div>
 
               {/* FROM Dropdown Modal */}
               {openDropdown === 'from' && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute top-full left-0 mt-2 w-64 bg-[#180d2e] border border-purple-500/30 rounded-2xl p-2 shadow-2xl z-50 space-y-1"
+                  className="absolute top-full left-0 mt-2 w-64 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl p-2 shadow-2xl z-50 space-y-1 text-popover-foreground"
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                     Select Departure Hub
                   </div>
                   {SERVED_CITIES.map((city) => (
@@ -303,12 +302,12 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       key={city}
                       type="button"
                       onClick={() => handleFromSelect(city)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer ${
-                        fromCity === city ? 'bg-[#ca2484] text-white' : 'text-slate-200 hover:bg-white/10'
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${
+                        fromCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
                       }`}
                     >
                       <div>
-                        <div className="font-bold">{city}</div>
+                        <div>{city}</div>
                         <div className="text-[10px] opacity-75">{CITY_DETAILS[city]?.terminal}</div>
                       </div>
                       <span className="font-mono text-[10px]">{CITY_DETAILS[city]?.code}</span>
@@ -318,45 +317,48 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               )}
             </div>
 
-            {/* Swap Button (Desktop Center Floating Icon) */}
-            <div className="hidden lg:flex absolute left-[24.2%] top-[60%] -translate-y-1/2 -translate-x-1/2 z-30 pointer-events-auto">
+            {/* Swap Button (Cleanly integrated between FROM and TO) */}
+            <div className="hidden lg:flex lg:col-span-1 justify-center pb-2">
               <button
                 type="button"
                 onClick={handleSwap}
                 aria-label="Swap origin and destination"
-                className="w-8 h-8 rounded-full bg-[#201338] border border-purple-500/40 text-purple-300 hover:text-white hover:scale-110 flex items-center justify-center transition-all cursor-pointer shadow-md"
+                className="w-9 h-9 rounded-full bg-background border border-border text-muted-foreground hover:text-foreground hover:border-primary flex items-center justify-center transition-colors cursor-pointer shadow-xs"
               >
                 <ArrowRightLeft className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* 2. TO City Capsule */}
-            <div
-              onClick={() => setOpenDropdown(openDropdown === 'to' ? null : 'to')}
-              className="lg:col-span-3 bg-[#0a0414]/90 rounded-2xl p-3 border border-white/5 hover:border-purple-500/40 transition-colors relative cursor-pointer min-h-[66px] flex flex-col justify-between"
-            >
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                TO
-              </span>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
-                <div className="overflow-hidden">
-                  <span className="text-sm font-bold text-white truncate block">
-                    {toCity} ({CITY_DETAILS[toCity]?.code})
-                  </span>
-                  <span className="text-[10px] text-slate-400 truncate block">
-                    {CITY_DETAILS[toCity]?.terminal}
-                  </span>
+            {/* 2. TO City */}
+            <div className="lg:col-span-3 space-y-1 relative">
+              <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
+                To
+              </label>
+              <div
+                onClick={() => setOpenDropdown(openDropdown === 'to' ? null : 'to')}
+                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                  <div className="overflow-hidden">
+                    <span className="text-sm font-normal text-foreground truncate block">
+                      {toCity} ({CITY_DETAILS[toCity]?.code})
+                    </span>
+                    <span className="text-[10px] text-muted-foreground truncate block">
+                      {CITY_DETAILS[toCity]?.terminal}
+                    </span>
+                  </div>
                 </div>
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               </div>
 
               {/* TO Dropdown Modal */}
               {openDropdown === 'to' && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute top-full left-0 mt-2 w-64 bg-[#180d2e] border border-purple-500/30 rounded-2xl p-2 shadow-2xl z-50 space-y-1"
+                  className="absolute top-full left-0 mt-2 w-64 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl p-2 shadow-2xl z-50 space-y-1 text-popover-foreground"
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                     Select Destination Hub
                   </div>
                   {availableDestinations.map((city) => (
@@ -364,12 +366,12 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       key={city}
                       type="button"
                       onClick={() => handleToSelect(city)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer ${
-                        toCity === city ? 'bg-[#ca2484] text-white' : 'text-slate-200 hover:bg-white/10'
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${
+                        toCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
                       }`}
                     >
                       <div>
-                        <div className="font-bold">{city}</div>
+                        <div>{city}</div>
                         <div className="text-[10px] opacity-75">{CITY_DETAILS[city]?.terminal}</div>
                       </div>
                       <span className="font-mono text-[10px]">{CITY_DETAILS[city]?.code}</span>
@@ -379,125 +381,125 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               )}
             </div>
 
-            {/* 3. DATE Capsule */}
-            <div className="lg:col-span-2 bg-[#0a0414]/90 rounded-2xl p-3 border border-white/5 hover:border-purple-500/40 transition-colors relative min-h-[66px] flex flex-col justify-between">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                DATE
-              </span>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-purple-400 flex-shrink-0" />
+            {/* 3. DATE */}
+            <div className="lg:col-span-2 space-y-1">
+              <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
+                Date
+              </label>
+              <div className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors min-h-[58px] flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
                 <input
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm font-bold text-white focus:outline-none cursor-pointer"
+                  className="w-full bg-transparent text-xs sm:text-sm font-normal text-foreground focus:outline-none cursor-pointer"
                 />
               </div>
             </div>
 
-            {/* 4. PASSENGERS & CLASS Capsule */}
-            <div
-              onClick={() => setOpenDropdown(openDropdown === 'passengers' ? null : 'passengers')}
-              className="lg:col-span-2 bg-[#0a0414]/90 rounded-2xl p-3 border border-white/5 hover:border-purple-500/40 transition-colors relative cursor-pointer min-h-[66px] flex flex-col justify-between"
-            >
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                PASSENGERS &amp; CLASS
-              </span>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 overflow-hidden">
-                  <Users className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                  <span className="text-xs sm:text-sm font-bold text-white truncate">
-                    {passengers} {passengers === 1 ? 'Adult' : 'Adults'}, 5 Seat
+            {/* 4. PASSENGERS & CLASS */}
+            <div className="lg:col-span-3 space-y-1 relative">
+              <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
+                Passengers
+              </label>
+              <div
+                onClick={() => setOpenDropdown(openDropdown === 'passengers' ? null : 'passengers')}
+                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <Users className="w-4 h-4 text-primary flex-shrink-0" />
+                  <span className="text-xs sm:text-sm font-normal text-foreground truncate">
+                    {passengers} {passengers === 1 ? 'Passenger' : 'Passengers'}, 5 Seat
                   </span>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               </div>
 
               {/* Passengers Stepper Modal */}
               {openDropdown === 'passengers' && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute top-full right-0 mt-2 w-56 bg-[#180d2e] border border-purple-500/30 rounded-2xl p-4 shadow-2xl z-50 space-y-3"
+                  className="absolute top-full right-0 mt-2 w-56 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl p-4 shadow-2xl z-50 space-y-3 text-popover-foreground"
                 >
-                  <div className="text-xs font-bold text-white">5 Passenger Sienna Cabin</div>
+                  <div className="text-xs font-normal text-foreground">5 Seat Sienna Cabin</div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-300">Seats</span>
+                    <span className="text-xs text-muted-foreground">Seats</span>
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
                         disabled={passengers <= 1}
-                        className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-bold flex items-center justify-center cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-30 text-foreground font-normal flex items-center justify-center cursor-pointer"
                       >
                         -
                       </button>
-                      <span className="text-sm font-bold text-white">{passengers}</span>
+                      <span className="text-sm font-normal text-foreground">{passengers}</span>
                       <button
                         type="button"
                         onClick={() => setPassengers(Math.min(5, passengers + 1))}
                         disabled={passengers >= 5}
-                        className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-bold flex items-center justify-center cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-30 text-foreground font-normal flex items-center justify-center cursor-pointer"
                       >
                         +
                       </button>
                     </div>
                   </div>
-                  <div className="text-[10px] text-purple-300">
-                    Maximum 5 seats per vehicle. Zero middle row congestion.
+                  <div className="text-[10px] text-muted-foreground">
+                    Strictly 5 passenger seats per vehicle.
                   </div>
                 </div>
               )}
             </div>
+          </div>
 
-            {/* 5. Glowing Search Now Button */}
-            <div className="lg:col-span-2 flex items-stretch">
-              <button
-                type="button"
-                onClick={handleSearch}
-                className="w-full bg-gradient-to-r from-[#9d4edd] via-[#c084fc] to-[#ca2484] hover:opacity-95 text-white font-bold rounded-2xl flex items-center justify-center gap-2 p-3 min-h-[66px] shadow-[0_0_30px_rgba(168,85,247,0.45)] hover:shadow-[0_0_40px_rgba(202,36,132,0.6)] transition-all hover:scale-[1.02] cursor-pointer"
-              >
-                <Search className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold">Search Now</span>
-              </button>
-            </div>
+          {/* Search Button (Full width bar or bottom action with small text and normal font weight) */}
+          <div className="pt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={handleSearch}
+              className="w-full sm:w-auto px-8 py-3 bg-primary hover:opacity-95 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 min-h-[48px] shadow-md transition-colors cursor-pointer"
+            >
+              <Search className="w-4 h-4" />
+              <span>Search Now</span>
+            </button>
           </div>
         </div>
 
-        {/* 4. Centered Bottom Trust Indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-4 text-xs text-slate-300">
+        {/* 4. Trust Indicators */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
-            <div className="flex items-center text-amber-400">
+            <div className="flex items-center text-amber-500">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <Star key={i} className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
               ))}
             </div>
-            <span className="font-bold text-white">4.9/5</span>
-            <span className="text-slate-400">on Trustpilot</span>
+            <span className="font-medium text-foreground">4.9/5</span>
+            <span>on Trustpilot</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <span className="font-semibold">100% Secure Checkout</span>
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <span>100% Secure Checkout</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <Globe className="w-4 h-4 text-purple-400" />
-            <span className="font-semibold">15,000+ Completed Trips</span>
+            <Globe className="w-4 h-4 text-primary" />
+            <span>15,000+ Completed Trips</span>
           </div>
         </div>
       </div>
 
-      {/* Floating Dispatch Assistance Bubble (Bottom Right) */}
+      {/* Floating Dispatch Assistance Bubble */}
       <a
         href={`https://wa.me/${BRAND.contactPhones[0].replace(/[^0-9]/g, '')}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Direct WhatsApp Dispatch Support"
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-[#9d4edd] to-[#ca2484] shadow-[0_0_30px_rgba(168,85,247,0.6)] flex items-center justify-center text-white hover:scale-105 transition-transform cursor-pointer"
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer"
       >
-        <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-[#07030f]">
-          01
+        <MessageCircle className="w-5 h-5" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-normal flex items-center justify-center">
+          1
         </span>
       </a>
     </div>

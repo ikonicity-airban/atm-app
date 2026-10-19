@@ -32,6 +32,11 @@ export const metadata: Metadata = {
     description: 'Intercity passenger transport, courier parcels, and vehicle charter across Nigeria. Travel Safe and Fast.',
     type: 'website',
   },
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

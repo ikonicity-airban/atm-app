@@ -17,8 +17,6 @@ import {
   Shield,
   User,
   MapPin,
-  Search,
-  Sparkles,
 } from 'lucide-react';
 import { Logo } from '../ui/Logo.tsx';
 import { ThemeToggle } from '../theme/ThemeToggle.tsx';
@@ -40,16 +38,15 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<'services' | 'support' | null>(null);
-  const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
 
   const headerRef = useRef<HTMLElement>(null);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Monitor scroll offset to transition from transparent to floating rounded pill
+  // Monitor scroll offset to adjust navbar height and background smoothly
   useEffect(() => {
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
-        setIsScrolled(window.scrollY > 20);
+        setIsScrolled(window.scrollY > 15);
       }
     };
 
@@ -81,19 +78,13 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Services Links (Courier, Tracking, Charter, Corporate)
+  // Services Links (Track removed as requested)
   const serviceLinks: DropdownLink[] = [
     {
       label: 'Express Courier',
       sub: 'Same day intercity parcel and waybill delivery',
       path: '/courier',
       icon: Package,
-    },
-    {
-      label: 'Track Waybill',
-      sub: 'Real time chain of custody tracking code lookup',
-      path: '/track',
-      icon: Search,
     },
     {
       label: 'Private Charter',
@@ -143,225 +134,172 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     },
   ];
 
-  // Determine active nav index for magnetic hover tracking pill
-  const getActiveNavIndex = () => {
-    if (currentPath === '/trips' || currentPath.startsWith('/book')) return 0;
-    if (currentPath.startsWith('/routes')) return 1;
-    if (currentPath.startsWith('/terminals')) return 2;
-    if (serviceLinks.some((l) => currentPath.startsWith(l.path))) return 3;
-    if (supportLinks.some((l) => currentPath.startsWith(l.path))) return 4;
-    return null;
-  };
-
-  const activeIndex = getActiveNavIndex();
-  const highlightedIndex = hoveredNavIndex !== null ? hoveredNavIndex : activeIndex;
-
   const handleNav = (path: string) => {
     onNavigate(path);
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
   };
 
-  const handleMouseEnter = (type: 'services' | 'support', index: number) => {
+  const handleMouseEnter = (type: 'services' | 'support') => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     setActiveDropdown(type);
-    setHoveredNavIndex(index);
   };
 
   const handleMouseLeave = () => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     dropdownTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-      setHoveredNavIndex(null);
-    }, 180);
+    }, 150);
   };
+
+  const toggleDropdown = (type: 'services' | 'support') => {
+    setActiveDropdown((prev) => (prev === type ? null : type));
+  };
+
+  const isTripsActive = currentPath === '/trips' || currentPath.startsWith('/book');
+  const isRoutesActive = currentPath.startsWith('/routes');
+  const isTerminalsActive = currentPath.startsWith('/terminals');
+  const isServicesActive = serviceLinks.some((l) => currentPath.startsWith(l.path));
+  const isSupportActive = supportLinks.some((l) => currentPath.startsWith(l.path));
 
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out flex justify-center ${isScrolled
-        ? 'pt-3 sm:pt-4 px-4 sm:px-6 pointer-events-none'
-        : 'pt-0 px-4 sm:px-6 lg:px-8 bg-transparent'
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-200 bg-background/85 backdrop-blur-md border-b ${
+        isScrolled
+          ? 'py-2.5 border-border shadow-xs bg-background/95'
+          : 'py-4 border-border/40 bg-background/80'
+      }`}
     >
-      <div
-        className={`w-full transition-all duration-300 ease-out flex items-center justify-between pointer-events-auto ${isScrolled
-          ? 'max-w-5xl lg:max-w-6xl bg-white/40 backdrop-blur-lg rounded-full px-4 sm:px-6 py-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border-0 ring-1 ring-slate-900/5'
-          : 'max-w-7xl mx-auto py-4 sm:py-6 bg-transparent border-0'
-          }`}
-      >
-        {/* Brand Logo */}
-        <button
-          type="button"
-          onClick={() => handleNav('/')}
-          className="flex items-center text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#ca2484] rounded-lg p-1 cursor-pointer transition-transform hover:scale-[1.01]"
-          aria-label="Ascent Transport Management Home"
-        >
-          <Logo variant="full" size="md" />
-        </button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {/* Left: Brand Logo */}
+        <div className="flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => handleNav('/')}
+            className="flex items-center text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-lg p-1 cursor-pointer transition-transform hover:scale-[1.01]"
+            aria-label="Ascent Transport Management Home"
+          >
+            <Logo variant="full" size="md" />
+          </button>
+        </div>
 
-        {/* Desktop Navigation Links with Magnetic Tracking Pill */}
+        {/* Center: Desktop Navigation Links */}
         <nav
-          className="hidden md:flex items-center relative gap-0.5 lg:gap-1"
+          className="hidden md:flex items-center justify-center flex-1 max-w-xl mx-auto gap-1"
           aria-label="Main navigation"
-          onMouseLeave={handleMouseLeave}
         >
-          {/* 1. Direct "Book Trip" Link */}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-              setActiveDropdown(null);
-              setHoveredNavIndex(0);
-            }}
+          {/* 1. Book Trip */}
+          <button
+            type="button"
+            onClick={() => handleNav('/trips')}
+            className={`px-3 py-1.5 text-sm font-normal rounded-lg min-h-[44px] flex items-center gap-1.5 cursor-pointer transition-colors ${
+              isTripsActive
+                ? 'text-primary font-medium bg-primary/10'
+                : 'text-foreground/80 hover:text-foreground hover:bg-muted/50'
+            }`}
           >
-            <button
-              type="button"
-              onClick={() => handleNav('/trips')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-bold rounded-full min-h-[44px] flex items-center gap-1.5 cursor-pointer transition-colors ${currentPath === '/trips' || currentPath.startsWith('/book')
-                ? 'text-[#ca2484]'
-                : 'text-slate-800 hover:text-slate-950'
-                }`}
-            >
-              <Bus className="w-4 h-4 text-[#ca2484]" />
-              <span>Book Trip</span>
-            </button>
-            {highlightedIndex === 0 && (
-              <motion.span
-                layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-pink-50/90 shadow-2xs -z-0"
-                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-              />
-            )}
-          </div>
+            <Bus className="w-4 h-4 text-primary" />
+            <span>Book Trip</span>
+          </button>
 
-          {/* 2. Direct "Routes" Link */}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-              setActiveDropdown(null);
-              setHoveredNavIndex(1);
-            }}
+          {/* 2. Routes */}
+          <button
+            type="button"
+            onClick={() => handleNav('/routes')}
+            className={`px-3 py-1.5 text-sm font-normal rounded-lg min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${
+              isRoutesActive
+                ? 'text-primary font-medium bg-primary/10'
+                : 'text-foreground/80 hover:text-foreground hover:bg-muted/50'
+            }`}
           >
-            <button
-              type="button"
-              onClick={() => handleNav('/routes')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${currentPath.startsWith('/routes')
-                ? 'text-[#ca2484]'
-                : 'text-slate-700 hover:text-slate-950'
-                }`}
-            >
-              <span>Routes</span>
-            </button>
-            {highlightedIndex === 1 && (
-              <motion.span
-                layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-pink-50/90 shadow-2xs -z-0"
-                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-              />
-            )}
-          </div>
+            <span>Routes</span>
+          </button>
 
-          {/* 3. Direct "Terminals" Link */}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-              setActiveDropdown(null);
-              setHoveredNavIndex(2);
-            }}
+          {/* 3. Terminals */}
+          <button
+            type="button"
+            onClick={() => handleNav('/terminals')}
+            className={`px-3 py-1.5 text-sm font-normal rounded-lg min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${
+              isTerminalsActive
+                ? 'text-primary font-medium bg-primary/10'
+                : 'text-foreground/80 hover:text-foreground hover:bg-muted/50'
+            }`}
           >
-            <button
-              type="button"
-              onClick={() => handleNav('/terminals')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${currentPath.startsWith('/terminals')
-                ? 'text-[#ca2484]'
-                : 'text-slate-700 hover:text-slate-950'
-                }`}
-            >
-              <span>Terminals</span>
-            </button>
-            {highlightedIndex === 2 && (
-              <motion.span
-                layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-pink-50/90 shadow-2xs -z-0"
-                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-              />
-            )}
-          </div>
+            <span>Terminals</span>
+          </button>
 
-          {/* 4. Services Dropdown (Courier, Tracking, Charter, Corporate) */}
+          {/* 4. Services Dropdown */}
           <div
             className="relative"
-            onMouseEnter={() => handleMouseEnter('services', 3)}
+            onMouseEnter={() => handleMouseEnter('services')}
+            onMouseLeave={handleMouseLeave}
           >
             <button
               type="button"
-              onClick={() => setActiveDropdown(activeDropdown === 'services' ? null : 'services')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${serviceLinks.some((l) => currentPath.startsWith(l.path))
-                ? 'text-[#ca2484]'
-                : 'text-slate-700 hover:text-slate-950'
-                }`}
+              onClick={() => toggleDropdown('services')}
+              className={`px-3 py-1.5 text-sm font-normal rounded-lg min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${
+                isServicesActive || activeDropdown === 'services'
+                  ? 'text-primary font-medium bg-primary/10'
+                  : 'text-foreground/80 hover:text-foreground hover:bg-muted/50'
+              }`}
               aria-expanded={activeDropdown === 'services'}
               aria-haspopup="true"
             >
               <span>Services</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'services' ? 'rotate-180 text-[#ca2484]' : 'text-slate-400'
-                  }`}
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  activeDropdown === 'services' ? 'rotate-180 text-primary' : 'text-muted-foreground'
+                }`}
               />
             </button>
-            {highlightedIndex === 3 && (
-              <motion.span
-                layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-pink-50/90 shadow-2xs -z-0"
-                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-              />
-            )}
 
+            {/* Seamless dropdown wrapper */}
             <AnimatePresence>
               {activeDropdown === 'services' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                  className="absolute top-full left-0 mt-2 w-72 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-[0_12px_36px_rgba(0,0,0,0.12)] ring-1 ring-slate-900/10 p-2 z-50 overflow-hidden"
-                  onMouseEnter={() => {
-                    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Logistics &amp; Private Fleet
-                  </div>
-                  <div className="space-y-1">
-                    {serviceLinks.map((item) => {
-                      const Icon = item.icon;
-                      const isItemActive = currentPath.startsWith(item.path);
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${isItemActive ? 'bg-pink-50 text-[#ca2484]' : 'hover:bg-slate-50 text-slate-800'
+                <div className="absolute top-full left-0 pt-2 z-50">
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.15 }}
+                    className="w-72 bg-popover/95 backdrop-blur-2xl rounded-2xl shadow-xl border border-border p-2 overflow-hidden"
+                  >
+                    <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Logistics &amp; Private Fleet
+                    </div>
+                    <div className="space-y-1">
+                      {serviceLinks.map((item) => {
+                        const Icon = item.icon;
+                        const isItemActive = currentPath.startsWith(item.path);
+                        return (
+                          <button
+                            key={item.path}
+                            type="button"
+                            onClick={() => handleNav(item.path)}
+                            className={`w-full text-left px-3 py-2 rounded-xl transition-colors flex items-start gap-3 cursor-pointer ${
+                              isItemActive
+                                ? 'bg-primary/10 text-primary'
+                                : 'hover:bg-muted/60 text-foreground'
                             }`}
-                        >
-                          <div
-                            className={`p-1.5 rounded-lg mt-0.5 ${isItemActive ? 'bg-[#ca2484] text-white' : 'bg-slate-100 text-slate-600'
-                              }`}
                           >
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold leading-tight">{item.label}</div>
-                            <div className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
+                            <div
+                              className={`p-1.5 rounded-lg mt-0.5 ${
+                                isItemActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-normal leading-tight">{item.label}</div>
+                              <div className="text-xs text-muted-foreground leading-tight mt-0.5">{item.sub}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                </div>
               )}
             </AnimatePresence>
           </div>
@@ -369,101 +307,89 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           {/* 5. Support Dropdown */}
           <div
             className="relative"
-            onMouseEnter={() => handleMouseEnter('support', 4)}
+            onMouseEnter={() => handleMouseEnter('support')}
+            onMouseLeave={handleMouseLeave}
           >
             <button
               type="button"
-              onClick={() => setActiveDropdown(activeDropdown === 'support' ? null : 'support')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${supportLinks.some((l) => currentPath.startsWith(l.path))
-                ? 'text-[#ca2484]'
-                : 'text-slate-700 hover:text-slate-950'
-                }`}
+              onClick={() => toggleDropdown('support')}
+              className={`px-3 py-1.5 text-sm font-normal rounded-lg min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${
+                isSupportActive || activeDropdown === 'support'
+                  ? 'text-primary font-medium bg-primary/10'
+                  : 'text-foreground/80 hover:text-foreground hover:bg-muted/50'
+              }`}
               aria-expanded={activeDropdown === 'support'}
               aria-haspopup="true"
             >
               <span>Support</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'support' ? 'rotate-180 text-[#ca2484]' : 'text-slate-400'
-                  }`}
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  activeDropdown === 'support' ? 'rotate-180 text-primary' : 'text-muted-foreground'
+                }`}
               />
             </button>
-            {highlightedIndex === 4 && (
-              <motion.span
-                layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-pink-50/90 shadow-2xs -z-0"
-                transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-              />
-            )}
 
+            {/* Seamless dropdown wrapper */}
             <AnimatePresence>
               {activeDropdown === 'support' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                  className="absolute top-full right-0 lg:left-0 mt-2 w-72 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-[0_12px_36px_rgba(0,0,0,0.12)] ring-1 ring-slate-900/10 p-2 z-50 overflow-hidden"
-                  onMouseEnter={() => {
-                    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Customer Care &amp; Policies
-                  </div>
-                  <div className="space-y-1">
-                    {supportLinks.map((item) => {
-                      const Icon = item.icon;
-                      const isItemActive = currentPath.startsWith(item.path);
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${isItemActive ? 'bg-pink-50 text-[#ca2484]' : 'hover:bg-slate-50 text-slate-800'
+                <div className="absolute top-full left-0 pt-2 z-50">
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.15 }}
+                    className="w-72 bg-popover/95 backdrop-blur-2xl rounded-2xl shadow-xl border border-border p-2 overflow-hidden"
+                  >
+                    <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Customer Care &amp; Policies
+                    </div>
+                    <div className="space-y-1">
+                      {supportLinks.map((item) => {
+                        const Icon = item.icon;
+                        const isItemActive = currentPath.startsWith(item.path);
+                        return (
+                          <button
+                            key={item.path}
+                            type="button"
+                            onClick={() => handleNav(item.path)}
+                            className={`w-full text-left px-3 py-2 rounded-xl transition-colors flex items-start gap-3 cursor-pointer ${
+                              isItemActive
+                                ? 'bg-primary/10 text-primary'
+                                : 'hover:bg-muted/60 text-foreground'
                             }`}
-                        >
-                          <div
-                            className={`p-1.5 rounded-lg mt-0.5 ${isItemActive ? 'bg-[#ca2484] text-white' : 'bg-slate-100 text-slate-600'
-                              }`}
                           >
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold leading-tight">{item.label}</div>
-                            <div className="text-[11px] text-slate-500 leading-tight mt-0.5">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
+                            <div
+                              className={`p-1.5 rounded-lg mt-0.5 ${
+                                isItemActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-normal leading-tight">{item.label}</div>
+                              <div className="text-xs text-muted-foreground leading-tight mt-0.5">{item.sub}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                </div>
               )}
             </AnimatePresence>
           </div>
         </nav>
 
-        {/* Action CTAs: Track Parcel + Manage Booking + Theme Changer */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right: Actions (Theme Toggle + Manage Booking) */}
+        <div className="flex items-center gap-2.5">
           {/* Theme Changer */}
           <ThemeToggle />
 
-          {/* Track Parcel Fast Utility Link */}
-          <button
-            type="button"
-            onClick={() => handleNav('/track')}
-            className={`hidden lg:flex px-3.5 py-2 text-xs font-bold rounded-full min-h-[44px] items-center gap-1.5 transition-colors cursor-pointer ${currentPath === '/track' ? 'text-[#ca2484] bg-pink-50 dark:bg-pink-950/40' : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-          >
-            <Search className="w-3.5 h-3.5 text-[#ca2484]" />
-            <span>Track Parcel</span>
-          </button>
-
-          {/* Primary Manage Booking Button */}
+          {/* Primary Manage Booking Button with Small Text and Normal Font Weight */}
           <button
             type="button"
             onClick={() => handleNav('/manage')}
-            className={`px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold text-slate-900 dark:text-white border border-slate-900/80 dark:border-white/30 rounded-full hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-950 transition-all shadow-2xs min-h-10 flex items-center cursor-pointer ${isScrolled && "bg-primary border-white text-white border-2"}`}
+            className="px-4 py-2 text-xs font-normal text-foreground border border-border rounded-full hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors min-h-[44px] flex items-center cursor-pointer"
           >
             Manage Booking
           </button>
@@ -472,7 +398,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => handleNav('/admin')}
-              className="hidden sm:flex px-3.5 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-full min-h-[44px] items-center gap-1.5 cursor-pointer"
+              className="hidden sm:flex px-3.5 py-2 text-xs font-normal text-primary-foreground bg-primary hover:opacity-90 rounded-full min-h-[44px] items-center gap-1.5 cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               <span>Staff Portal</span>
@@ -481,7 +407,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => handleNav('/account')}
-              className="hidden sm:flex px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full min-h-[44px] items-center gap-1.5 cursor-pointer"
+              className="hidden sm:flex px-3.5 py-2 text-xs font-normal text-foreground bg-muted hover:bg-muted/80 rounded-full min-h-[44px] items-center gap-1.5 cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               <span>Account</span>
@@ -492,7 +418,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden w-11 h-11 rounded-full flex items-center justify-center text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="md:hidden w-11 h-11 rounded-full flex items-center justify-center text-foreground hover:bg-muted transition-colors cursor-pointer"
             aria-label="Toggle mobile navigation menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -509,20 +435,20 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-20 left-4 right-4 bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] ring-1 ring-slate-900/10 dark:ring-white/10 p-5 z-50 max-h-[85vh] overflow-y-auto text-slate-900 dark:text-slate-100"
+            className="md:hidden fixed top-16 left-4 right-4 bg-popover/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-border p-5 z-50 max-h-[85vh] overflow-y-auto text-popover-foreground"
           >
             <div className="space-y-6">
-              {/* High Visibility "Book Trip" Button */}
+              {/* High Visibility Book Trip Button */}
               <button
                 type="button"
                 onClick={() => handleNav('/trips')}
-                className="w-full min-h-[48px] px-4 py-3 bg-[#ca2484] hover:bg-[#aa1769] text-white rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer"
+                className="w-full min-h-[48px] px-4 py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-normal text-sm flex items-center justify-between shadow-xs cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <Bus className="w-4 h-4 text-white" />
+                  <Bus className="w-4 h-4" />
                   <span>Book Trip</span>
                 </div>
-                <span className="text-xs bg-white/20 px-2 py-0.5 rounded-md font-semibold">
+                <span className="text-xs bg-white/20 px-2 py-0.5 rounded-md font-normal">
                   5 Seat Sienna
                 </span>
               </button>
@@ -532,30 +458,38 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 <button
                   type="button"
                   onClick={() => handleNav('/routes')}
-                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 dark:border-slate-700 text-xs font-bold ${currentPath.startsWith('/routes') ? 'bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] border-pink-200 dark:border-pink-800' : 'text-slate-800 dark:text-slate-200'}`}
+                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border text-xs font-normal ${
+                    isRoutesActive
+                      ? 'bg-primary/10 text-primary border-primary/30'
+                      : 'border-border text-foreground hover:bg-muted/50'
+                  }`}
                 >
-                  <Bus className="w-4 h-4 text-[#ca2484]" />
+                  <Bus className="w-4 h-4 text-primary" />
                   <span>Routes</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => handleNav('/terminals')}
-                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border border-slate-200 dark:border-slate-700 text-xs font-bold ${currentPath.startsWith('/terminals') ? 'bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] border-pink-200 dark:border-pink-800' : 'text-slate-800 dark:text-slate-200'}`}
+                  className={`px-3 py-2.5 rounded-xl flex items-center gap-2 border text-xs font-normal ${
+                    isTerminalsActive
+                      ? 'bg-primary/10 text-primary border-primary/30'
+                      : 'border-border text-foreground hover:bg-muted/50'
+                  }`}
                 >
-                  <MapPin className="w-4 h-4 text-[#ca2484]" />
+                  <MapPin className="w-4 h-4 text-primary" />
                   <span>Terminals</span>
                 </button>
               </div>
 
               {/* Theme Switcher Row in Mobile Menu */}
-              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
-                <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Appearance</span>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/40 border border-border">
+                <span className="text-xs font-normal text-foreground">Appearance</span>
                 <ThemeToggle showLabel={true} />
               </div>
 
               {/* Services Section */}
               <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1">
+                <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground block px-1">
                   Services
                 </span>
                 <div className="grid grid-cols-1 gap-1">
@@ -566,15 +500,16 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                         key={item.path}
                         type="button"
                         onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-pink-50 dark:bg-pink-950/40 text-[#ca2484] font-bold'
-                          : 'text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
-                          }`}
+                        className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${
+                          currentPath.startsWith(item.path)
+                            ? 'bg-primary/10 text-primary font-normal'
+                            : 'text-foreground hover:bg-muted/50'
+                        }`}
                       >
-                        <Icon className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
+                        <Icon className="w-4 h-4 text-primary flex-shrink-0" />
                         <div>
-                          <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">{item.sub}</div>
+                          <div className="text-sm font-normal leading-tight">{item.label}</div>
+                          <div className="text-xs text-muted-foreground leading-tight">{item.sub}</div>
                         </div>
                       </button>
                     );
@@ -584,7 +519,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
 
               {/* Support & Policies Section */}
               <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1">
+                <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground block px-1">
                   Support &amp; Policies
                 </span>
                 <div className="grid grid-cols-2 gap-1 text-xs">
@@ -593,10 +528,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                       key={item.path}
                       type="button"
                       onClick={() => handleNav(item.path)}
-                      className={`text-left px-3 py-2 rounded-lg min-h-[44px] flex items-center cursor-pointer ${currentPath.startsWith(item.path)
-                        ? 'text-[#ca2484] font-bold bg-pink-50 dark:bg-pink-950/40'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                        }`}
+                      className={`text-left px-3 py-2 rounded-lg min-h-[44px] flex items-center cursor-pointer ${
+                        currentPath.startsWith(item.path)
+                          ? 'text-primary font-normal bg-primary/10'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                      }`}
                     >
                       {item.label}
                     </button>
@@ -605,19 +541,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
               </div>
 
               {/* Self-Service Action Bar at Bottom of Mobile Menu */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleNav('/track')}
-                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Search className="w-3.5 h-3.5 text-[#ca2484]" />
-                  <span>Track Waybill Parcel</span>
-                </button>
+              <div className="pt-3 border-t border-border flex flex-col gap-2">
                 <button
                   type="button"
                   onClick={() => handleNav('/manage')}
-                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-foreground text-background text-xs font-normal hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Manage / Cancel Booking</span>
                 </button>

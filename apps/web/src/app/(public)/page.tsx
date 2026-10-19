@@ -105,7 +105,7 @@ export default function HomePage({ onNavigate }: HomePageProps = {}) {
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         <div className="flex justify-between items-end border-b border-border pb-3 mb-6">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground tracking-tight text-balance">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
               Frequently Asked Questions
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
@@ -115,14 +115,14 @@ export default function HomePage({ onNavigate }: HomePageProps = {}) {
           <button
             type="button"
             onClick={() => onNavigate ? onNavigate('/faq') : (window.location.href = '/faq')}
-            className="text-xs font-bold text-[#ca2484] hover:text-[#aa1769] flex items-center gap-1 min-h-[44px] cursor-pointer"
+            className="text-xs font-normal text-primary hover:opacity-80 flex items-center gap-1 min-h-[44px] cursor-pointer"
           >
             <span>View all FAQs</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="bg-card border border-border rounded-3xl p-6 shadow-xs">
+        <div className="bg-card/75 backdrop-blur-xl border border-border rounded-3xl p-6 shadow-md">
           <Accordion items={FAQ_ITEMS} defaultOpenId="faq-1" />
         </div>
       </section>

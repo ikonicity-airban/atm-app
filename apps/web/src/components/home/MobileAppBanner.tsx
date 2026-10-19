@@ -15,16 +15,16 @@ export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) =>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
           {/* Left Text & Features */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md text-pink-200 text-xs font-bold border border-white/15">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md text-pink-200 text-xs font-normal border border-white/15">
               <Sparkles className="w-3.5 h-3.5 text-pink-300" />
               <span>Mobile First Progressive Web App</span>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight text-balance">
+            <h2 className="text-2xl sm:text-4xl font-heading font-bold text-white tracking-tight leading-tight text-balance">
               Take Ascent Travel Everywhere
             </h2>
 
-            <p className="text-sm sm:text-base text-purple-100/90 leading-relaxed max-w-xl text-pretty">
+            <p className="text-sm sm:text-base text-purple-100/90 leading-relaxed max-w-xl text-pretty font-normal">
               Access your digital boarding pass, track waybill parcels, and receive departure gate announcements directly in your phone browser without installing heavy apps.
             </p>
 
@@ -34,7 +34,7 @@ export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) =>
                 'Live SMS updates and terminal dispatch announcements',
                 'Fast seat hold with instant bank transfer and Paystack checkout',
               ].map((benefit) => (
-                <div key={benefit} className="flex items-center gap-3 text-xs sm:text-sm text-purple-100 font-medium">
+                <div key={benefit} className="flex items-center gap-3 text-xs sm:text-sm text-purple-100 font-normal">
                   <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
@@ -48,7 +48,7 @@ export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) =>
               <button
                 type="button"
                 onClick={() => onNavigate ? onNavigate('/trips') : (window.location.href = '/trips')}
-                className="px-6 py-3.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 font-bold text-xs sm:text-sm shadow-xl transition-transform hover:scale-105 flex items-center gap-2 cursor-pointer min-h-[48px]"
+                className="px-6 py-3 rounded-xl bg-white text-slate-900 hover:bg-slate-100 font-normal text-xs sm:text-sm shadow-xl transition-transform hover:scale-105 flex items-center gap-2 cursor-pointer min-h-[44px]"
               >
                 <Smartphone className="w-4 h-4 text-[#ca2484]" />
                 <span>Book on Mobile Web</span>
@@ -58,7 +58,7 @@ export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) =>
                 href={`https://wa.me/${BRAND.contactPhones[0].replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-xl transition-transform hover:scale-105 flex items-center gap-2 cursor-pointer min-h-[48px]"
+                className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-normal text-xs sm:text-sm shadow-xl transition-transform hover:scale-105 flex items-center gap-2 cursor-pointer min-h-[44px]"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>WhatsApp Dispatch</span>

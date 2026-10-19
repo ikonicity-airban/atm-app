@@ -27,9 +27,9 @@ export function Logo({
     return (
       <div className={`inline-flex items-center ${className}`}>
         <img
-          src="/favicon.svg"
+          src="/favicon.png"
           alt="Ascent Transport Management Mark"
-          className={`${heightClass} w-auto object-contain rounded-xl`}
+          className={`${heightClass} w-auto object-contain`}
           width={40}
           height={40}
         />
@@ -42,7 +42,7 @@ export function Logo({
     return (
       <div className={`inline-flex items-center ${className}`}>
         <img
-          src="/logo-dark.svg"
+          src="/logo-dark.png"
           alt="Ascent Transport Management (ATM Nigeria)"
           className={`${heightClass} w-auto object-contain`}
           height={40}
@@ -55,7 +55,7 @@ export function Logo({
     return (
       <div className={`inline-flex items-center ${className}`}>
         <img
-          src="/logo.svg"
+          src="/logo.png"
           alt="Ascent Transport Management (ATM Nigeria)"
           className={`${heightClass} w-auto object-contain`}
           height={40}
@@ -68,13 +68,13 @@ export function Logo({
   return (
     <div className={`inline-flex items-center ${className}`}>
       <img
-        src="/logo.svg"
+        src="/logo.png"
         alt="Ascent Transport Management (ATM Nigeria)"
         className={`dark:hidden ${heightClass} w-auto object-contain`}
         height={40}
       />
       <img
-        src="/logo-dark.svg"
+        src="/logo-dark.png"
         alt="Ascent Transport Management (ATM Nigeria)"
         className={`hidden dark:block ${heightClass} w-auto object-contain`}
         height={40}

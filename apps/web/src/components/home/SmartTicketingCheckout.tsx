@@ -88,13 +88,13 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#ca2484] bg-accent px-3.5 py-1 rounded-full inline-block">
+        <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
           Digital Ticketing &amp; Direct Reservation
         </span>
-        <h2 className="text-2xl sm:text-4xl font-black font-heading text-foreground tracking-tight text-balance">
+        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
           Smart Ticketing &amp; Instant Fare Calculator
         </h2>
-        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty">
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-pretty font-normal">
           Transparent integer pricing with zero hidden surcharges. Receive your verified digital pass immediately after booking.
         </p>
       </div>
@@ -102,7 +102,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Left Side: Authentic Digital Boarding Pass Graphic */}
         <div className="lg:col-span-6 flex justify-center">
-          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/90 dark:border-slate-800 overflow-hidden relative">
+          <div className="w-full max-w-md bg-card/75 backdrop-blur-xl rounded-3xl shadow-xl border border-border overflow-hidden relative">
             {/* Top Pass Header */}
             <div className="bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] p-6 text-white">
               <div className="flex items-center justify-between mb-4">
@@ -201,17 +201,17 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
         </div>
 
         {/* Right Side: Interactive Quick Checkout & Fare Calculator */}
-        <div className="lg:col-span-6 bg-card text-card-foreground rounded-3xl p-6 sm:p-8 border border-border shadow-xl space-y-6">
+        <div className="lg:col-span-6 bg-card/75 backdrop-blur-xl text-card-foreground rounded-3xl p-6 sm:p-8 border border-border shadow-xl space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-heading font-black text-foreground">
+              <h3 className="text-lg font-heading font-semibold text-foreground">
                 Live Fare Calculator
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Calculate total kobo fare and reserve your seat instantly
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded-full bg-accent text-[#ca2484] text-xs font-bold">
+            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-normal">
               Instant Hold
             </span>
           </div>
@@ -220,13 +220,13 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           <div className="space-y-4">
             {/* Corridor Select */}
             <div>
-              <label className="text-xs font-bold font-heading text-foreground block mb-1.5">
+              <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                 Select Corridor
               </label>
               <select
                 value={selectedRouteIndex}
                 onChange={(e) => setSelectedRouteIndex(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-2xl bg-muted border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[48px]"
+                className="w-full px-4 py-3 rounded-2xl bg-muted/50 border border-border text-xs sm:text-sm font-normal text-foreground focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px]"
               >
                 {CHECKOUT_ROUTES.map((route, idx) => (
                   <option key={route.label} value={idx}>
@@ -239,38 +239,38 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
             {/* Travel Date & Passengers Count Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold font-heading text-foreground block mb-1.5">
+                <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                   Departure Date
                 </label>
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-muted border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[48px]"
+                  className="w-full px-4 py-3 rounded-2xl bg-muted/50 border border-border text-xs sm:text-sm font-normal text-foreground focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px]"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold font-heading text-foreground block mb-1.5">
+                <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                   Passengers (Max 5)
                 </label>
-                <div className="flex items-center justify-between px-3 py-1.5 rounded-2xl bg-muted border border-border min-h-[48px]">
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-2xl bg-muted/50 border border-border min-h-[48px]">
                   <button
                     type="button"
                     onClick={() => setPassengerCount(Math.max(1, passengerCount - 1))}
                     disabled={passengerCount <= 1}
-                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-2xs border border-border"
+                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
-                  <span className="text-sm font-black text-foreground">
+                  <span className="text-sm font-medium text-foreground">
                     {passengerCount} {passengerCount === 1 ? 'Seat' : 'Seats'}
                   </span>
                   <button
                     type="button"
                     onClick={() => setPassengerCount(Math.min(5, passengerCount + 1))}
                     disabled={passengerCount >= 5}
-                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-2xs border border-border"
+                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -280,25 +280,25 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           </div>
 
           {/* Fare Summary Breakdown Box */}
-          <div className="p-4 rounded-2xl bg-muted/40 border border-border space-y-2">
+          <div className="p-4 rounded-2xl bg-muted/30 border border-border space-y-2">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Base Fare ({passengerCount} × {formatNaira(currentRoute.baseFareKobo)})</span>
-              <span className="font-bold text-foreground">{formatNaira(subtotalKobo)}</span>
+              <span className="font-medium text-foreground">{formatNaira(subtotalKobo)}</span>
             </div>
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Terminal &amp; Luggage Fee ({passengerCount} × {formatNaira(TERMINAL_SERVICE_FEE_KOBO)})</span>
-              <span className="font-bold text-foreground">{formatNaira(feesKobo)}</span>
+              <span className="font-medium text-foreground">{formatNaira(feesKobo)}</span>
             </div>
             <div className="pt-2 border-t border-border flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold font-heading text-foreground block">
+                <span className="text-xs font-medium font-heading text-foreground block">
                   Total Fare
                 </span>
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-normal">
                   Guaranteed integer kobo fare
                 </span>
               </div>
-              <span className="text-2xl font-black text-[#ca2484]">
+              <span className="text-xl sm:text-2xl font-bold text-primary">
                 {formatNaira(totalKobo)}
               </span>
             </div>
@@ -308,7 +308,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           <button
             type="button"
             onClick={handleProceed}
-            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-bold text-sm shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer min-h-[48px]"
+            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-normal text-xs sm:text-sm shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer min-h-[48px]"
           >
             <span>Hold Seat &amp; Proceed to Trips</span>
             <ArrowRight className="w-4 h-4" />
