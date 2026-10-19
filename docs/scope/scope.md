@@ -295,16 +295,19 @@ Airline-grade executive transit search experience with collapsible search modifi
  
 ### 19. Unified UI token and Coss component system · in-progress
 Standardize Base UI primitives with Coss UI styling and Tailwind CSS v4 design tokens across all application screens.
-**Done when:** core controls (Button, Input, Select, Card, Dialog, Badge, Tabs, Popover) are powered by Base UI and class variance authority, glassmorphism tokens are defined in globals.css, and hero showcase and public forms consume the shared primitives.
+**Done when:** core controls (Button, Input, Select, Card, Dialog, Badge, Tabs, Popover) are powered by Base UI and class variance authority, glassmorphism tokens are defined in globals.css, and all public booking funnels, layout shells, auth views, and admin portals consume the shared primitives with complete theme responsiveness.
 - [x] Design it (spec): `/architect unified ui token and coss component system`
-- [x] Build it: `/develop unified ui token and coss component system`
+- [ ] Build it: `/develop unified ui token and coss component system`
    - [x] Install @base-ui/react and class-variance-authority, define glass utilities in globals.css (AC-1, AC-4, AC-5)
    - [x] Create standardized Wave 1 primitives with backward compatibility aliases in components/ui (AC-1, AC-2, AC-3, AC-7)
    - [x] Refactor HeroShowcase and public search controls to consume standardized primitives (AC-6, AC-7)
-   - [x] Upgrade dialog and overlay components with Base UI logic (AC-1, AC-2)
+   - [ ] Refactor layout shells (Templates.tsx, PageShell, ContentPage) and shared domain blocks (AtmBlocks.tsx) with semantic tokens (AC-8)
+   - [ ] Migrate public booking and service funnels (/trips, /book/*, /courier, /track/*, /manage, /terminals, /charter) to standardized primitives (AC-9)
+   - [ ] Migrate public marketing pages (modular home sections, /about, /contact, /faq, /routes/*) to semantic tokens (AC-7, AC-8)
+   - [ ] Migrate authentication and administrative portals (/login, /register, /account, /admin/*, /driver/*) with theme responsiveness (AC-10)
 - [ ] Verify it: `/check verify unified ui token and coss component system`
 - [ ] Test it: `/test unified ui token and coss component system`
-[Spec 0028](../specs/0028-unified-ui-token-and-coss-component-system.md) · code in `apps/web/src/components/ui/`, `apps/web/src/app/globals.css`, `apps/web/src/components/home/HeroShowcase.tsx`
+[Spec 0028](../specs/0028-unified-ui-token-and-coss-component-system.md) · code in `apps/web/src/components/ui/`, `apps/web/src/components/layout/Templates.tsx`, `apps/web/src/components/atm/AtmBlocks.tsx`, `apps/web/src/app/(public)/`
 
 ## Deferred
 
