@@ -125,7 +125,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         {/* Subtle radial ambient light */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-purple-500/10 via-[#ca2484]/15 to-indigo-500/10 dark:from-purple-900/30 dark:via-[#ca2484]/20 dark:to-indigo-900/30 rounded-full blur-[100px]" />
-        
+
         {/* Background visual image in dark mode */}
         <div className="hidden dark:block absolute inset-0 opacity-20 mix-blend-screen">
           <img
@@ -148,14 +148,14 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
 
         {/* 2. Main Typographic Headline */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-heading font-bold tracking-tight leading-[1.1] text-balance">
+          <h1 className="text-[1vw] md:text-6xl font-heading font-black tracking-tight leading-[1.1] text-balance">
             <span className="block text-foreground">Your Journey Begins in</span>
-            <span className="block bg-gradient-to-r from-purple-600 via-pink-600 to-[#ca2484] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#ca2484] bg-clip-text text-transparent">
+            <span className="block bg-linear-to-br from-purple-300 via-pink-700 to-[#9a2484] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#ca2484] bg-clip-text text-transparent">
               One Click
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-normal">
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-normal">
             Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
           </p>
         </div>
@@ -168,37 +168,34 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           {/* Top Bar: Mode Tabs (Left) + Utility Options (Right) */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
             {/* Trip Mode Segmented Pills */}
-            <div className="inline-flex items-center p-1 rounded-full bg-muted/50 dark:bg-black/40 border border-border">
+            <div className="inline-flex items-center p-1 rounded-full bg-muted/50 dark:bg-white/10 border border-border">
               <button
                 type="button"
                 onClick={() => setTripMode('one-way')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${
-                  tripMode === 'one-way'
-                    ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${tripMode === 'one-way'
+                  ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
+                  : 'text-muted-foreground hover:text-foreground'
+                  }`}
               >
                 One Way
               </button>
               <button
                 type="button"
                 onClick={() => setTripMode('round-trip')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${
-                  tripMode === 'round-trip'
-                    ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${tripMode === 'round-trip'
+                  ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
+                  : 'text-muted-foreground hover:text-foreground'
+                  }`}
               >
                 Round Trip
               </button>
               <button
                 type="button"
                 onClick={() => setTripMode('charter')}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${
-                  tripMode === 'charter'
-                    ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${tripMode === 'charter'
+                  ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
+                  : 'text-muted-foreground hover:text-foreground'
+                  }`}
               >
                 Private Charter
               </button>
@@ -211,7 +208,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 onClick={() => setOpenDropdown(openDropdown === 'promo' ? null : 'promo')}
                 className="px-3 py-1.5 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
-                <Tag className="w-3.5 h-3.5 text-primary" />
+                <Tag className="w-3.5 h-3.5 text-muted-foreground" />
                 <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
               </button>
 
@@ -220,7 +217,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 onClick={() => onNavigate ? onNavigate('/terminals') : (window.location.href = '/terminals')}
                 className="px-3 py-1.5 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Terminals</span>
               </button>
             </div>
@@ -272,10 +269,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               </label>
               <div
                 onClick={() => setOpenDropdown(openDropdown === 'from' ? null : 'from')}
-                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
+                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
               >
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <div className="overflow-hidden">
                     <span className="text-sm font-normal text-foreground truncate block">
                       {fromCity} ({CITY_DETAILS[fromCity]?.code})
@@ -302,9 +299,8 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       key={city}
                       type="button"
                       onClick={() => handleFromSelect(city)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${
-                        fromCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                      }`}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${fromCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                        }`}
                     >
                       <div>
                         <div>{city}</div>
@@ -336,10 +332,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               </label>
               <div
                 onClick={() => setOpenDropdown(openDropdown === 'to' ? null : 'to')}
-                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
+                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
               >
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <div className="overflow-hidden">
                     <span className="text-sm font-normal text-foreground truncate block">
                       {toCity} ({CITY_DETAILS[toCity]?.code})
@@ -366,9 +362,8 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       key={city}
                       type="button"
                       onClick={() => handleToSelect(city)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${
-                        toCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                      }`}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${toCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                        }`}
                     >
                       <div>
                         <div>{city}</div>
@@ -386,8 +381,8 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 Date
               </label>
-              <div className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors min-h-[58px] flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
+              <div className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors min-h-[58px] flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                 <input
                   type="date"
                   value={date}
@@ -404,10 +399,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               </label>
               <div
                 onClick={() => setOpenDropdown(openDropdown === 'passengers' ? null : 'passengers')}
-                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/50 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
+                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
               >
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <Users className="w-4 h-4 text-primary flex-shrink-0" />
+                  <Users className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-xs sm:text-sm font-normal text-foreground truncate">
                     {passengers} {passengers === 1 ? 'Passenger' : 'Passengers'}, 5 Seat
                   </span>
