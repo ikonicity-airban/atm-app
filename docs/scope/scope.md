@@ -26,6 +26,7 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 | 13 | SEO landing pages and launch preparation | Phase 12 | done |
 | 14 | Driver mobile web portal and roadside manifest | Phase 13 | in-progress |
 | 15 | Real time fleet telematics and journey tracking | Phase 14 | planned |
+| 19 | Unified UI token and Coss component system | Design System | in-progress |
 
 ## Foundations
 
@@ -291,6 +292,19 @@ Airline-grade executive transit search experience with collapsible search modifi
 - [x] Verify it: `/check verify trips search results page high-craft Coss redesign`
 - [x] Test it: `/test trips search results page high-craft Coss redesign`
 [Spec 0025](../specs/0025-trips-search-results-page-high-craft-coss-redesign.md) · code in `apps/web/src/app/(public)/trips`
+ 
+### 19. Unified UI token and Coss component system · in-progress
+Standardize Base UI primitives with Coss UI styling and Tailwind CSS v4 design tokens across all application screens.
+**Done when:** core controls (Button, Input, Select, Card, Dialog, Badge, Tabs, Popover) are powered by Base UI and class variance authority, glassmorphism tokens are defined in globals.css, and hero showcase and public forms consume the shared primitives.
+- [x] Design it (spec): `/architect unified ui token and coss component system`
+- [ ] Build it: `/develop unified ui token and coss component system`
+   - [ ] Install @base-ui/react and class-variance-authority, define glass utilities in globals.css (AC-1, AC-4, AC-5)
+   - [ ] Create standardized Wave 1 primitives with backward compatibility aliases in components/ui (AC-1, AC-2, AC-3, AC-7)
+   - [ ] Refactor HeroShowcase and public search controls to consume standardized primitives (AC-6, AC-7)
+   - [ ] Upgrade dialog and overlay components with Base UI logic (AC-1, AC-2)
+- [ ] Verify it: `/check verify unified ui token and coss component system`
+- [ ] Test it: `/test unified ui token and coss component system`
+[Spec 0028](../specs/0028-unified-ui-token-and-coss-component-system.md) · code in `apps/web/src/components/ui/`, `apps/web/src/app/globals.css`, `apps/web/src/components/home/HeroShowcase.tsx`
 
 ## Deferred
 
