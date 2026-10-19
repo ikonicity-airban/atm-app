@@ -564,15 +564,19 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           {/* Theme Switcher Toggle */}
           <ThemeToggle />
 
-          {/* Track Parcel Fast Utility Link */}
+          {/* Track Parcel / Search Utility Button */}
           <button
             type="button"
             onClick={() => handleNav('/track')}
-            className={`hidden lg:flex px-3.5 py-2 text-xs font-bold rounded-full min-h-[44px] items-center gap-1.5 transition-colors cursor-pointer ${currentPath === '/track' ? 'text-[#ca2484] bg-pink-50' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
-              }`}
+            aria-label="Track parcel"
+            title="Track parcel"
+            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center transition-colors cursor-pointer ${
+              currentPath === '/track'
+                ? 'text-[#ca2484] bg-pink-50'
+                : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+            }`}
           >
-            <Search className="w-3.5 h-3.5 text-[#ca2484]" />
-            <span>Track Parcel</span>
+            <Search className="w-4 h-4 text-[#ca2484]" />
           </button>
 
           {/* Primary Manage Booking Button */}
