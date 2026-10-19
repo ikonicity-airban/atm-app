@@ -1,25 +1,46 @@
-import React from 'react';
+'use client';
+
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.ts';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export const inputVariants = cva(
+  'w-full rounded-xl border border-input bg-background px-3.5 py-2 text-xs sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-transparent disabled:cursor-not-allowed disabled:opacity-50',
+  {
+    variants: {
+      size: {
+        sm: 'h-9 text-xs min-h-[36px] relative after:absolute after:-inset-1 after:min-h-[44px]',
+        default: 'h-11 min-h-[44px]',
+        lg: 'h-12 text-base min-h-[48px]',
+      },
+      hasError: {
+        true: 'border-destructive focus-visible:ring-destructive',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+      hasError: false,
+    },
+  }
+);
+
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
+    VariantProps<typeof inputVariants> {
   hasError?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = 'text', hasError = false, ...props }, ref) => {
+  ({ className, type = 'text', size, hasError, 'aria-invalid': ariaInvalid, ...props }, ref) => {
+    const isInvalid = ariaInvalid === true || ariaInvalid === 'true' || hasError === true;
+
     return (
       <input
-        type={type}
         ref={ref}
-        className={cn(
-          'w-full px-3.5 py-2.5 text-sm rounded bg-white text-slate-900 border transition-colors min-h-[44px]',
-          'placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-offset-1',
-          hasError
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-slate-300 focus:border-[#ca2484] focus:ring-[#ca2484]',
-          'disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed',
-          className
-        )}
+        type={type}
+        aria-invalid={isInvalid ? true : undefined}
+        className={cn(inputVariants({ size, hasError: isInvalid, className }))}
         {...props}
       />
     );

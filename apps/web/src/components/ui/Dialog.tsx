@@ -1,13 +1,46 @@
-import React, { useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
-import { cn } from '../../lib/utils.ts';
+'use client';
 
-export interface DialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
+import * as React from 'react';
+import { Dialog as DialogPrimitive } from '@base-ui/react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+export const dialogPopupVariants = cva(
+  'fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-2xl border p-6 shadow-2xl outline-none max-h-[90vh] overflow-y-auto transition-all',
+  {
+    variants: {
+      variant: {
+        default: 'bg-card text-card-foreground border-border',
+        glass: 'glass-card-spatial text-card-foreground',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
+
+export const dialogFooterVariants = cva(
+  'flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-4',
+  {
+    variants: {
+      variant: {
+        default: 'border-t border-border mt-4',
+        bare: 'mt-2',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
+
+export interface DialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
+  isOpen?: boolean;
+  onClose?: () => void;
+  title?: string;
   description?: string;
-  children: React.ReactNode;
   className?: string;
 }
 
@@ -16,111 +49,172 @@ export function Dialog({
   onClose,
   title,
   description,
-  children,
   className,
+  children,
+  open,
+  onOpenChange,
+  ...props
 }: DialogProps) {
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      previouslyFocusedRef.current = document.activeElement as HTMLElement;
-      document.body.style.overflow = 'hidden';
-
-      // Focus first focusable element or dialog container
-      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      if (focusable && focusable.length > 0) {
-        focusable[0]?.focus();
-      } else {
-        dialogRef.current?.focus();
-      }
-    }
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-
-      if (e.key === 'Escape') {
-        e.preventDefault();
+  // Legacy compatibility: <Dialog isOpen={isOpen} onClose={onClose} title={title}>
+  if (isOpen !== undefined) {
+    const handleOpenChange = (nextOpen: boolean, eventDetails: any) => {
+      onOpenChange?.(nextOpen, eventDetails);
+      if (!nextOpen && onClose) {
         onClose();
-        return;
-      }
-
-      // Trap Tab navigation inside dialog
-      if (e.key === 'Tab' && dialogRef.current) {
-        const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusables.length === 0) return;
-
-        const firstElement = focusables[0];
-        const lastElement = focusables[focusables.length - 1];
-
-        if (e.shiftKey && document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        } else if (!e.shiftKey && document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = 'unset';
-      window.removeEventListener('keydown', handleKeyDown);
-      if (previouslyFocusedRef.current) {
-        previouslyFocusedRef.current.focus();
-      }
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
+    return (
+      <DialogPrimitive.Root
+        open={isOpen}
+        onOpenChange={handleOpenChange}
+        {...props}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity" />
+          <DialogPrimitive.Popup
+            className={cn(dialogPopupVariants({ variant: 'default' }), className)}
+          >
+            {(title || onClose) && (
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  {title && (
+                    <DialogPrimitive.Title className="text-base font-bold text-foreground tracking-tight">
+                      {title}
+                    </DialogPrimitive.Title>
+                  )}
+                  {description && (
+                    <DialogPrimitive.Description className="text-xs text-muted-foreground mt-1">
+                      {description}
+                    </DialogPrimitive.Description>
+                  )}
+                </div>
+                {onClose && (
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="p-1.5 text-muted-foreground hover:text-foreground rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-label="Close dialog"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+            )}
+            {typeof children === 'function' ? null : (children as React.ReactNode)}
+          </DialogPrimitive.Popup>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+    );
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+    <DialogPrimitive.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Root>
+  );
+}
 
-      {/* Modal Dialog Box */}
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dialog-title"
-        tabIndex={-1}
-        className={cn(
-          'relative w-full max-w-lg bg-white rounded-lg shadow-xl border border-slate-200 z-10 p-6',
-          'focus:outline-none max-h-[90vh] overflow-y-auto',
-          className
-        )}
+export const DialogTrigger = DialogPrimitive.Trigger;
+export const DialogPortal = DialogPrimitive.Portal;
+export const DialogBackdrop = DialogPrimitive.Backdrop;
+
+export interface DialogPopupProps
+  extends React.ComponentProps<typeof DialogPrimitive.Popup>,
+    VariantProps<typeof dialogPopupVariants> {
+  showCloseButton?: boolean;
+}
+
+export function DialogPopup({
+  className,
+  variant,
+  showCloseButton = true,
+  children,
+  ...props
+}: DialogPopupProps) {
+  return (
+    <DialogPrimitive.Portal>
+      <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity" />
+      <DialogPrimitive.Popup
+        className={cn(dialogPopupVariants({ variant }), className)}
+        {...props}
       >
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <h2 id="dialog-title" className="text-lg font-bold text-slate-900 tracking-tight">
-              {title}
-            </h2>
-            {description && <p className="text-xs text-slate-500 mt-1">{description}</p>}
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[44px] min-w-[44px] flex items-center justify-center"
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            className="absolute top-4 right-4 p-1.5 text-muted-foreground hover:text-foreground rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div>{children}</div>
-      </div>
-    </div>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Popup>
+    </DialogPrimitive.Portal>
   );
 }
+
+export function DialogHeader({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn('flex flex-col space-y-1.5 text-left mb-4', className)}
+      {...props}
+    />
+  );
+}
+
+export function DialogPanel({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn('space-y-4 text-xs text-foreground', className)} {...props} />;
+}
+
+export interface DialogFooterProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof dialogFooterVariants> {}
+
+export function DialogFooter({
+  className,
+  variant,
+  ...props
+}: DialogFooterProps) {
+  return (
+    <div
+      className={cn(dialogFooterVariants({ variant }), className)}
+      {...props}
+    />
+  );
+}
+
+export function DialogTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+  return (
+    <DialogPrimitive.Title
+      className={cn('text-base font-bold text-foreground tracking-tight', className)}
+      {...props}
+    />
+  );
+}
+
+export function DialogDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  return (
+    <DialogPrimitive.Description
+      className={cn('text-xs text-muted-foreground mt-1', className)}
+      {...props}
+    />
+  );
+}
+
+export const DialogClose = DialogPrimitive.Close;

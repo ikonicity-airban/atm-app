@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Search,
   MapPin,
@@ -14,9 +15,7 @@ import {
   MessageCircle,
   ArrowRightLeft,
   X,
-  Sparkles,
   ChevronDown,
-  Stars,
 } from 'lucide-react';
 import {
   SERVED_CITIES,
@@ -25,6 +24,9 @@ import {
   BRAND,
   type ServedCity,
 } from '@atm/shared';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Popover, PopoverTrigger, PopoverPopup, PopoverClose, PopoverTitle } from '@/components/ui/Popover';
 
 interface HeroShowcaseProps {
   onNavigate?: (path: string) => void;
@@ -43,9 +45,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const [toCity, setToCity] = useState<ServedCity>('Abuja');
   const [date, setDate] = useState<string>(() => getLagosDate());
   const [passengers, setPassengers] = useState<number>(1);
-  const [openDropdown, setOpenDropdown] = useState<'from' | 'to' | 'passengers' | 'promo' | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<'from' | 'to' | 'passengers' | null>(null);
   const [promoCode, setPromoCode] = useState<string>('');
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
+  const [isPromoOpen, setIsPromoOpen] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -164,7 +167,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         {/* 3. Floating Glassmorphism Search Island */}
         <div
           ref={containerRef}
-          className="w-full max-w-4xl mx-auto rounded-3xl bg-card/75 dark:bg-[#120a22]/80 backdrop-blur-xl border border-border shadow-xl p-4 sm:p-6 relative"
+          className="w-full max-w-4xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative"
         >
           {/* Top Bar: Mode Tabs (Left) + Utility Options (Right) */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
@@ -204,14 +207,41 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
 
             {/* Utility Actions (Promo Code + Terminal Directory) */}
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setOpenDropdown(openDropdown === 'promo' ? null : 'promo')}
-                className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
-              >
-                <Tag className="w-3.5 h-3.5 text-muted-foreground" />
-                <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
-              </button>
+              <Popover open={isPromoOpen} onOpenChange={setIsPromoOpen}>
+                <PopoverTrigger
+                  className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                >
+                  <Tag className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
+                </PopoverTrigger>
+                <PopoverPopup className="w-72 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <PopoverTitle>Enter Promo Voucher</PopoverTitle>
+                    <PopoverClose />
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      size="sm"
+                      placeholder="e.g. ASCENT2026"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      className="uppercase"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        if (promoCode.trim()) {
+                          setAppliedPromo(promoCode.trim());
+                          setIsPromoOpen(false);
+                        }
+                      }}
+                      className="font-normal"
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                </PopoverPopup>
+              </Popover>
 
               <button
                 type="button"
@@ -223,43 +253,6 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               </button>
             </div>
           </div>
-
-          {/* Promo Code Popover */}
-          {openDropdown === 'promo' && (
-            <div className="absolute top-16 right-6 z-50 w-72 p-4 rounded-2xl bg-popover/95 backdrop-blur-xl border border-border shadow-2xl space-y-3">
-              <div className="flex items-center justify-between text-xs font-normal text-foreground">
-                <span>Enter Promo Voucher</span>
-                <button
-                  type="button"
-                  onClick={() => setOpenDropdown(null)}
-                  className="text-muted-foreground hover:text-foreground cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="e.g. ASCENT2026"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                  className="w-full px-3 py-1 rounded-xl bg-background border border-border text-xs text-foreground uppercase placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (promoCode.trim()) {
-                      setAppliedPromo(promoCode.trim());
-                      setOpenDropdown(null);
-                    }
-                  }}
-                  className="px-3 py-1 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-xs font-normal min-h-[36px] cursor-pointer"
-                >
-                  Apply
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Search Inputs Row with Distinct Labels Above Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 pt-4 items-end">
@@ -316,14 +309,15 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
 
             {/* Swap Button (Cleanly integrated between FROM and TO) */}
             <div className="hidden lg:flex lg:col-span-1 justify-center pb-2">
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={handleSwap}
                 aria-label="Swap origin and destination"
-                className="w-9 h-9 rounded-full bg-background border border-border text-muted-foreground hover:text-foreground hover:border-primary flex items-center justify-center transition-colors cursor-pointer shadow-xs"
+                className="w-9 h-9 rounded-full"
               >
                 <ArrowRightLeft className="w-3.5 h-3.5" />
-              </button>
+              </Button>
             </div>
 
             {/* 2. TO City */}
@@ -448,16 +442,17 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
           </div>
 
-          {/* Search Button (Full width bar or bottom action with small text and normal font weight) */}
+          {/* Search Button */}
           <div className="pt-4 flex justify-end">
-            <button
-              type="button"
+            <Button
+              variant="default"
+              size="default"
               onClick={handleSearch}
-              className="w-full sm:w-auto px-8 py-3 bg-primary hover:opacity-95 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 min-h-[48px] shadow-md transition-colors cursor-pointer"
+              className="w-full sm:w-auto px-8 font-normal text-xs sm:text-sm min-h-[48px] shadow-md"
+              leftIcon={<Search className="w-4 h-4" />}
             >
-              <Search className="w-4 h-4" />
-              <span>Search Now</span>
-            </button>
+              Search Now
+            </Button>
           </div>
         </div>
 

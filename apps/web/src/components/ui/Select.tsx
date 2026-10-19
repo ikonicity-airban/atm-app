@@ -1,37 +1,174 @@
-import React from 'react';
+'use client';
+
+import * as React from 'react';
+import { Select as SelectPrimitive } from '@base-ui/react';
+import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils.ts';
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+// Backward-compatible native select component
+export interface NativeSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   hasError?: boolean;
 }
 
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProps>(
   ({ className, hasError = false, children, ...props }, ref) => {
     return (
       <div className="relative">
         <select
           ref={ref}
           className={cn(
-            'w-full px-3.5 py-2.5 text-sm rounded bg-white text-slate-900 border appearance-none transition-colors min-h-[44px]',
-            'focus:outline-none focus:ring-2 focus:ring-offset-1',
+            'w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl bg-background text-foreground border appearance-none transition-colors min-h-[44px] cursor-pointer',
+            'focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent',
             hasError
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 focus:border-[#ca2484] focus:ring-[#ca2484]',
-            'disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed',
+              ? 'border-destructive focus:ring-destructive'
+              : 'border-input hover:border-border',
+            'disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed',
             className
           )}
           {...props}
         >
           {children}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
-          <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-          </svg>
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
+          <ChevronDown className="w-4 h-4" />
         </div>
       </div>
     );
   }
 );
+NativeSelect.displayName = 'NativeSelect';
 
-Select.displayName = 'Select';
+export type SelectProps =
+  | (React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & { onChange?: never })
+  | NativeSelectProps;
+
+export function Select(props: SelectProps) {
+  if ('onChange' in props && props.onChange) {
+    return <NativeSelect {...(props as NativeSelectProps)} />;
+  }
+  return <SelectPrimitive.Root {...(props as React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>)} />;
+}
+
+export interface SelectTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+  size?: 'sm' | 'default' | 'lg';
+  hasError?: boolean;
+}
+
+export const SelectTrigger = React.forwardRef<
+  HTMLButtonElement,
+  SelectTriggerProps
+>(({ className, children, size = 'default', hasError, ...props }, ref) => {
+  return (
+    <SelectPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        'flex w-full items-center justify-between rounded-xl border border-input bg-background px-3.5 py-2 text-xs sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-transparent disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px] cursor-pointer',
+        size === 'sm' && 'h-9 text-xs min-h-[36px] relative after:absolute after:-inset-1 after:min-h-[44px]',
+        size === 'lg' && 'h-12 text-base min-h-[48px]',
+        hasError && 'border-destructive focus-visible:ring-destructive',
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon>
+        <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  );
+});
+SelectTrigger.displayName = 'SelectTrigger';
+
+export const SelectValue = React.forwardRef<
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+>(({ className, ...props }, ref) => {
+  return (
+    <SelectPrimitive.Value
+      ref={ref}
+      className={cn('block truncate text-left', className)}
+      {...props}
+    />
+  );
+});
+SelectValue.displayName = 'SelectValue';
+
+export const SelectPopup = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Popup> & {
+    portalProps?: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Portal>;
+  }
+>(({ className, children, portalProps, ...props }, ref) => {
+  return (
+    <SelectPrimitive.Portal {...portalProps}>
+      <SelectPrimitive.Positioner sideOffset={6} className="z-50">
+        <SelectPrimitive.Popup
+          ref={ref}
+          className={cn(
+            'relative max-h-80 min-w-[8rem] overflow-hidden rounded-2xl border border-border bg-popover/95 p-1 text-popover-foreground shadow-xl backdrop-blur-xl animate-fluid-fade data-[state=closed]:opacity-0',
+            className
+          )}
+          {...props}
+        >
+          <SelectPrimitive.List className="overflow-y-auto p-1 space-y-0.5">
+            {children}
+          </SelectPrimitive.List>
+        </SelectPrimitive.Popup>
+      </SelectPrimitive.Positioner>
+    </SelectPrimitive.Portal>
+  );
+});
+SelectPopup.displayName = 'SelectPopup';
+
+export const SelectItem = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <SelectPrimitive.Item
+      ref={ref}
+      className={cn(
+        'relative flex w-full cursor-pointer select-none items-center justify-between rounded-xl py-2 px-3 text-xs sm:text-sm outline-none transition-colors hover:bg-muted focus:bg-muted data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted',
+        className
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator className="ml-2 inline-flex">
+        <Check className="w-3.5 h-3.5 text-primary" />
+      </SelectPrimitive.ItemIndicator>
+    </SelectPrimitive.Item>
+  );
+});
+SelectItem.displayName = 'SelectItem';
+
+export const SelectGroup = SelectPrimitive.Group;
+
+export const SelectLabel = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.GroupLabel>
+>(({ className, ...props }, ref) => {
+  return (
+    <SelectPrimitive.GroupLabel
+      ref={ref}
+      className={cn('px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground', className)}
+      {...props}
+    />
+  );
+});
+SelectLabel.displayName = 'SelectLabel';
+
+export const SelectSeparator = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
+>(({ className, ...props }, ref) => {
+  return (
+    <SelectPrimitive.Separator
+      ref={ref}
+      className={cn('-mx-1 my-1 h-px bg-border', className)}
+      {...props}
+    />
+  );
+});
+SelectSeparator.displayName = 'SelectSeparator';

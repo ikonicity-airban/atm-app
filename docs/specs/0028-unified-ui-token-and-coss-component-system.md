@@ -216,12 +216,12 @@ export function Button({
 
 ## Build plan
 
-- [ ] 1. Install `@base-ui/react` and `class-variance-authority` in `apps/web`, satisfies **AC-1**.
-- [ ] 2. Update `apps/web/src/app/globals.css` to add tokenized `@utility glass-surface` and `@utility glass-card-spatial` definitions, satisfies **AC-4**, **AC-5**.
-- [ ] 3. Create or upgrade Wave 1 component primitives in `apps/web/src/components/ui/` (`button.tsx`, `input.tsx`, `select.tsx`, `card.tsx`, `badge.tsx`, `tabs.tsx`, `popover.tsx`) with Coss UI Base UI compound patterns and backward compatibility aliases, satisfies **AC-1**, **AC-2**, **AC-3**, **AC-7**.
-- [ ] 4. Refactor `HeroShowcase.tsx` to consume the standardized Button, Input, Select, Tabs, and Card primitives, satisfies **AC-6**, **AC-7**.
-- [ ] 5. Upgrade `dialog.tsx` with Base UI popup primitives, satisfies **AC-1**, **AC-2**.
-- [ ] 6. Run test suite and contrast validation confirming zero regressions, satisfies **AC-5**, **AC-7**.
+- [x] 1. Install `@base-ui/react` and `class-variance-authority` in `apps/web`, satisfies **AC-1**.
+- [x] 2. Update `apps/web/src/app/globals.css` to add tokenized `@utility glass-surface` and `@utility glass-card-spatial` definitions, satisfies **AC-4**, **AC-5**.
+- [x] 3. Create or upgrade Wave 1 component primitives in `apps/web/src/components/ui/` (`button.tsx`, `input.tsx`, `select.tsx`, `card.tsx`, `badge.tsx`, `tabs.tsx`, `popover.tsx`) with Coss UI Base UI compound patterns and backward compatibility aliases, satisfies **AC-1**, **AC-2**, **AC-3**, **AC-7**.
+- [x] 4. Refactor `HeroShowcase.tsx` to consume the standardized Button, Input, Select, Tabs, and Card primitives, satisfies **AC-6**, **AC-7**.
+- [x] 5. Upgrade `dialog.tsx` with Base UI popup primitives, satisfies **AC-1**, **AC-2**.
+- [x] 6. Run test suite and contrast validation confirming zero regressions, satisfies **AC-5**, **AC-7**.
 
 ## Consequences
 

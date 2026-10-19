@@ -1,84 +1,135 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { cn } from '../../lib/utils.ts';
+'use client';
 
-export interface PopoverProps {
-  trigger: React.ReactNode;
-  children: React.ReactNode;
-  align?: 'left' | 'right';
+import * as React from 'react';
+import { Popover as PopoverPrimitive } from '@base-ui/react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+export const popoverPopupVariants = cva(
+  'z-50 min-w-[8rem] rounded-xl border p-4 shadow-lg outline-none transition-all duration-150 data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+  {
+    variants: {
+      variant: {
+        default: 'bg-card text-card-foreground border-border shadow-md',
+        glass: 'glass-surface text-card-foreground shadow-xl',
+        spatial: 'glass-card-spatial text-card-foreground',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
+
+export interface PopoverProps extends React.ComponentProps<typeof PopoverPrimitive.Root> {
+  trigger?: React.ReactNode;
+  content?: React.ReactNode;
+  title?: string;
   className?: string;
 }
 
-export function Popover({ trigger, children, align = 'left', className }: PopoverProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+export function Popover({
+  trigger,
+  content,
+  title,
+  children,
+  className,
+  ...props
+}: PopoverProps) {
+  if (trigger !== undefined) {
+    return (
+      <PopoverPrimitive.Root {...props}>
+        <PopoverPrimitive.Trigger render={React.isValidElement(trigger) ? trigger : <button type="button">{trigger}</button>} />
+        <PopoverPrimitive.Portal>
+          <PopoverPrimitive.Positioner sideOffset={8}>
+            <PopoverPrimitive.Popup className={cn(popoverPopupVariants({ variant: 'default' }), className)}>
+              {title && (
+                <PopoverPrimitive.Title className="text-xs font-semibold text-foreground mb-1">
+                  {title}
+                </PopoverPrimitive.Title>
+              )}
+              {content || (typeof children === 'function' ? null : (children as React.ReactNode))}
+            </PopoverPrimitive.Popup>
+          </PopoverPrimitive.Positioner>
+        </PopoverPrimitive.Portal>
+      </PopoverPrimitive.Root>
+    );
+  }
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
-    };
+  return <PopoverPrimitive.Root {...props}>{children}</PopoverPrimitive.Root>;
+}
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleKeyDown);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen]);
+export const PopoverTrigger = PopoverPrimitive.Trigger;
+export const PopoverPortal = PopoverPrimitive.Portal;
+export const PopoverPositioner = PopoverPrimitive.Positioner;
+export const PopoverArrow = PopoverPrimitive.Arrow;
 
+export interface PopoverPopupProps
+  extends React.ComponentProps<typeof PopoverPrimitive.Popup>,
+    VariantProps<typeof popoverPopupVariants> {
+  sideOffset?: number;
+}
+
+export function PopoverPopup({
+  className,
+  variant,
+  sideOffset = 8,
+  children,
+  ...props
+}: PopoverPopupProps) {
   return (
-    <div className="relative inline-block" ref={containerRef}>
-      <div onClick={() => setIsOpen(!isOpen)} role="button" tabIndex={0} className="cursor-pointer">
-        {trigger}
-      </div>
-      {isOpen && (
-        <div
-          className={cn(
-            'absolute z-50 mt-2 min-w-[200px] bg-white border border-slate-200 rounded-lg shadow-lg p-3 text-xs',
-            align === 'right' ? 'right-0' : 'left-0',
-            className
-          )}
+    <PopoverPrimitive.Portal>
+      <PopoverPrimitive.Positioner sideOffset={sideOffset}>
+        <PopoverPrimitive.Popup
+          className={cn(popoverPopupVariants({ variant }), className)}
+          {...props}
         >
           {children}
-        </div>
-      )}
-    </div>
+        </PopoverPrimitive.Popup>
+      </PopoverPrimitive.Positioner>
+    </PopoverPrimitive.Portal>
   );
 }
 
-export interface TooltipProps {
-  content: string;
-  children: React.ReactNode;
-  className?: string;
+export function PopoverTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Title>) {
+  return (
+    <PopoverPrimitive.Title
+      className={cn('text-xs font-semibold text-foreground tracking-tight', className)}
+      {...props}
+    />
+  );
 }
 
-export function Tooltip({ content, children, className }: TooltipProps) {
-  const [isVisible, setIsVisible] = useState(false);
-
+export function PopoverDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Description>) {
   return (
-    <div
-      className={cn('relative inline-flex items-center', className)}
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-      onFocus={() => setIsVisible(true)}
-      onBlur={() => setIsVisible(false)}
-    >
-      {children}
-      {isVisible && (
-        <div
-          role="tooltip"
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 text-[11px] font-medium text-white bg-slate-900 rounded shadow-md whitespace-nowrap z-50 pointer-events-none"
-        >
-          {content}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900" />
-        </div>
+    <PopoverPrimitive.Description
+      className={cn('text-xs text-muted-foreground mt-1', className)}
+      {...props}
+    />
+  );
+}
+
+export function PopoverClose({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Close>) {
+  return (
+    <PopoverPrimitive.Close
+      className={cn(
+        'inline-flex items-center justify-center rounded-lg p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted min-h-[44px] min-w-[44px] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        className
       )}
-    </div>
+      {...props}
+    >
+      {children || <X className="w-4 h-4" />}
+    </PopoverPrimitive.Close>
   );
 }

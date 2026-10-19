@@ -10,9 +10,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@atm/shared": "workspace:*",
     "@atm/db": "workspace:*",
+    "@atm/shared": "workspace:*",
+    "@base-ui/react": "^1.9.0",
     "@google/genai": "^2.4.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.546.0",
     "next": "^15.3.0",
