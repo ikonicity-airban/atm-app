@@ -189,16 +189,16 @@ export default function CourierPage(props?: any) {
       <div className="mb-8">
         {/* Feature Highlights */}
         <div className="mt-4 flex flex-wrap gap-2.5">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700">
-            <Truck className="w-3.5 h-3.5 text-brand-600" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs font-semibold text-foreground">
+            <Truck className="w-3.5 h-3.5 text-primary" />
             <span>Same-Day Highway Transit</span>
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs font-semibold text-foreground">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>4-Digit SMS Collection OTP</span>
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-700">
-            <CreditCard className="w-3.5 h-3.5 text-sky-600" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs font-semibold text-foreground">
+            <CreditCard className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
             <span>Online or Counter Payment</span>
           </div>
         </div>
@@ -207,13 +207,13 @@ export default function CourierPage(props?: any) {
       {/* Main Grid: Form + Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Booking Form */}
-        <div className="lg:col-span-8 relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+        <div className="lg:col-span-8 relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground p-6 sm:p-8 shadow-sm">
           {/* Top specular highlight */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
           {errorMsg && (
-            <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-700 dark:text-rose-400 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
               <div className="text-sm font-medium text-pretty">{errorMsg}</div>
             </div>
           )}
@@ -222,22 +222,22 @@ export default function CourierPage(props?: any) {
             {/* Step 1: Terminal Route */}
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-sm">
                   1
                 </span>
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">Route &amp; Terminal Corridors</h2>
+                <h2 className="text-lg font-bold text-foreground tracking-tight">Route &amp; Terminal Corridors</h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="origin-terminal" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                  <label htmlFor="origin-terminal" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Origin Terminal (Drop-off)
                   </label>
                   <select
                     id="origin-terminal"
                     value={originTerminalId}
                     onChange={(e) => setOriginTerminalId(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   >
                     {SEED_TERMINALS.map((term) => (
                       <option key={term.id} value={term.id}>
@@ -246,21 +246,21 @@ export default function CourierPage(props?: any) {
                     ))}
                   </select>
                   {originTerminal && (
-                    <p className="mt-1.5 text-xs text-slate-500 truncate">
+                    <p className="mt-1.5 text-xs text-muted-foreground truncate">
                       {originTerminal.address}
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="dest-terminal" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                  <label htmlFor="dest-terminal" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Destination Terminal (Pickup)
                   </label>
                   <select
                     id="dest-terminal"
                     value={destinationTerminalId}
                     onChange={(e) => setDestinationTerminalId(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   >
                     {SEED_TERMINALS.filter((t) => t.id !== originTerminalId).map((term) => (
                       <option key={term.id} value={term.id}>
@@ -269,7 +269,7 @@ export default function CourierPage(props?: any) {
                     ))}
                   </select>
                   {destinationTerminal && (
-                    <p className="mt-1.5 text-xs text-slate-500 truncate">
+                    <p className="mt-1.5 text-xs text-muted-foreground truncate">
                       {destinationTerminal.address}
                     </p>
                   )}
@@ -280,10 +280,10 @@ export default function CourierPage(props?: any) {
             {/* Step 2: Parcel Categorization & Weight */}
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-sm">
                   2
                 </span>
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">Consignment &amp; Dimensions</h2>
+                <h2 className="text-lg font-bold text-foreground tracking-tight">Consignment &amp; Dimensions</h2>
               </div>
 
               {/* Category Grid */}
@@ -297,13 +297,13 @@ export default function CourierPage(props?: any) {
                       key={cat.id}
                       onClick={() => setCategory(cat.id)}
                       className={`text-left p-3.5 rounded-xl border transition-all ${isSelected
-                        ? 'bg-brand-50/70 border-brand-500 text-brand-950 ring-1 ring-brand-500 shadow-sm'
-                        : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50/60'
+                        ? 'bg-primary/10 border-primary text-foreground ring-1 ring-primary shadow-xs'
+                        : 'bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
                         }`}
                     >
-                      <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-brand-600' : 'text-slate-500'}`} />
+                      <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
                       <div className="text-xs font-bold">{cat.name}</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{cat.desc}</div>
+                      <div className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{cat.desc}</div>
                     </button>
                   );
                 })}
@@ -312,7 +312,7 @@ export default function CourierPage(props?: any) {
               {/* Weight & Description */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label htmlFor="package-weight" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                  <label htmlFor="package-weight" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Weight in Kilograms (kg)
                   </label>
                   <input
@@ -323,13 +323,13 @@ export default function CourierPage(props?: any) {
                     max="50"
                     value={weightKg}
                     onChange={(e) => setWeightKg(parseFloat(e.target.value) || 1)}
-                    className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
-                  <p className="mt-1.5 text-[11px] text-slate-500">First 5kg covered in base rate</p>
+                  <p className="mt-1.5 text-[11px] text-muted-foreground">First 5kg covered in base rate</p>
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label htmlFor="package-desc" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                  <label htmlFor="package-desc" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Contents Description
                   </label>
                   <input
@@ -339,29 +339,29 @@ export default function CourierPage(props?: any) {
                     placeholder="e.g. 1 Laptop, 2 Power adapters, charger cord"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
 
               {/* Fragile & Declared Value */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-slate-50/70 p-4 rounded-xl border border-slate-200/80">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-muted/30 p-4 rounded-xl border border-border">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={fragile || category === 'fragile'}
                     disabled={category === 'fragile'}
                     onChange={(e) => setFragile(e.target.checked)}
-                    className="w-4 h-4 rounded text-brand-600 bg-white border-slate-300 focus:ring-brand-500"
+                    className="w-4 h-4 rounded text-primary bg-card border-border focus:ring-primary/20"
                   />
                   <div>
-                    <span className="text-sm font-semibold text-slate-900">Fragile Special Handling</span>
-                    <p className="text-xs text-slate-500">+₦1,500 priority protective bay loading</p>
+                    <span className="text-sm font-semibold text-foreground">Fragile Special Handling</span>
+                    <p className="text-xs text-muted-foreground">+₦1,500 priority protective bay loading</p>
                   </div>
                 </label>
 
                 <div>
-                  <label htmlFor="declared-val" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-1">
+                  <label htmlFor="declared-val" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-1">
                     Declared Value (₦) - Optional
                   </label>
                   <input
@@ -370,9 +370,9 @@ export default function CourierPage(props?: any) {
                     placeholder="e.g. 50,000"
                     value={declaredValueNaira}
                     onChange={(e) => setDeclaredValueNaira(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
-                  <p className="text-[11px] text-slate-500 mt-1">1.5% insurance for declared value above ₦50,000</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">1.5% insurance for declared value above ₦50,000</p>
                 </div>
               </div>
             </div>
@@ -380,18 +380,18 @@ export default function CourierPage(props?: any) {
             {/* Step 3: Sender & Receiver Contacts */}
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-sm">
                   3
                 </span>
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">Sender &amp; Recipient Information</h2>
+                <h2 className="text-lg font-bold text-foreground tracking-tight">Sender &amp; Recipient Information</h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Sender info */}
-                <div className="space-y-3.5 bg-slate-50/70 p-5 rounded-xl border border-slate-200/80">
-                  <div className="text-xs uppercase font-bold text-brand-700 tracking-wider">Sender Details</div>
+                <div className="space-y-3.5 bg-muted/30 p-5 rounded-xl border border-border">
+                  <div className="text-xs uppercase font-bold text-primary tracking-wider">Sender Details</div>
                   <div>
-                    <label htmlFor="sender-name" className="block text-xs font-semibold text-slate-600 mb-1">Full Name</label>
+                    <label htmlFor="sender-name" className="block text-xs font-semibold text-muted-foreground mb-1">Full Name</label>
                     <input
                       id="sender-name"
                       type="text"
@@ -399,11 +399,11 @@ export default function CourierPage(props?: any) {
                       placeholder="e.g. Chidi Okonkwo"
                       value={senderName}
                       onChange={(e) => setSenderName(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
-                    <label htmlFor="sender-phone" className="block text-xs font-semibold text-slate-600 mb-1">Phone Number (SMS receipt)</label>
+                    <label htmlFor="sender-phone" className="block text-xs font-semibold text-muted-foreground mb-1">Phone Number (SMS receipt)</label>
                     <input
                       id="sender-phone"
                       type="tel"
@@ -411,27 +411,27 @@ export default function CourierPage(props?: any) {
                       placeholder="08031234567"
                       value={senderPhone}
                       onChange={(e) => setSenderPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
-                    <label htmlFor="sender-email" className="block text-xs font-semibold text-slate-600 mb-1">Email (Optional)</label>
+                    <label htmlFor="sender-email" className="block text-xs font-semibold text-muted-foreground mb-1">Email (Optional)</label>
                     <input
                       id="sender-email"
                       type="email"
                       placeholder="chidi@example.com"
                       value={senderEmail}
                       onChange={(e) => setSenderEmail(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
 
                 {/* Receiver info */}
-                <div className="space-y-3.5 bg-slate-50/70 p-5 rounded-xl border border-slate-200/80">
-                  <div className="text-xs uppercase font-bold text-emerald-800 tracking-wider">Recipient Details</div>
+                <div className="space-y-3.5 bg-muted/30 p-5 rounded-xl border border-border">
+                  <div className="text-xs uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider">Recipient Details</div>
                   <div>
-                    <label htmlFor="receiver-name" className="block text-xs font-semibold text-slate-600 mb-1">Recipient Name</label>
+                    <label htmlFor="receiver-name" className="block text-xs font-semibold text-muted-foreground mb-1">Recipient Name</label>
                     <input
                       id="receiver-name"
                       type="text"
@@ -439,11 +439,11 @@ export default function CourierPage(props?: any) {
                       placeholder="e.g. Amina Yusuf"
                       value={receiverName}
                       onChange={(e) => setReceiverName(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
-                    <label htmlFor="receiver-phone" className="block text-xs font-semibold text-slate-600 mb-1">Recipient Phone (Receives Pickup OTP)</label>
+                    <label htmlFor="receiver-phone" className="block text-xs font-semibold text-muted-foreground mb-1">Recipient Phone (Receives Pickup OTP)</label>
                     <input
                       id="receiver-phone"
                       type="tel"
@@ -451,18 +451,18 @@ export default function CourierPage(props?: any) {
                       placeholder="08029876543"
                       value={receiverPhone}
                       onChange={(e) => setReceiverPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
-                    <label htmlFor="receiver-alt-phone" className="block text-xs font-semibold text-slate-600 mb-1">Alternative Phone (Optional)</label>
+                    <label htmlFor="receiver-alt-phone" className="block text-xs font-semibold text-muted-foreground mb-1">Alternative Phone (Optional)</label>
                     <input
                       id="receiver-alt-phone"
                       type="tel"
                       placeholder="08091112233"
                       value={receiverAltPhone}
                       onChange={(e) => setReceiverAltPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
@@ -472,10 +472,10 @@ export default function CourierPage(props?: any) {
             {/* Step 4: Payment Method & Declaration */}
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-sm">
                   4
                 </span>
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">Payment Method &amp; Security</h2>
+                <h2 className="text-lg font-bold text-foreground tracking-tight">Payment Method &amp; Security</h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -483,43 +483,43 @@ export default function CourierPage(props?: any) {
                   type="button"
                   onClick={() => setPaymentMethod('online')}
                   className={`text-left p-4 rounded-xl border transition-all ${paymentMethod === 'online'
-                    ? 'bg-brand-50/70 border-brand-500 text-brand-950 ring-1 ring-brand-500 shadow-sm'
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'bg-primary/10 border-primary text-foreground ring-1 ring-primary shadow-xs'
+                    : 'bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
                     }`}
                 >
                   <div className="flex items-center gap-2 font-bold text-sm">
-                    <CreditCard className="w-4 h-4 text-brand-600" />
+                    <CreditCard className="w-4 h-4 text-primary" />
                     <span>Pay Online (Instant Confirmation)</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Cards, Bank Transfer, USSD via Paystack</p>
+                  <p className="text-xs text-muted-foreground mt-1">Cards, Bank Transfer, USSD via Paystack</p>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('pay_on_dropoff')}
                   className={`text-left p-4 rounded-xl border transition-all ${paymentMethod === 'pay_on_dropoff'
-                    ? 'bg-brand-50/70 border-brand-500 text-brand-950 ring-1 ring-brand-500 shadow-sm'
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'bg-primary/10 border-primary text-foreground ring-1 ring-primary shadow-xs'
+                    : 'bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
                     }`}
                 >
                   <div className="flex items-center gap-2 font-bold text-sm">
-                    <Building2 className="w-4 h-4 text-slate-700" />
+                    <Building2 className="w-4 h-4 text-muted-foreground" />
                     <span>Pay at Terminal Counter</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Cash or POS when dropping package</p>
+                  <p className="text-xs text-muted-foreground mt-1">Cash or POS when dropping package</p>
                 </button>
               </div>
 
               {/* Security confirmation */}
-              <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl bg-slate-50/80 border border-slate-200/90 text-slate-700">
+              <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl bg-muted/30 border border-border text-foreground">
                 <input
                   type="checkbox"
                   required
                   checked={securityDeclaration}
                   onChange={(e) => setSecurityDeclaration(e.target.checked)}
-                  className="w-4 h-4 mt-0.5 rounded text-brand-600 bg-white border-slate-300 focus:ring-brand-500"
+                  className="w-4 h-4 mt-0.5 rounded text-primary bg-card border-border focus:ring-primary/20"
                 />
-                <div className="text-xs leading-relaxed text-slate-700">
+                <div className="text-xs leading-relaxed text-muted-foreground">
                   I confirm that this parcel contains no hazardous chemicals, ammunition, currency notes, or contraband prohibited under Nigerian law. I understand packages are subject to terminal inspection.
                 </div>
               </label>
@@ -529,7 +529,7 @@ export default function CourierPage(props?: any) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full min-h-[48px] py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-lg shadow-brand-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full min-h-[48px] py-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <span>Generating Waybill...</span>
@@ -546,69 +546,69 @@ export default function CourierPage(props?: any) {
         {/* Right Column: Sticky Summary & Guarantees */}
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
           {/* Live Pricing Breakdown Card */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground p-6 shadow-sm">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
-            <h3 className="text-xs uppercase font-bold text-slate-500 tracking-wider mb-4">
+            <h3 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-4">
               Estimated Freight Summary
             </h3>
 
             {/* Route pill */}
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 mb-4 flex items-center justify-between text-xs font-semibold text-slate-900">
+            <div className="p-3 rounded-xl bg-muted/50 border border-border mb-4 flex items-center justify-between text-xs font-semibold text-foreground">
               <span className="truncate max-w-[110px]">{originTerminal?.city || 'Origin'}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-brand-600 flex-shrink-0" />
+              <ArrowRight className="w-3.5 h-3.5 text-primary flex-shrink-0" />
               <span className="truncate max-w-[110px]">{destinationTerminal?.city || 'Destination'}</span>
             </div>
 
-            <div className="space-y-2.5 text-xs text-slate-600 border-b border-slate-200/80 pb-4 mb-4">
+            <div className="space-y-2.5 text-xs text-muted-foreground border-b border-border pb-4 mb-4">
               <div className="flex justify-between">
                 <span className="capitalize">{category} Base Freight:</span>
-                <span className="font-semibold text-slate-900">{formatNaira(pricing.baseFeeKobo)}</span>
+                <span className="font-semibold text-foreground">{formatNaira(pricing.baseFeeKobo)}</span>
               </div>
 
               {pricing.weightSurchargeKobo > 0 && (
                 <div className="flex justify-between">
                   <span>Additional Weight Surcharge:</span>
-                  <span className="font-semibold text-amber-700">+{formatNaira(pricing.weightSurchargeKobo)}</span>
+                  <span className="font-semibold text-amber-600 dark:text-amber-400">+{formatNaira(pricing.weightSurchargeKobo)}</span>
                 </div>
               )}
 
               {pricing.fragileSurchargeKobo > 0 && (
                 <div className="flex justify-between">
                   <span>Fragile Handling:</span>
-                  <span className="font-semibold text-amber-700">+{formatNaira(pricing.fragileSurchargeKobo)}</span>
+                  <span className="font-semibold text-amber-600 dark:text-amber-400">+{formatNaira(pricing.fragileSurchargeKobo)}</span>
                 </div>
               )}
 
               {pricing.insuranceFeeKobo > 0 && (
                 <div className="flex justify-between">
                   <span>Transit Insurance (1.5%):</span>
-                  <span className="font-semibold text-sky-700">+{formatNaira(pricing.insuranceFeeKobo)}</span>
+                  <span className="font-semibold text-sky-600 dark:text-sky-400">+{formatNaira(pricing.insuranceFeeKobo)}</span>
                 </div>
               )}
             </div>
 
             <div className="flex items-baseline justify-between mb-4">
-              <span className="text-sm font-bold text-slate-700">Total Amount:</span>
-              <span className="text-2xl font-extrabold text-slate-900">{formatNaira(pricing.totalFeeKobo)}</span>
+              <span className="text-sm font-bold text-foreground">Total Amount:</span>
+              <span className="text-2xl font-extrabold text-foreground">{formatNaira(pricing.totalFeeKobo)}</span>
             </div>
 
-            <p className="text-[11px] text-slate-500 leading-normal">
+            <p className="text-[11px] text-muted-foreground leading-normal">
               Official rates guaranteed upon drop-off. Final physical scale weigh-in occurs at terminal intake counter.
             </p>
           </div>
 
           {/* Quick Track Link */}
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] text-center">
-            <Package className="w-6 h-6 text-brand-600 mx-auto mb-2" />
-            <h4 className="text-sm font-bold text-slate-900 mb-1">Already sent a package?</h4>
-            <p className="text-xs text-slate-500 mb-3 text-pretty">
+          <div className="rounded-2xl border border-border bg-card text-card-foreground p-5 shadow-sm text-center">
+            <Package className="w-6 h-6 text-primary mx-auto mb-2" />
+            <h4 className="text-sm font-bold text-foreground mb-1">Already sent a package?</h4>
+            <p className="text-xs text-muted-foreground mb-3 text-pretty">
               Track your parcel in real-time using your ATM-EXP code or recipient phone number.
             </p>
             <button
               type="button"
               onClick={() => navigate('/track')}
-              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
             >
               <span>Go to Tracking Portal</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -619,32 +619,32 @@ export default function CourierPage(props?: any) {
 
       {/* Booking Success Modal */}
       {successResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl text-left">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative overflow-hidden bg-card text-card-foreground border border-border rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl text-left">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-900">Waybill Booked Successfully</h3>
-                <p className="text-xs text-slate-500">Present this pass at the terminal intake counter</p>
+                <h3 className="text-xl font-bold text-foreground">Waybill Booked Successfully</h3>
+                <p className="text-xs text-muted-foreground">Present this pass at the terminal intake counter</p>
               </div>
             </div>
 
             {/* Waybill Slip Box */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-5 mb-5 space-y-4">
+            <div className="bg-muted/30 border border-border rounded-xl p-5 mb-5 space-y-4">
               {/* Tracking Code */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200/80">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div>
-                  <div className="text-[10px] uppercase font-bold text-slate-500">Tracking Code</div>
-                  <div className="text-xl font-mono font-extrabold text-brand-600">{successResult.trackingCode}</div>
+                  <div className="text-[10px] uppercase font-bold text-muted-foreground">Tracking Code</div>
+                  <div className="text-xl font-mono font-extrabold text-primary">{successResult.trackingCode}</div>
                 </div>
                 <button
                   type="button"
                   onClick={handleCopyTrackingCode}
-                  className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center gap-1 transition-colors shadow-sm"
+                  className="px-3 py-1.5 rounded-lg bg-card border border-border hover:bg-muted text-xs font-semibold text-foreground flex items-center gap-1 transition-colors shadow-xs"
                 >
                   <Copy className="w-3.5 h-3.5" />
                   <span>{copiedCode ? 'Copied' : 'Copy'}</span>
@@ -652,33 +652,33 @@ export default function CourierPage(props?: any) {
               </div>
 
               {/* Pickup Verification OTP */}
-              <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+              <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-emerald-950">Recipient Pickup OTP Code</div>
-                  <div className="text-[11px] text-emerald-800">Required at terminal collection counter</div>
+                  <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">Recipient Pickup OTP Code</div>
+                  <div className="text-[11px] text-emerald-600 dark:text-emerald-400">Required at terminal collection counter</div>
                 </div>
-                <div className="text-2xl font-mono font-extrabold text-emerald-800 tracking-widest bg-white px-3.5 py-1 rounded-md border border-emerald-300 shadow-sm">
+                <div className="text-2xl font-mono font-extrabold text-emerald-700 dark:text-emerald-300 tracking-widest bg-card px-3.5 py-1 rounded-md border border-border shadow-xs">
                   {successResult.pickupOtp}
                 </div>
               </div>
 
               {/* Route & Payment */}
-              <div className="grid grid-cols-2 gap-3 text-xs text-slate-600">
+              <div className="grid grid-cols-2 gap-3 text-xs text-muted-foreground">
                 <div>
-                  <div className="text-slate-500 font-medium">Drop-off At:</div>
-                  <div className="font-semibold text-slate-900 truncate">{successResult.originTerminalName}</div>
+                  <div className="text-muted-foreground font-medium">Drop-off At:</div>
+                  <div className="font-semibold text-foreground truncate">{successResult.originTerminalName}</div>
                 </div>
                 <div>
-                  <div className="text-slate-500 font-medium">Collect At:</div>
-                  <div className="font-semibold text-slate-900 truncate">{successResult.destTerminalName}</div>
+                  <div className="text-muted-foreground font-medium">Collect At:</div>
+                  <div className="font-semibold text-foreground truncate">{successResult.destTerminalName}</div>
                 </div>
                 <div>
-                  <div className="text-slate-500 font-medium">Freight Total:</div>
-                  <div className="font-semibold text-emerald-700">{formatNaira(successResult.totalFeeKobo)}</div>
+                  <div className="text-muted-foreground font-medium">Freight Total:</div>
+                  <div className="font-semibold text-emerald-600 dark:text-emerald-400">{formatNaira(successResult.totalFeeKobo)}</div>
                 </div>
                 <div>
-                  <div className="text-slate-500 font-medium">Payment Status:</div>
-                  <div className="font-semibold text-slate-900 capitalize">
+                  <div className="text-muted-foreground font-medium">Payment Status:</div>
+                  <div className="font-semibold text-foreground capitalize">
                     {successResult.paymentMethod === 'online' ? 'Paid Online' : 'Pay on Drop-off'}
                   </div>
                 </div>
@@ -690,7 +690,7 @@ export default function CourierPage(props?: any) {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+                className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border font-semibold text-sm transition-colors flex items-center justify-center gap-2"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print Waybill Pass</span>
@@ -699,7 +699,7 @@ export default function CourierPage(props?: any) {
               <button
                 type="button"
                 onClick={() => navigate(`/track?q=${successResult.trackingCode}`)}
-                className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-md shadow-brand-600/20"
+                className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-md"
               >
                 <span>Track This Parcel</span>
                 <ArrowRight className="w-4 h-4" />

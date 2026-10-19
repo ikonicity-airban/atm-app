@@ -151,22 +151,22 @@ export default function ManageBookingPage(props?: any) {
       {/* 1. Retrieval Form View (State A) */}
       {!bookingDetails && (
         <div className="max-w-2xl mx-auto space-y-6">
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground p-6 sm:p-8 shadow-sm">
             {/* Specular top highlight */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-accent-500/30 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             <div className="mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 text-balance">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground text-balance">
                 Find Your Reservation
               </h2>
-              <p className="mt-1 text-sm text-slate-600 text-pretty">
+              <p className="mt-1 text-sm text-muted-foreground text-pretty">
                 Enter your private booking reference code and the contact phone number registered during checkout.
               </p>
             </div>
 
             {error && (
-              <div className="mb-6 flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-800">
-                <AlertTriangle className="h-5 w-5 shrink-0 text-rose-600 mt-0.5" />
+              <div className="mb-6 flex items-start gap-3 rounded-xl border border-rose-500/25 bg-rose-500/10 p-4 text-rose-700 dark:text-rose-400">
+                <AlertTriangle className="h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
                 <div className="text-sm">
                   <p className="font-semibold">Lookup Notification</p>
                   <p className="mt-0.5 text-pretty">{error}</p>
@@ -176,7 +176,7 @@ export default function ManageBookingPage(props?: any) {
 
             <form onSubmit={handleLookup} className="space-y-5">
               <div>
-                <label htmlFor="booking-ref" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                <label htmlFor="booking-ref" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                   Booking Reference Code
                 </label>
                 <div className="relative">
@@ -188,19 +188,19 @@ export default function ManageBookingPage(props?: any) {
                     onChange={(e) => setRefInput(e.target.value.toUpperCase())}
                     placeholder="e.g. ATM-7K9W2P"
                     maxLength={10}
-                    className="w-full min-h-[44px] rounded-xl border border-slate-300 pl-4 pr-10 text-sm font-semibold tracking-wider text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+                    className="w-full min-h-[44px] rounded-xl border border-border bg-card pl-4 pr-10 text-sm font-semibold tracking-wider text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-muted-foreground">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="mt-1.5 text-xs text-slate-500">
+                <p className="mt-1.5 text-xs text-muted-foreground">
                   Provided in your booking confirmation SMS and on your payment receipt.
                 </p>
               </div>
 
               <div>
-                <label htmlFor="customer-phone" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                <label htmlFor="customer-phone" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                   Booked Phone Number
                 </label>
                 <input
@@ -210,7 +210,7 @@ export default function ManageBookingPage(props?: any) {
                   value={phoneInput}
                   onChange={(e) => setPhoneInput(e.target.value)}
                   placeholder="e.g. 0803 123 4567 or +234..."
-                  className="w-full min-h-[44px] rounded-xl border border-slate-300 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+                  className="w-full min-h-[44px] rounded-xl border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -218,14 +218,14 @@ export default function ManageBookingPage(props?: any) {
                 <button
                   type="button"
                   onClick={handleQuickDemo}
-                  className="min-h-[44px] px-3 text-xs font-semibold text-accent-700 hover:text-accent-800 text-left transition-colors"
+                  className="min-h-[44px] px-3 text-xs font-semibold text-primary hover:opacity-80 text-left transition-colors"
                 >
                   ⚡ Autofill Demo Booking (ATM-7K9W2P)
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="min-h-[44px] px-7 rounded-xl bg-accent-600 hover:bg-accent-700 text-white text-sm font-bold shadow transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+                  className="min-h-[44px] px-7 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-md transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   {loading ? 'Verifying...' : 'Retrieve Booking'}
                   {!loading && <ArrowRight className="h-4 w-4" />}
@@ -235,18 +235,18 @@ export default function ManageBookingPage(props?: any) {
           </div>
 
           {/* Policy Information Surface */}
-          <div className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-6 text-sm text-slate-600 space-y-3">
-            <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
-              <Info className="h-4 w-4 text-accent-600 shrink-0" />
+          <div className="rounded-2xl border border-border bg-muted/30 p-6 text-sm text-muted-foreground space-y-3">
+            <div className="flex items-center gap-2 font-bold text-foreground text-sm">
+              <Info className="h-4 w-4 text-primary shrink-0" />
               Ascent Cancellation &amp; Refund Policy Rules
             </div>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-600 leading-relaxed list-disc list-inside">
+            <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground leading-relaxed list-disc list-inside">
               <li><strong>Beyond 24 hours:</strong> 90% refund (10% standard processing deduction).</li>
               <li><strong>6 to 24 hours:</strong> 75% refund (25% cancellation deduction).</li>
               <li><strong>2 to 6 hours:</strong> 50% refund (50% late notice deduction).</li>
               <li><strong>Within 2 hours:</strong> Non refundable due to vehicle departure dispatch.</li>
             </ul>
-            <p className="text-xs text-slate-500 pt-1">
+            <p className="text-xs text-muted-foreground pt-1">
               Choose instant ATM store credit for zero waiting rebooking, or direct Paystack card reversal.
             </p>
           </div>
@@ -258,10 +258,10 @@ export default function ManageBookingPage(props?: any) {
         <div className="space-y-8 animate-fade-in">
           {/* Success Banner when cancellation just occurred */}
           {cancellationResult && (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-900 shadow-sm flex items-start gap-4">
-              <CheckCircle2 className="h-6 w-6 text-emerald-600 shrink-0 mt-0.5" />
+            <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-5 text-emerald-800 dark:text-emerald-300 shadow-sm flex items-start gap-4">
+              <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               <div className="space-y-1 text-sm">
-                <p className="font-bold text-base text-emerald-950">
+                <p className="font-bold text-base text-foreground">
                   Ticket Cancellation Processed Successfully
                 </p>
                 <p className="text-pretty">
@@ -275,7 +275,7 @@ export default function ManageBookingPage(props?: any) {
                   A confirmation SMS has been dispatched to your contact phone.
                 </p>
                 {cancellationResult.walletBalanceAfterKobo !== null && (
-                  <p className="text-xs font-semibold text-emerald-800 pt-1">
+                  <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">
                     Your current wallet balance is {formatNaira(cancellationResult.walletBalanceAfterKobo)}.
                   </p>
                 )}
@@ -286,17 +286,17 @@ export default function ManageBookingPage(props?: any) {
           {/* Action Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase font-bold text-slate-500 tracking-wider">
+              <p className="text-xs uppercase font-bold text-muted-foreground tracking-wider">
                 Booking Reference
               </p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
                 {bookingDetails.booking.ref}
               </h2>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href={`/track/journey/${encodeURIComponent(bookingDetails.booking.ref)}?phone=${encodeURIComponent(phoneInput || bookingDetails.booking.contact.phone)}`}
-                className="min-h-[44px] px-4 rounded-xl bg-accent-600 hover:bg-accent-700 text-xs font-bold text-white transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 shadow-sm"
+                className="min-h-[44px] px-4 rounded-xl bg-primary hover:opacity-90 text-xs font-bold text-primary-foreground transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm"
               >
                 <Compass className="h-4 w-4" />
                 Track Live Vehicle
@@ -304,7 +304,7 @@ export default function ManageBookingPage(props?: any) {
               <button
                 type="button"
                 onClick={handleResetSearch}
-                className="min-h-[44px] px-4 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+                className="min-h-[44px] px-4 rounded-xl border border-border text-xs font-bold text-foreground hover:bg-muted transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Change Booking
@@ -312,7 +312,7 @@ export default function ManageBookingPage(props?: any) {
               <button
                 type="button"
                 onClick={() => typeof window !== 'undefined' && window.print()}
-                className="min-h-[44px] px-5 rounded-xl border border-slate-300 text-xs font-bold text-slate-800 hover:bg-slate-50 transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 shadow-sm"
+                className="min-h-[44px] px-5 rounded-xl border border-border text-xs font-bold text-foreground hover:bg-muted transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm"
               >
                 <Printer className="h-4 w-4" />
                 Print Passes
@@ -320,47 +320,47 @@ export default function ManageBookingPage(props?: any) {
             </div>
           </div>
 
-          {/* Premium Trip Schedule Card with Specular Top Sheen */}
-          <div className="relative overflow-hidden rounded-2xl bg-slate-900 text-white p-6 sm:p-8 shadow-xl">
-            {/* 3D Specular Top Highlight */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          {/* Trip Schedule Card */}
+          <div className="relative overflow-hidden rounded-2xl bg-card text-card-foreground border border-border p-6 sm:p-8 shadow-sm">
+            {/* Specular Top Highlight */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
               {/* Corridor Route */}
               <div className="md:col-span-2 space-y-3">
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/10 text-xs font-bold uppercase tracking-wider text-accent-300">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-primary/10 text-xs font-bold uppercase tracking-wider text-primary">
                   <Car className="h-3.5 w-3.5" />
                   Scheduled Intercity Service
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-balance text-white">
+                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-balance text-foreground">
                   {bookingDetails.booking.trip.originTerminal.city} ({bookingDetails.booking.trip.originTerminal.code}) → {bookingDetails.booking.trip.destinationTerminal.city} ({bookingDetails.booking.trip.destinationTerminal.code})
                 </h3>
-                <div className="flex flex-wrap gap-y-2 gap-x-6 text-sm text-slate-300">
+                <div className="flex flex-wrap gap-y-2 gap-x-6 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">
-                    <MapPin className="h-4 w-4 text-accent-400" />
+                    <MapPin className="h-4 w-4 text-primary" />
                     Boarding at {bookingDetails.booking.trip.originTerminal.name}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4 text-accent-400" />
+                    <Calendar className="h-4 w-4 text-primary" />
                     {formatWatDateTime(bookingDetails.booking.trip.departureTimeUtc).dateStr}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Clock className="h-4 w-4 text-accent-400" />
+                    <Clock className="h-4 w-4 text-primary" />
                     {formatWatDateTime(bookingDetails.booking.trip.departureTimeUtc).timeStr}
                   </span>
                 </div>
               </div>
 
               {/* Status and Summary */}
-              <div className="border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6 space-y-2 text-right md:text-right">
-                <div className="text-xs uppercase font-bold text-slate-400 tracking-wider">
+              <div className="border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6 space-y-2 text-right md:text-right">
+                <div className="text-xs uppercase font-bold text-muted-foreground tracking-wider">
                   Reservation Status
                 </div>
-                <div className="text-lg font-bold text-emerald-400 flex items-center justify-end gap-1.5">
+                <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 flex items-center justify-end gap-1.5">
                   <CheckCircle2 className="h-5 w-5" />
                   {bookingDetails.booking.status === 'confirmed' ? 'Confirmed & Ticketed' : bookingDetails.booking.status.toUpperCase()}
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-muted-foreground">
                   {activeTickets.length} active seat(s) • Total {formatNaira(bookingDetails.booking.totalFareKobo)}
                 </div>
               </div>
@@ -368,15 +368,15 @@ export default function ManageBookingPage(props?: any) {
           </div>
 
           {/* Live Vehicle Telematics & Corridor Tracking Card */}
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground p-5 sm:p-6 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-accent-50 text-accent-800 text-xs font-bold border border-accent-200">
-                    <Radio className="w-3.5 h-3.5 text-accent-600" />
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
+                    <Radio className="w-3.5 h-3.5 text-primary" />
                     Live Vehicle &amp; Highway Telematics
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-500/25">
                     {bookingDetails.telematics ? (
                       bookingDetails.telematics.tripStatus === 'in_transit'
                         ? 'En Route (In Transit)'
@@ -393,22 +393,22 @@ export default function ManageBookingPage(props?: any) {
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-foreground">
                   <span className="flex items-center gap-1.5">
-                    <Car className="w-4 h-4 text-accent-600" />
+                    <Car className="w-4 h-4 text-primary" />
                     <span>
                       {bookingDetails.telematics?.vehicle.model || 'Toyota Sienna Limited'} • Reg:{' '}
-                      <strong className="font-mono text-slate-900">
+                      <strong className="font-mono text-foreground">
                         {bookingDetails.telematics?.vehicle.plateNumber || 'ENU-418-XY'}
                       </strong>
                     </span>
                   </span>
-                  <span className="text-slate-500">
-                    Driver: <strong>{bookingDetails.telematics?.driver.name || 'Emeka Nwosu'}</strong>
+                  <span className="text-muted-foreground">
+                    Driver: <strong className="text-foreground">{bookingDetails.telematics?.driver.name || 'Emeka Nwosu'}</strong>
                   </span>
-                  <span className="text-slate-500">
+                  <span className="text-muted-foreground">
                     ETA:{' '}
-                    <strong className="font-mono text-emerald-700">
+                    <strong className="font-mono text-emerald-600 dark:text-emerald-400">
                       {bookingDetails.telematics?.estimatedArrivalWat || '1:45 PM WAT'}
                     </strong>
                   </span>
@@ -418,9 +418,9 @@ export default function ManageBookingPage(props?: any) {
               <div>
                 <a
                   href={`/track/journey/${encodeURIComponent(bookingDetails.booking.ref)}?phone=${encodeURIComponent(phoneInput || bookingDetails.booking.contact.phone)}`}
-                  className="min-h-[44px] px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
+                  className="min-h-[44px] px-5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <Compass className="w-4 h-4 text-accent-400" />
+                  <Compass className="w-4 h-4" />
                   <span>Launch Live GPS Tracker</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
@@ -444,22 +444,22 @@ export default function ManageBookingPage(props?: any) {
           {/* Passenger & Ticket Overview Bar */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Passenger Manifest */}
-            <div className="md:col-span-2 rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div className="md:col-span-2 rounded-2xl border border-border bg-card text-card-foreground p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-border pb-4">
                 <div>
-                  <h4 className="text-base font-bold text-slate-900">
+                  <h4 className="text-base font-bold text-foreground">
                     Passenger Manifest &amp; Toyota Sienna Seat Assignments
                   </h4>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted-foreground">
                     Dedicated 5 passenger configuration with air conditioning and extra legroom
                   </p>
                 </div>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
                   {bookingDetails.tickets.length} total seats
                 </span>
               </div>
 
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-border">
                 {bookingDetails.tickets.map((ticket) => {
                   const isCancelled = ticket.status === 'cancelled';
                   return (
@@ -468,17 +468,17 @@ export default function ManageBookingPage(props?: any) {
                         <div
                           className={`h-9 w-9 rounded-xl flex items-center justify-center font-bold text-sm ${
                             isCancelled
-                              ? 'bg-slate-100 text-slate-400'
-                              : 'bg-accent-100 text-accent-700'
+                              ? 'bg-muted text-muted-foreground'
+                              : 'bg-primary/10 text-primary'
                           }`}
                         >
                           {ticket.seatNo}
                         </div>
                         <div>
-                          <p className={`text-sm font-bold ${isCancelled ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
+                          <p className={`text-sm font-bold ${isCancelled ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
                             {ticket.passengerName}
                           </p>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-muted-foreground">
                             Seat {ticket.seatNo} • Ticket ID: {ticket.id}
                           </p>
                         </div>
@@ -487,13 +487,13 @@ export default function ManageBookingPage(props?: any) {
                         <span
                           className={`inline-block text-xs font-bold px-2.5 py-0.5 rounded-full ${
                             isCancelled
-                              ? 'bg-rose-100 text-rose-800'
-                              : 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400'
+                              : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
                           }`}
                         >
                           {isCancelled ? 'Cancelled' : 'Valid Boarding Pass'}
                         </span>
-                        <p className="text-xs text-slate-500 mt-0.5 font-semibold">
+                        <p className="text-xs text-muted-foreground mt-0.5 font-semibold">
                           {formatNaira(ticket.fareKobo)}
                         </p>
                       </div>
@@ -506,37 +506,37 @@ export default function ManageBookingPage(props?: any) {
             {/* Quick Actions & Store Credit Panel */}
             <div className="space-y-4">
               {/* Store Credit Card */}
-              <div className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-3">
-                <div className="flex items-center gap-2 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                  <Wallet className="h-4 w-4 text-accent-600" />
+              <div className="rounded-2xl border border-border bg-card text-card-foreground p-6 shadow-sm space-y-3">
+                <div className="flex items-center gap-2 text-xs uppercase font-bold text-muted-foreground tracking-wider">
+                  <Wallet className="h-4 w-4 text-primary" />
                   Traveler Credit Wallet
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold text-slate-900">
+                  <div className="text-2xl font-extrabold text-foreground">
                     {formatNaira(bookingDetails.walletBalanceKobo)}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     Linked to {bookingDetails.booking.contact.phone}
                   </p>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed text-pretty">
+                <p className="text-xs text-muted-foreground leading-relaxed text-pretty">
                   Available credit applies automatically toward your next intercity journey.
                 </p>
               </div>
 
               {/* Cancellation Trigger */}
               {activeTickets.length > 0 && (
-                <div className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-3">
-                  <h4 className="text-sm font-bold text-slate-900">
+                <div className="rounded-2xl border border-border bg-card text-card-foreground p-6 shadow-sm space-y-3">
+                  <h4 className="text-sm font-bold text-foreground">
                     Need to Change Plans?
                   </h4>
-                  <p className="text-xs text-slate-600 text-pretty">
+                  <p className="text-xs text-muted-foreground text-pretty">
                     Cancel individual seats or your entire reservation. Seats return to live inventory immediately.
                   </p>
                   <button
                     type="button"
                     onClick={() => setIsCancelModalOpen(true)}
-                    className="w-full min-h-[44px] rounded-xl border border-rose-300 text-rose-700 hover:bg-rose-50 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
+                    className="w-full min-h-[44px] rounded-xl border border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                   >
                     Request Ticket Cancellation
                   </button>
@@ -548,10 +548,10 @@ export default function ManageBookingPage(props?: any) {
           {/* Boarding Passes Matrix */}
           <div>
             <div className="mb-4">
-              <h3 className="text-xl font-bold tracking-tight text-slate-900">
+              <h3 className="text-xl font-bold tracking-tight text-foreground">
                 Official Digital Boarding Passes
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 text-pretty">
+              <p className="text-xs sm:text-sm text-muted-foreground text-pretty">
                 Present this cryptographically signed QR matrix at the terminal check-in gate for instant boarding verification.
               </p>
             </div>

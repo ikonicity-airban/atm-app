@@ -217,22 +217,22 @@ export default function AdminTripsPage() {
       {/* Title rests directly on background */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Trips &amp; Vehicle Dispatch Console
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-muted-foreground mt-0.5">
             Fleet vehicle assignment, driver scheduling, and highway departure manifest generation.
           </p>
         </div>
 
         {/* Station Filter & Refresh Button */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 bg-white border border-slate-300 rounded-lg px-3 py-1.5 shadow-sm text-xs">
-            <Filter className="w-3.5 h-3.5 text-slate-400" />
+          <div className="flex items-center gap-1.5 bg-card border border-border rounded-xl px-3 py-1.5 shadow-sm text-xs">
+            <Filter className="w-3.5 h-3.5 text-muted-foreground" />
             <select
               value={selectedTerminal}
               onChange={(e) => setSelectedTerminal(e.target.value)}
-              className="font-medium text-slate-800 bg-transparent focus:outline-none"
+              className="font-medium text-foreground bg-transparent focus:outline-none"
             >
               <option value="all">All Terminal Hubs</option>
               {SEED_TERMINALS.map((t) => (
@@ -246,7 +246,7 @@ export default function AdminTripsPage() {
           <button
             type="button"
             onClick={loadTrips}
-            className="p-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg shadow-sm transition-colors"
+            className="p-2 bg-card border border-border hover:bg-muted/40 text-foreground rounded-xl shadow-sm transition-colors"
             title="Refresh departure schedules"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -256,24 +256,24 @@ export default function AdminTripsPage() {
 
       {/* Notifications */}
       {errorMessage && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3.5 flex items-center justify-between text-sm text-red-800">
+        <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3.5 flex items-center justify-between text-sm text-rose-700 dark:text-rose-400">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" />
             <span className="font-medium">{errorMessage}</span>
           </div>
-          <button onClick={() => setErrorMessage(null)} className="text-red-500 hover:text-red-700">
+          <button onClick={() => setErrorMessage(null)} className="text-rose-600 hover:text-rose-700 dark:hover:text-rose-300">
             <X className="w-4 h-4" />
           </button>
         </div>
       )}
 
       {successMessage && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3.5 flex items-center justify-between text-sm text-emerald-800">
+        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3.5 flex items-center justify-between text-sm text-emerald-700 dark:text-emerald-400">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
             <span className="font-medium">{successMessage}</span>
           </div>
-          <button onClick={() => setSuccessMessage(null)} className="text-emerald-500 hover:text-emerald-700">
+          <button onClick={() => setSuccessMessage(null)} className="text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -281,42 +281,42 @@ export default function AdminTripsPage() {
 
       {/* KPI Cards Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between text-muted-foreground text-xs font-semibold">
             <span>Scheduled Departures</span>
-            <Calendar className="w-4 h-4 text-slate-400" />
+            <Calendar className="w-4 h-4 text-muted-foreground" />
           </div>
-          <div className="text-2xl font-bold text-slate-900 mt-2">{totalTrips}</div>
-          <div className="text-[11px] text-slate-500 mt-0.5">Across active travel corridors</div>
+          <div className="text-2xl font-bold text-foreground mt-2">{totalTrips}</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Across active travel corridors</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between text-muted-foreground text-xs font-semibold">
             <span>Assigned Fleet Vehicles</span>
-            <Car className="w-4 h-4 text-orange-600" />
+            <Car className="w-4 h-4 text-primary" />
           </div>
-          <div className="text-2xl font-bold text-slate-900 mt-2">
-            {assignedTrips} <span className="text-xs font-normal text-slate-400">/ {totalTrips}</span>
+          <div className="text-2xl font-bold text-foreground mt-2">
+            {assignedTrips} <span className="text-xs font-normal text-muted-foreground">/ {totalTrips}</span>
           </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">5-Seat Toyota Sienna fleet</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">5-Seat Toyota Sienna fleet</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between text-muted-foreground text-xs font-semibold">
             <span>Boarding in Progress</span>
-            <Clock className="w-4 h-4 text-amber-600" />
+            <Clock className="w-4 h-4 text-amber-500" />
           </div>
-          <div className="text-2xl font-bold text-amber-700 mt-2">{boardingTrips}</div>
-          <div className="text-[11px] text-slate-500 mt-0.5">Active at departure bays</div>
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-2">{boardingTrips}</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Active at departure bays</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
+          <div className="flex items-center justify-between text-muted-foreground text-xs font-semibold">
             <span>Boarding Completion</span>
-            <Users className="w-4 h-4 text-emerald-600" />
+            <Users className="w-4 h-4 text-emerald-500" />
           </div>
-          <div className="text-2xl font-bold text-emerald-700 mt-2">{boardingPercentage}%</div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
+          <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">{boardingPercentage}%</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">
             {totalCheckedIn} of {totalBooked} passengers boarded
           </div>
         </div>
@@ -325,20 +325,20 @@ export default function AdminTripsPage() {
       {/* Trips Feed */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-bold text-foreground flex items-center gap-2">
             <span>Corridor Departure Roster</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-mono font-semibold">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-mono font-semibold">
               {trips.length} Trips
             </span>
           </h2>
         </div>
 
         {isLoading ? (
-          <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-sm text-slate-500">
+          <div className="bg-card rounded-xl border border-border p-8 text-center text-sm text-muted-foreground">
             Loading scheduled departures...
           </div>
         ) : trips.length === 0 ? (
-          <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-sm text-slate-500">
+          <div className="bg-card rounded-xl border border-border p-8 text-center text-sm text-muted-foreground">
             No scheduled departures found for the selected terminal filter.
           </div>
         ) : (
@@ -351,25 +351,25 @@ export default function AdminTripsPage() {
               return (
                 <div
                   key={trip.id}
-                  className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:border-slate-300 transition-colors"
+                  className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col justify-between hover:border-primary/40 transition-colors"
                 >
                   {/* Trip Card Top Bar */}
-                  <div className="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/50">
+                  <div className="p-4 sm:p-5 border-b border-border bg-muted/30">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="flex items-center gap-2 text-xs font-mono font-semibold text-slate-500">
+                        <div className="flex items-center gap-2 text-xs font-mono font-semibold text-muted-foreground">
                           <span>{trip.id}</span>
                           <span>•</span>
-                          <span className="text-orange-600 font-bold">{formatNaira(trip.fareKobo)}</span>
+                          <span className="text-primary font-bold">{formatNaira(trip.fareKobo)}</span>
                         </div>
-                        <div className="text-base font-bold text-slate-900 mt-1 flex items-center gap-2">
+                        <div className="text-base font-bold text-foreground mt-1 flex items-center gap-2">
                           <span>{trip.originTerminalName}</span>
-                          <ArrowRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                           <span>{trip.destinationTerminalName}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-slate-500 mt-1.5">
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1.5">
                           <span className="flex items-center gap-1 font-medium">
-                            <Clock className="w-3.5 h-3.5 text-orange-500" />
+                            <Clock className="w-3.5 h-3.5 text-primary" />
                             {trip.departureTimeWat} (WAT)
                           </span>
                         </div>
@@ -379,12 +379,12 @@ export default function AdminTripsPage() {
                       <span
                         className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex-shrink-0 ${
                           trip.status === 'boarding'
-                            ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                            ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20'
                             : trip.status === 'in_transit'
-                            ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                            ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20'
                             : trip.status === 'completed'
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                            : 'bg-slate-100 text-slate-700 border border-slate-200'
+                            ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+                            : 'bg-muted text-muted-foreground border border-border'
                         }`}
                       >
                         {trip.status.replace('_', ' ')}
@@ -397,22 +397,22 @@ export default function AdminTripsPage() {
                     {/* Vehicle & Driver Details */}
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       {/* Vehicle Box */}
-                      <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                        <div className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1">
-                          <Car className="w-3 h-3 text-slate-500" />
+                      <div className="p-3 bg-muted/30 rounded-xl border border-border">
+                        <div className="text-muted-foreground font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1">
+                          <Car className="w-3 h-3 text-muted-foreground" />
                           Vehicle Assignment
                         </div>
                         {trip.vehicle ? (
                           <div className="mt-1">
-                            <div className="font-mono font-bold text-slate-900 text-sm">
+                            <div className="font-mono font-bold text-foreground text-sm">
                               {trip.vehicle.registrationNumber}
                             </div>
-                            <div className="text-slate-600 truncate">
+                            <div className="text-muted-foreground truncate">
                               {trip.vehicle.make} {trip.vehicle.model}
                             </div>
                           </div>
                         ) : (
-                          <div className="mt-1.5 text-amber-700 font-medium flex items-center gap-1">
+                          <div className="mt-1.5 text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
                             <AlertTriangle className="w-3.5 h-3.5" />
                             Unassigned
                           </div>
@@ -420,22 +420,22 @@ export default function AdminTripsPage() {
                       </div>
 
                       {/* Driver Box */}
-                      <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                        <div className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1">
-                          <User className="w-3 h-3 text-slate-500" />
+                      <div className="p-3 bg-muted/30 rounded-xl border border-border">
+                        <div className="text-muted-foreground font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1">
+                          <User className="w-3 h-3 text-muted-foreground" />
                           Driver Assignment
                         </div>
                         {trip.driver ? (
                           <div className="mt-1">
-                            <div className="font-bold text-slate-900 text-sm truncate">
+                            <div className="font-bold text-foreground text-sm truncate">
                               {trip.driver.fullName}
                             </div>
-                            <div className="text-slate-500 font-mono text-[11px] truncate">
+                            <div className="text-muted-foreground font-mono text-[11px] truncate">
                               {trip.driver.phone}
                             </div>
                           </div>
                         ) : (
-                          <div className="mt-1.5 text-amber-700 font-medium flex items-center gap-1">
+                          <div className="mt-1.5 text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
                             <AlertTriangle className="w-3.5 h-3.5" />
                             Unassigned
                           </div>
@@ -446,27 +446,27 @@ export default function AdminTripsPage() {
                     {/* Live Boarding Progress Bar */}
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-700">
+                        <span className="font-semibold text-foreground">
                           Boarding Status: {trip.checkedInSeats} of {trip.bookedSeats} Checked In
                         </span>
-                        <span className="font-mono font-bold text-slate-600">{boardingPercent}%</span>
+                        <span className="font-mono font-bold text-muted-foreground">{boardingPercent}%</span>
                       </div>
-                      <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                      <div className="w-full h-2.5 bg-muted rounded-full overflow-hidden border border-border">
                         <div
                           className={`h-full transition-all duration-300 ${
                             boardingPercent === 100
-                              ? 'bg-emerald-600'
+                              ? 'bg-emerald-600 dark:bg-emerald-500'
                               : boardingPercent > 0
-                              ? 'bg-orange-500'
-                              : 'bg-slate-300'
+                              ? 'bg-primary'
+                              : 'bg-muted-foreground/30'
                           }`}
                           style={{ width: `${boardingPercent}%` }}
                         />
                       </div>
-                      <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
+                      <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-0.5">
                         <span>Total Capacity: 5 Seats (Toyota Sienna)</span>
                         {trip.standbyReleasedSeats > 0 && (
-                          <span className="text-amber-600 font-medium">
+                          <span className="text-amber-600 dark:text-amber-400 font-medium">
                             {trip.standbyReleasedSeats} standby released
                           </span>
                         )}
@@ -475,12 +475,12 @@ export default function AdminTripsPage() {
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2.5">
+                  <div className="p-4 bg-muted/30 border-t border-border flex flex-wrap items-center justify-between gap-2.5">
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => openAssignModal(trip)}
-                        className="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 text-xs font-semibold rounded-lg shadow-sm transition-colors min-h-[38px]"
+                        className="px-3 py-1.5 bg-background border border-border hover:bg-muted/50 text-foreground text-xs font-semibold rounded-xl shadow-sm transition-colors min-h-[38px]"
                       >
                         Assign Fleet &amp; Driver
                       </button>
@@ -492,7 +492,7 @@ export default function AdminTripsPage() {
                           onClick={() =>
                             handleQuickStatus(trip.id, trip.vehicle!.id, trip.driver!.id, 'boarding')
                           }
-                          className="px-2.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors min-h-[38px]"
+                          className="px-2.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-colors min-h-[38px]"
                         >
                           Start Boarding
                         </button>
@@ -504,7 +504,7 @@ export default function AdminTripsPage() {
                           onClick={() =>
                             handleQuickStatus(trip.id, trip.vehicle!.id, trip.driver!.id, 'in_transit')
                           }
-                          className="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors min-h-[38px]"
+                          className="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-colors min-h-[38px]"
                         >
                           Dispatch Highway
                         </button>
@@ -516,7 +516,7 @@ export default function AdminTripsPage() {
                           onClick={() =>
                             handleQuickStatus(trip.id, trip.vehicle!.id, trip.driver!.id, 'completed')
                           }
-                          className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors min-h-[38px]"
+                          className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-colors min-h-[38px]"
                         >
                           Arrived
                         </button>
@@ -528,9 +528,9 @@ export default function AdminTripsPage() {
                       href={`/admin/trips/${trip.id}/manifest`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors flex items-center gap-1.5 min-h-[38px]"
+                      className="px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold rounded-xl shadow-sm transition-colors flex items-center gap-1.5 min-h-[38px]"
                     >
-                      <Printer className="w-3.5 h-3.5 text-orange-400" />
+                      <Printer className="w-3.5 h-3.5" />
                       <span>Print Manifest (A4)</span>
                     </a>
                   </div>
@@ -543,19 +543,19 @@ export default function AdminTripsPage() {
 
       {/* Assign Vehicle & Driver Modal */}
       {assigningTrip && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200">
-            <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-4 border-b border-border flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-sm">Assign Fleet Vehicle &amp; Driver</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <h3 className="font-bold text-sm text-foreground">Assign Fleet Vehicle &amp; Driver</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {assigningTrip.routeTitle} • {assigningTrip.departureTimeWat} (WAT)
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setAssigningTrip(null)}
-                className="text-slate-400 hover:text-white p-1"
+                className="text-muted-foreground hover:text-foreground p-1"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -564,14 +564,14 @@ export default function AdminTripsPage() {
             <form onSubmit={handleSaveAssignment} className="p-5 space-y-4">
               {/* Vehicle Selection */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
-                  <Car className="w-3.5 h-3.5 text-orange-600" />
+                <label className="block text-xs font-semibold text-foreground mb-1 flex items-center gap-1.5">
+                  <Car className="w-3.5 h-3.5 text-primary" />
                   Select Toyota Sienna Vehicle:
                 </label>
                 <select
                   value={selectedVehicleId}
                   onChange={(e) => setSelectedVehicleId(e.target.value)}
-                  className="w-full text-xs font-medium border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs font-medium border border-input bg-background rounded-xl p-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">-- Choose active Toyota Sienna --</option>
@@ -585,14 +585,14 @@ export default function AdminTripsPage() {
 
               {/* Driver Selection */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-orange-600" />
+                <label className="block text-xs font-semibold text-foreground mb-1 flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-primary" />
                   Select Licensed Driver:
                 </label>
                 <select
                   value={selectedDriverId}
                   onChange={(e) => setSelectedDriverId(e.target.value)}
-                  className="w-full text-xs font-medium border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs font-medium border border-input bg-background rounded-xl p-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">-- Choose vetted driver --</option>
@@ -606,14 +606,14 @@ export default function AdminTripsPage() {
 
               {/* Status Selection */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-orange-600" />
+                <label className="block text-xs font-semibold text-foreground mb-1 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-primary" />
                   Dispatch Status:
                 </label>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value as TripStatus)}
-                  className="w-full text-xs font-medium border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs font-medium border border-input bg-background rounded-xl p-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="scheduled">Scheduled</option>
                   <option value="boarding">Boarding at Bay</option>
@@ -624,18 +624,18 @@ export default function AdminTripsPage() {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-slate-200 flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-border flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setAssigningTrip(null)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg"
+                  className="px-4 py-2 bg-muted/40 hover:bg-muted text-foreground text-xs font-semibold rounded-xl"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingAssign}
-                  className="px-5 py-2 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white text-xs font-bold rounded-lg shadow-sm transition-colors"
+                  className="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-sm transition-colors"
                 >
                   {isSubmittingAssign ? 'Saving...' : 'Save & Assign'}
                 </button>
