@@ -8,11 +8,11 @@ export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> 
 export function Label({ className, isRequired, children, ...props }: LabelProps) {
   return (
     <label
-      className={cn('block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5', className)}
+      className={cn('block text-xs font-medium uppercase tracking-wider text-foreground mb-1.5', className)}
       {...props}
     >
       {children}
-      {isRequired && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
+      {isRequired && <span className="text-destructive ml-1" aria-hidden="true">*</span>}
     </label>
   );
 }
@@ -39,9 +39,9 @@ export function FormField({
       {label && <Label isRequired={isRequired}>{label}</Label>}
       {children}
       {errorMessage ? (
-        <p className="text-xs text-red-600 font-medium mt-1">{errorMessage}</p>
+        <p className="text-xs text-destructive font-medium mt-1">{errorMessage}</p>
       ) : helpText ? (
-        <p className="text-xs text-slate-500 mt-1">{helpText}</p>
+        <p className="text-xs text-muted-foreground mt-1">{helpText}</p>
       ) : null}
     </div>
   );

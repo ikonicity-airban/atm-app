@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { MapPin, ShieldCheck, Clock, Users, ArrowUpRight } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Station {
   city: string;
@@ -24,8 +25,8 @@ export function StationStrip({ onSelectStation }: { onSelectStation?: (city: str
       <div className="bg-card/75 text-card-foreground rounded-3xl p-5 sm:p-8 border border-border shadow-lg backdrop-blur-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-5 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-accent text-[#ca2484] flex items-center justify-center font-bold shadow-2xs">
-              <MapPin className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-accent text-primary flex items-center justify-center font-bold shadow-2xs">
+              <Icon icon={MapPin} variant="primary" size="md" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-heading font-semibold text-foreground">
@@ -39,15 +40,15 @@ export function StationStrip({ onSelectStation }: { onSelectStation?: (city: str
 
           <div className="flex items-center gap-5 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 font-normal">
-              <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <Icon icon={Clock} variant="success" size="sm" />
               <span>Prompt Departures</span>
             </span>
             <span className="inline-flex items-center gap-1.5 font-normal">
-              <Users className="w-3.5 h-3.5 text-[#ca2484]" />
+              <Icon icon={Users} variant="primary" size="sm" />
               <span>5 Seats Only</span>
             </span>
             <span className="inline-flex items-center gap-1.5 font-normal">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <Icon icon={ShieldCheck} size="sm" />
               <span>Verified Drivers</span>
             </span>
           </div>
@@ -66,7 +67,7 @@ export function StationStrip({ onSelectStation }: { onSelectStation?: (city: str
                 <span className="text-[10px] font-normal px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground font-mono">
                   {station.code}
                 </span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <Icon icon={ArrowUpRight} size="sm" className="group-hover:text-primary transition-colors" />
               </div>
               <div className="mt-2.5">
                 <div className="text-xs sm:text-sm font-heading font-medium text-foreground group-hover:text-primary transition-colors">

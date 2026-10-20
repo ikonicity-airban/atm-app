@@ -4,16 +4,33 @@ import * as React from 'react';
 import { Select as SelectPrimitive } from '@base-ui/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils.ts';
+import { Icon } from './Icon.tsx';
 
 // Backward-compatible native select component
 export interface NativeSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   hasError?: boolean;
+  startIcon?: React.ReactNode | React.ComponentType<{ className?: string }>;
+  containerClassName?: string;
 }
 
 export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProps>(
-  ({ className, hasError = false, children, ...props }, ref) => {
+  ({ className, containerClassName, hasError = false, startIcon, children, ...props }, ref) => {
+    const renderStartIcon = () => {
+      if (!startIcon) return null;
+      if (typeof startIcon === 'function') {
+        const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
+        return <Icon icon={IconComponent} />;
+      }
+      return <Icon>{startIcon}</Icon>;
+    };
+
     return (
-      <div className="relative">
+      <div className={cn('relative w-full', containerClassName)}>
+        {startIcon && (
+          <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center">
+            {renderStartIcon()}
+          </div>
+        )}
         <select
           ref={ref}
           className={cn(
@@ -23,6 +40,7 @@ export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProp
               ? 'border-destructive focus:ring-destructive'
               : 'border-input hover:border-border',
             'disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed',
+            startIcon && 'pl-10',
             className
           )}
           {...props}
@@ -30,7 +48,7 @@ export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProp
           {children}
         </select>
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
-          <ChevronDown className="w-4 h-4" />
+          <Icon icon={ChevronDown} />
         </div>
       </div>
     );
@@ -53,12 +71,22 @@ export interface SelectTriggerProps
   extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
   size?: 'sm' | 'default' | 'lg';
   hasError?: boolean;
+  startIcon?: React.ReactNode | React.ComponentType<{ className?: string }>;
 }
 
 export const SelectTrigger = React.forwardRef<
   HTMLButtonElement,
   SelectTriggerProps
->(({ className, children, size = 'default', hasError, ...props }, ref) => {
+>(({ className, children, size = 'default', hasError, startIcon, ...props }, ref) => {
+  const renderStartIcon = () => {
+    if (!startIcon) return null;
+    if (typeof startIcon === 'function') {
+      const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
+      return <Icon icon={IconComponent} size={size === 'lg' ? 'md' : 'default'} />;
+    }
+    return <Icon size={size === 'lg' ? 'md' : 'default'}>{startIcon}</Icon>;
+  };
+
   return (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -71,9 +99,12 @@ export const SelectTrigger = React.forwardRef<
       )}
       {...props}
     >
-      {children}
+      <div className="flex items-center gap-2 truncate">
+        {startIcon && renderStartIcon()}
+        {children}
+      </div>
       <SelectPrimitive.Icon>
-        <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
+        <Icon icon={ChevronDown} className="transition-transform duration-200" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );

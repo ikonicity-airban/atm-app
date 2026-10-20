@@ -26,7 +26,17 @@ import {
 } from '@atm/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Icon } from '@/components/ui/Icon';
 import { Popover, PopoverTrigger, PopoverPopup, PopoverClose, PopoverTitle } from '@/components/ui/Popover';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/DropdownMenu';
+import { cn } from '@/lib/utils';
 
 interface HeroShowcaseProps {
   onNavigate?: (path: string) => void;
@@ -45,23 +55,11 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const [toCity, setToCity] = useState<ServedCity>('Abuja');
   const [date, setDate] = useState<string>(() => getLagosDate());
   const [passengers, setPassengers] = useState<number>(1);
-  const [openDropdown, setOpenDropdown] = useState<'from' | 'to' | 'passengers' | null>(null);
   const [promoCode, setPromoCode] = useState<string>('');
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [isPromoOpen, setIsPromoOpen] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpenDropdown(null);
-      }
-    };
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, []);
 
   const handleSwap = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -83,12 +81,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
     if (!validDests.includes(toCity)) {
       setToCity(validDests[0] || 'Abuja');
     }
-    setOpenDropdown(null);
   };
 
   const handleToSelect = (city: ServedCity) => {
     setToCity(city);
-    setOpenDropdown(null);
   };
 
   const handleSearch = () => {
@@ -211,7 +207,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 <PopoverTrigger
                   className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
                 >
-                  <Tag className="w-3.5 h-3.5 text-muted-foreground" />
+                  <Icon icon={Tag} size="sm" />
                   <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
                 </PopoverTrigger>
                 <PopoverPopup className="w-72 p-4 space-y-3">
@@ -248,7 +244,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 onClick={() => onNavigate ? onNavigate('/terminals') : (window.location.href = '/terminals')}
                 className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
               >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
+                <Icon icon={SlidersHorizontal} size="sm" />
                 <span>Terminals</span>
               </button>
             </div>
@@ -261,50 +257,45 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 From
               </label>
-              <div
-                onClick={() => setOpenDropdown(openDropdown === 'from' ? null : 'from')}
-                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors cursor-pointer min-h-13 flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <div className="overflow-hidden">
-                    <span className="text-xs font-normal text-foreground truncate block">
-                      {fromCity} ({CITY_DETAILS[fromCity]?.code})
-                    </span>
-                    <span className="text-[10px] text-muted-foreground truncate block">
-                      {CITY_DETAILS[fromCity]?.terminal}
-                    </span>
-                  </div>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              </div>
-
-              {/* FROM Dropdown Modal */}
-              {openDropdown === 'from' && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="absolute top-full left-0 mt-2 w-64 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl p-2 shadow-2xl z-50 space-y-1 text-popover-foreground"
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="w-full bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between text-left"
+                  aria-label="Select departure hub"
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                    Select Departure Hub
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <Icon icon={MapPin} className="shrink-0" />
+                    <div className="overflow-hidden">
+                      <span className="text-xs font-normal text-foreground truncate block">
+                        {fromCity} ({CITY_DETAILS[fromCity]?.code})
+                      </span>
+                      <span className="text-[10px] text-muted-foreground truncate block">
+                        {CITY_DETAILS[fromCity]?.terminal}
+                      </span>
+                    </div>
                   </div>
+                  <Icon icon={ChevronDown} size="sm" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-64 max-h-72 overflow-y-auto">
+                  <DropdownMenuLabel>Select Departure Hub</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   {SERVED_CITIES.map((city) => (
-                    <button
+                    <DropdownMenuItem
                       key={city}
-                      type="button"
                       onClick={() => handleFromSelect(city)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${fromCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                        }`}
+                      className={cn(
+                        'flex items-center justify-between cursor-pointer',
+                        fromCity === city && 'bg-primary text-primary-foreground font-semibold'
+                      )}
                     >
                       <div>
                         <div>{city}</div>
                         <div className="text-[10px] opacity-75">{CITY_DETAILS[city]?.terminal}</div>
                       </div>
                       <span className="font-mono text-[10px]">{CITY_DETAILS[city]?.code}</span>
-                    </button>
+                    </DropdownMenuItem>
                   ))}
-                </div>
-              )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* Swap Button (Cleanly integrated between FROM and TO) */}
@@ -316,7 +307,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 aria-label="Swap origin and destination"
                 className="w-9 h-9 rounded-full"
               >
-                <ArrowRightLeft className="w-3.5 h-3.5" />
+                <Icon icon={ArrowRightLeft} size="sm" />
               </Button>
             </div>
 
@@ -325,50 +316,45 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 To
               </label>
-              <div
-                onClick={() => setOpenDropdown(openDropdown === 'to' ? null : 'to')}
-                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <div className="overflow-hidden">
-                    <span className="text-xs font-normal text-foreground truncate block">
-                      {toCity} ({CITY_DETAILS[toCity]?.code})
-                    </span>
-                    <span className="text-[10px] text-muted-foreground truncate block">
-                      {CITY_DETAILS[toCity]?.terminal}
-                    </span>
-                  </div>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              </div>
-
-              {/* TO Dropdown Modal */}
-              {openDropdown === 'to' && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="absolute top-full left-0 mt-2 w-64 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl p-2 shadow-2xl z-50 space-y-1 text-popover-foreground"
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="w-full bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between text-left"
+                  aria-label="Select destination hub"
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                    Select Destination Hub
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <Icon icon={MapPin} className="shrink-0" />
+                    <div className="overflow-hidden">
+                      <span className="text-xs font-normal text-foreground truncate block">
+                        {toCity} ({CITY_DETAILS[toCity]?.code})
+                      </span>
+                      <span className="text-[10px] text-muted-foreground truncate block">
+                        {CITY_DETAILS[toCity]?.terminal}
+                      </span>
+                    </div>
                   </div>
+                  <Icon icon={ChevronDown} size="sm" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-64 max-h-72 overflow-y-auto">
+                  <DropdownMenuLabel>Select Destination Hub</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   {availableDestinations.map((city) => (
-                    <button
+                    <DropdownMenuItem
                       key={city}
-                      type="button"
                       onClick={() => handleToSelect(city)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-normal flex items-center justify-between cursor-pointer ${toCity === city ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                        }`}
+                      className={cn(
+                        'flex items-center justify-between cursor-pointer',
+                        toCity === city && 'bg-primary text-primary-foreground font-semibold'
+                      )}
                     >
                       <div>
                         <div>{city}</div>
                         <div className="text-[10px] opacity-75">{CITY_DETAILS[city]?.terminal}</div>
                       </div>
                       <span className="font-mono text-[10px]">{CITY_DETAILS[city]?.code}</span>
-                    </button>
+                    </DropdownMenuItem>
                   ))}
-                </div>
-              )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* 3. DATE */}
@@ -376,15 +362,13 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 Date
               </label>
-              <div className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors min-h-[58px] flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-transparent text-xs font-normal text-foreground focus:outline-none cursor-pointer"
-                />
-              </div>
+              <Input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                startIcon={Calendar}
+                className="min-h-[58px] bg-background/80 dark:bg-black/30 rounded-2xl text-xs cursor-pointer"
+              />
             </div>
 
             {/* 4. PASSENGERS & CLASS */}
@@ -392,26 +376,21 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 Passengers
               </label>
-              <div
-                onClick={() => setOpenDropdown(openDropdown === 'passengers' ? null : 'passengers')}
-                className="bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-border transition-colors cursor-pointer min-h-[58px] flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <Users className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-xs font-normal text-foreground truncate">
-                    {passengers} {passengers === 1 ? 'Passenger' : 'Passengers'}, 5 Seat
-                  </span>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              </div>
-
-              {/* Passengers Stepper Modal */}
-              {openDropdown === 'passengers' && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="absolute top-full right-0 mt-2 w-56 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl p-4 shadow-2xl z-50 space-y-3 text-popover-foreground"
+              <Popover>
+                <PopoverTrigger
+                  className="w-full bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between text-left"
+                  aria-label="Select passengers"
                 >
-                  <div className="text-xs font-normal text-foreground">5 Seat Sienna Cabin</div>
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <Icon icon={Users} className="shrink-0" />
+                    <span className="text-xs font-normal text-foreground truncate">
+                      {passengers} {passengers === 1 ? 'Passenger' : 'Passengers'}, 5 Seat
+                    </span>
+                  </div>
+                  <Icon icon={ChevronDown} size="sm" />
+                </PopoverTrigger>
+                <PopoverPopup className="w-56 p-4 space-y-3">
+                  <div className="text-xs font-semibold text-foreground">5 Seat Sienna Cabin</div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Seats</span>
                     <div className="flex items-center gap-3">
@@ -423,7 +402,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       >
                         -
                       </button>
-                      <span className="text-sm font-normal text-foreground">{passengers}</span>
+                      <span className="text-sm font-semibold text-foreground">{passengers}</span>
                       <button
                         type="button"
                         onClick={() => setPassengers(Math.min(5, passengers + 1))}
@@ -437,8 +416,8 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                   <div className="text-[10px] text-muted-foreground">
                     Strictly 5 passenger seats per vehicle.
                   </div>
-                </div>
-              )}
+                </PopoverPopup>
+              </Popover>
             </div>
           </div>
 

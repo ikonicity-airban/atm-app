@@ -11,6 +11,9 @@ import {
 } from '@atm/shared';
 import { PageShell } from '@/components/layout/Templates.tsx';
 import { StaticParcelRepository } from '@/server/repositories/parcels.ts';
+import { Input } from '@/components/ui/Input';
+import { NativeSelect } from '@/components/ui/Select';
+import { Icon } from '@/components/ui/Icon';
 import {
   Package,
   FileText,
@@ -28,6 +31,8 @@ import {
   CreditCard,
   Building2,
   AlertTriangle,
+  MapPin,
+  Calendar,
 } from 'lucide-react';
 
 const parcelRepo = new StaticParcelRepository();
@@ -98,38 +103,47 @@ export default function CourierPage(props?: any) {
   const pricing = useMemo(() => {
     return calculateParcelDeliveryFee({
       category,
-      weightKg: Math.max(0.5, weightKg),
-      fragile: fragile || category === 'fragile',
+      weightKg,
       declaredValueKobo,
+      fragile: fragile || category === 'fragile',
     });
-  }, [category, weightKg, fragile, declaredValueKobo]);
+  }, [category, weightKg, declaredValueKobo, fragile]);
 
-  const originTerminal = SEED_TERMINALS.find((t) => t.id === originTerminalId);
-  const destinationTerminal = SEED_TERMINALS.find((t) => t.id === destinationTerminalId);
+  // Terminal objects for display
+  const originTerminal = useMemo(
+    () => SEED_TERMINALS.find((t) => t.id === originTerminalId),
+    [originTerminalId]
+  );
+  const destinationTerminal = useMemo(
+    () => SEED_TERMINALS.find((t) => t.id === destinationTerminalId),
+    [destinationTerminalId]
+  );
 
-  // Submit Handler
+  const handleCopyTrackingCode = () => {
+    if (successResult) {
+      navigator.clipboard.writeText(successResult.trackingCode);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2500);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
 
     if (originTerminalId === destinationTerminalId) {
-      setErrorMsg('Origin and destination terminals cannot be identical.');
+      setErrorMsg('Origin and destination terminals must be in different locations');
       return;
     }
 
     if (!securityDeclaration) {
-      setErrorMsg('You must agree to the security declaration confirming no prohibited items.');
+      setErrorMsg('You must certify that the parcel contains no prohibited items');
       return;
     }
 
     const payload: BookParcelInput = {
       originTerminalId,
       destinationTerminalId,
-      category,
-      description: description.trim() || `${category} consignment`,
-      weightKg: Math.max(0.5, weightKg),
-      fragile: fragile || category === 'fragile',
-      declaredValueKobo,
       senderName: senderName.trim(),
       senderPhone: senderPhone.trim(),
       senderEmail: senderEmail.trim() || undefined,
@@ -137,46 +151,48 @@ export default function CourierPage(props?: any) {
       receiverPhone: receiverPhone.trim(),
       receiverAltPhone: receiverAltPhone.trim() || undefined,
       receiverAddress: receiverAddress.trim() || undefined,
+      category,
+      description: description.trim(),
+      weightKg,
+      declaredValueKobo,
+      fragile: fragile || category === 'fragile',
       paymentMethod,
       securityDeclarationAccepted: true,
     };
 
-    const validation = bookParcelSchema.safeParse(payload);
-    if (!validation.success) {
-      const firstError = validation.error.issues[0]?.message || 'Please check the form inputs.';
-      setErrorMsg(firstError);
+    // Client Zod validation
+    const parsed = bookParcelSchema.safeParse(payload);
+    if (!parsed.success) {
+      const issue = parsed.error.issues[0];
+      setErrorMsg(issue ? issue.message : 'Please check the entered parcel details');
       return;
     }
 
     setIsSubmitting(true);
+
     try {
-      const result = await parcelRepo.createParcel(validation.data);
+      // In browser mock / live repo fallback
+      const { parcel } = await parcelRepo.createParcel(payload);
+
       setSuccessResult({
-        trackingCode: result.parcel.trackingCode,
-        pickupOtp: result.parcel.pickupOtp || '0000',
-        totalFeeKobo: result.parcel.totalFeeKobo || pricing.totalFeeKobo,
-        originTerminalName: originTerminal?.name || 'Origin Terminal',
-        destTerminalName: destinationTerminal?.name || 'Destination Terminal',
-        createdAt: result.parcel.createdAt,
-        paymentMethod: result.parcel.paymentMethod || 'online',
+        trackingCode: parcel.trackingCode,
+        pickupOtp: parcel.pickupOtp || '',
+        totalFeeKobo: parcel.totalFeeKobo ?? pricing.totalFeeKobo,
+        originTerminalName: originTerminal ? `${originTerminal.city} (${originTerminal.name})` : 'Origin Hub',
+        destTerminalName: destinationTerminal ? `${destinationTerminal.city} (${destinationTerminal.name})` : 'Destination Hub',
+        createdAt: typeof parcel.createdAt === 'string' ? parcel.createdAt : (parcel.createdAt ? new Date(parcel.createdAt).toISOString() : new Date().toISOString()),
+        paymentMethod: parcel.paymentMethod || paymentMethod,
       });
-    } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : 'Failed to book parcel waybill. Please retry.');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to register consignment. Please retry.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleCopyTrackingCode = () => {
-    if (!successResult) return;
-    navigator.clipboard.writeText(successResult.trackingCode);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
-
   return (
     <PageShell
-      title="Courier &amp; Parcel Express"
+      title="Ascent Express Courier &amp; Waybill Dispatch"
       description="Send packages, documents, and commercial goods safely between Enugu, Abuja, Lagos, and Owerri.
           Dispatched on scheduled Toyota Sienna transit runs with four digit SMS pickup code verification."
       breadcrumbs={[
@@ -190,15 +206,15 @@ export default function CourierPage(props?: any) {
         {/* Feature Highlights */}
         <div className="mt-4 flex flex-wrap gap-2.5">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs font-semibold text-foreground">
-            <Truck className="w-3.5 h-3.5 text-primary" />
+            <Icon icon={Truck} size="xs" className="text-primary" />
             <span>Same-Day Highway Transit</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs font-semibold text-foreground">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <Icon icon={ShieldCheck} size="xs" className="text-emerald-600 dark:text-emerald-400" />
             <span>4-Digit SMS Collection OTP</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/60 border border-border text-xs font-semibold text-foreground">
-            <CreditCard className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+            <Icon icon={CreditCard} size="xs" className="text-sky-600 dark:text-sky-400" />
             <span>Online or Counter Payment</span>
           </div>
         </div>
@@ -207,13 +223,13 @@ export default function CourierPage(props?: any) {
       {/* Main Grid: Form + Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Booking Form */}
-        <div className="lg:col-span-8 relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground p-6 sm:p-8 shadow-sm">
+        <div className="lg:col-span-8 relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
           {/* Top specular highlight */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
           {errorMsg && (
             <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-700 dark:text-rose-400 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+              <Icon icon={AlertTriangle} size="sm" className="flex-shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
               <div className="text-sm font-medium text-pretty">{errorMsg}</div>
             </div>
           )}
@@ -233,18 +249,18 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="origin-terminal" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Origin Terminal (Drop-off)
                   </label>
-                  <select
+                  <NativeSelect
                     id="origin-terminal"
                     value={originTerminalId}
                     onChange={(e) => setOriginTerminalId(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    startIcon={MapPin}
                   >
                     {SEED_TERMINALS.map((term) => (
                       <option key={term.id} value={term.id}>
                         {term.city}: {term.name}
                       </option>
                     ))}
-                  </select>
+                  </NativeSelect>
                   {originTerminal && (
                     <p className="mt-1.5 text-xs text-muted-foreground truncate">
                       {originTerminal.address}
@@ -256,18 +272,18 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="dest-terminal" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Destination Terminal (Pickup)
                   </label>
-                  <select
+                  <NativeSelect
                     id="dest-terminal"
                     value={destinationTerminalId}
                     onChange={(e) => setDestinationTerminalId(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    startIcon={MapPin}
                   >
                     {SEED_TERMINALS.filter((t) => t.id !== originTerminalId).map((term) => (
                       <option key={term.id} value={term.id}>
                         {term.city}: {term.name}
                       </option>
                     ))}
-                  </select>
+                  </NativeSelect>
                   {destinationTerminal && (
                     <p className="mt-1.5 text-xs text-muted-foreground truncate">
                       {destinationTerminal.address}
@@ -289,7 +305,7 @@ export default function CourierPage(props?: any) {
               {/* Category Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
                 {CATEGORIES.map((cat) => {
-                  const Icon = cat.icon;
+                  const CategoryIcon = cat.icon;
                   const isSelected = category === cat.id;
                   return (
                     <button
@@ -301,7 +317,7 @@ export default function CourierPage(props?: any) {
                         : 'bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
                         }`}
                     >
-                      <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <Icon icon={CategoryIcon} size="md" className={`mb-2 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
                       <div className="text-xs font-bold">{cat.name}</div>
                       <div className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{cat.desc}</div>
                     </button>
@@ -315,7 +331,7 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="package-weight" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Weight in Kilograms (kg)
                   </label>
-                  <input
+                  <Input
                     id="package-weight"
                     type="number"
                     step="0.5"
@@ -323,7 +339,6 @@ export default function CourierPage(props?: any) {
                     max="50"
                     value={weightKg}
                     onChange={(e) => setWeightKg(parseFloat(e.target.value) || 1)}
-                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                   <p className="mt-1.5 text-[11px] text-muted-foreground">First 5kg covered in base rate</p>
                 </div>
@@ -332,14 +347,13 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="package-desc" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Contents Description
                   </label>
-                  <input
+                  <Input
                     id="package-desc"
                     type="text"
                     required
                     placeholder="e.g. 1 Laptop, 2 Power adapters, charger cord"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm font-medium text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
@@ -364,13 +378,12 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="declared-val" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-1">
                     Declared Value (₦) - Optional
                   </label>
-                  <input
+                  <Input
                     id="declared-val"
                     type="text"
                     placeholder="e.g. 50,000"
                     value={declaredValueNaira}
                     onChange={(e) => setDeclaredValueNaira(e.target.value)}
-                    className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   />
                   <p className="text-[11px] text-muted-foreground mt-1">1.5% insurance for declared value above ₦50,000</p>
                 </div>
@@ -392,37 +405,34 @@ export default function CourierPage(props?: any) {
                   <div className="text-xs uppercase font-bold text-primary tracking-wider">Sender Details</div>
                   <div>
                     <label htmlFor="sender-name" className="block text-xs font-semibold text-muted-foreground mb-1">Full Name</label>
-                    <input
+                    <Input
                       id="sender-name"
                       type="text"
                       required
                       placeholder="e.g. Chidi Okonkwo"
                       value={senderName}
                       onChange={(e) => setSenderName(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
                     <label htmlFor="sender-phone" className="block text-xs font-semibold text-muted-foreground mb-1">Phone Number (SMS receipt)</label>
-                    <input
+                    <Input
                       id="sender-phone"
                       type="tel"
                       required
                       placeholder="08031234567"
                       value={senderPhone}
                       onChange={(e) => setSenderPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
                     <label htmlFor="sender-email" className="block text-xs font-semibold text-muted-foreground mb-1">Email (Optional)</label>
-                    <input
+                    <Input
                       id="sender-email"
                       type="email"
                       placeholder="chidi@example.com"
                       value={senderEmail}
                       onChange={(e) => setSenderEmail(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
@@ -432,37 +442,34 @@ export default function CourierPage(props?: any) {
                   <div className="text-xs uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider">Recipient Details</div>
                   <div>
                     <label htmlFor="receiver-name" className="block text-xs font-semibold text-muted-foreground mb-1">Recipient Name</label>
-                    <input
+                    <Input
                       id="receiver-name"
                       type="text"
                       required
                       placeholder="e.g. Amina Yusuf"
                       value={receiverName}
                       onChange={(e) => setReceiverName(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
                     <label htmlFor="receiver-phone" className="block text-xs font-semibold text-muted-foreground mb-1">Recipient Phone (Receives Pickup OTP)</label>
-                    <input
+                    <Input
                       id="receiver-phone"
                       type="tel"
                       required
                       placeholder="08029876543"
                       value={receiverPhone}
                       onChange={(e) => setReceiverPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <div>
                     <label htmlFor="receiver-alt-phone" className="block text-xs font-semibold text-muted-foreground mb-1">Alternative Phone (Optional)</label>
-                    <input
+                    <Input
                       id="receiver-alt-phone"
                       type="tel"
                       placeholder="08091112233"
                       value={receiverAltPhone}
                       onChange={(e) => setReceiverAltPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
@@ -488,7 +495,7 @@ export default function CourierPage(props?: any) {
                     }`}
                 >
                   <div className="flex items-center gap-2 font-bold text-sm">
-                    <CreditCard className="w-4 h-4 text-primary" />
+                    <Icon icon={CreditCard} size="xs" className="text-primary" />
                     <span>Pay Online (Instant Confirmation)</span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">Cards, Bank Transfer, USSD via Paystack</p>
@@ -503,7 +510,7 @@ export default function CourierPage(props?: any) {
                     }`}
                 >
                   <div className="flex items-center gap-2 font-bold text-sm">
-                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                    <Icon icon={Building2} size="xs" />
                     <span>Pay at Terminal Counter</span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">Cash or POS when dropping package</p>
@@ -536,7 +543,7 @@ export default function CourierPage(props?: any) {
               ) : (
                 <>
                   <span>Confirm Booking · {formatNaira(pricing.totalFeeKobo)}</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <Icon icon={ArrowRight} size="sm" className="text-primary-foreground" />
                 </>
               )}
             </button>
@@ -546,7 +553,7 @@ export default function CourierPage(props?: any) {
         {/* Right Column: Sticky Summary & Guarantees */}
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
           {/* Live Pricing Breakdown Card */}
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground p-6 shadow-sm">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 shadow-sm">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             <h3 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-4">
@@ -556,7 +563,7 @@ export default function CourierPage(props?: any) {
             {/* Route pill */}
             <div className="p-3 rounded-xl bg-muted/50 border border-border mb-4 flex items-center justify-between text-xs font-semibold text-foreground">
               <span className="truncate max-w-[110px]">{originTerminal?.city || 'Origin'}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <Icon icon={ArrowRight} size="xs" className="text-primary flex-shrink-0" />
               <span className="truncate max-w-[110px]">{destinationTerminal?.city || 'Destination'}</span>
             </div>
 
@@ -599,8 +606,8 @@ export default function CourierPage(props?: any) {
           </div>
 
           {/* Quick Track Link */}
-          <div className="rounded-2xl border border-border bg-card text-card-foreground p-5 shadow-sm text-center">
-            <Package className="w-6 h-6 text-primary mx-auto mb-2" />
+          <div className="rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-5 shadow-sm text-center">
+            <Icon icon={Package} size="lg" className="text-primary mx-auto mb-2" />
             <h4 className="text-sm font-bold text-foreground mb-1">Already sent a package?</h4>
             <p className="text-xs text-muted-foreground mb-3 text-pretty">
               Track your parcel in real-time using your ATM-EXP code or recipient phone number.
@@ -611,7 +618,7 @@ export default function CourierPage(props?: any) {
               className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
             >
               <span>Go to Tracking Portal</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <Icon icon={ExternalLink} size="xs" />
             </button>
           </div>
         </div>
@@ -625,7 +632,7 @@ export default function CourierPage(props?: any) {
 
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-6 h-6" />
+                <Icon icon={CheckCircle2} size="md" className="text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">Waybill Booked Successfully</h3>
@@ -646,7 +653,7 @@ export default function CourierPage(props?: any) {
                   onClick={handleCopyTrackingCode}
                   className="px-3 py-1.5 rounded-lg bg-card border border-border hover:bg-muted text-xs font-semibold text-foreground flex items-center gap-1 transition-colors shadow-xs"
                 >
-                  <Copy className="w-3.5 h-3.5" />
+                  <Icon icon={Copy} size="xs" />
                   <span>{copiedCode ? 'Copied' : 'Copy'}</span>
                 </button>
               </div>
@@ -692,7 +699,7 @@ export default function CourierPage(props?: any) {
                 onClick={() => window.print()}
                 className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border font-semibold text-sm transition-colors flex items-center justify-center gap-2"
               >
-                <Printer className="w-4 h-4" />
+                <Icon icon={Printer} size="xs" />
                 <span>Print Waybill Pass</span>
               </button>
 
@@ -702,7 +709,7 @@ export default function CourierPage(props?: any) {
                 className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-md"
               >
                 <span>Track This Parcel</span>
-                <ArrowRight className="w-4 h-4" />
+                <Icon icon={ArrowRight} size="xs" className="text-primary-foreground" />
               </button>
             </div>
           </div>

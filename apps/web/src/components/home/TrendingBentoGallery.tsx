@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Clock, MapPin, Users, Sparkles } from 'lucide-react';
 import { formatNaira } from '@atm/shared';
+import { Icon } from '@/components/ui/Icon';
 
 interface BentoCorridor {
   id: string;
@@ -153,9 +154,9 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
         <div className="flex flex-wrap items-center gap-1.5 p-1 bg-muted/50 rounded-full border border-border">
           {[
             { id: 'all', label: 'All Corridors' },
-            { id: 'enugu-abuja', label: 'Enugu ↔ Abuja' },
-            { id: 'lagos-enugu', label: 'Lagos ↔ Enugu' },
-            { id: 'lagos-owerri', label: 'Lagos ↔ Owerri' },
+            { id: 'enugu-abuja', label: 'Enugu ↁEAbuja' },
+            { id: 'lagos-enugu', label: 'Lagos ↁEEnugu' },
+            { id: 'lagos-owerri', label: 'Lagos ↁEOwerri' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -190,8 +191,8 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
 
             {/* Top Badges */}
             <div className="relative z-10 flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ca2484] text-white text-xs font-bold shadow-md">
-                <Sparkles className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-md">
+                <Icon icon={Sparkles} size="sm" className="text-primary-foreground" />
                 <span>Featured Corridor</span>
               </span>
               <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold border border-white/20">
@@ -214,15 +215,15 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
 
               <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-300 font-medium">
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-pink-400" />
+                  <Icon icon={Clock} size="default" className="text-pink-300" />
                   <span>{featured.durationHours} estimated</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-pink-400" />
+                  <Icon icon={MapPin} size="default" className="text-pink-300" />
                   <span>{featured.distanceKm} km direct</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-emerald-400" />
+                  <Icon icon={Users} size="default" className="text-emerald-400" />
                   <span>5 Seat Sienna</span>
                 </span>
               </div>
@@ -240,10 +241,10 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                 <button
                   type="button"
                   onClick={() => handleBook(featured.from, featured.to)}
-                  className="px-6 py-3 bg-[#ca2484] hover:opacity-90 text-white font-normal text-xs sm:text-sm rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
+                  className="px-6 py-3 bg-primary hover:opacity-90 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
                 >
                   <span>Book Seat Now</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <Icon icon={ArrowRight} size="default" className="text-primary-foreground" />
                 </button>
               </div>
             </div>
@@ -275,7 +276,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
 
               <div className="space-y-1">
                 <div className="text-xs text-muted-foreground font-normal truncate">
-                  {corridor.fromHub} → {corridor.toHub}
+                  {corridor.fromHub} ↁE{corridor.toHub}
                 </div>
                 <h4 className="text-base font-heading font-semibold text-foreground">
                   {corridor.from} to {corridor.to}
@@ -299,7 +300,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                 className="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-xs font-normal rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
               >
                 <span>Select</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <Icon icon={ArrowRight} size="sm" />
               </button>
             </div>
           </div>

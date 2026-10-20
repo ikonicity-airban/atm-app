@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Users, Package, Calendar, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Pillar {
   title: string;
@@ -60,7 +61,7 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
+        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Executive Mobility Standards
         </span>
         <h2 className="text-2xl sm:text-3xl font-bold font-heading text-foreground tracking-tight text-balance">
@@ -73,7 +74,7 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {PILLARS.map((pillar) => {
-          const Icon = pillar.icon;
+          const PillarIcon = pillar.icon;
           return (
             <div
               key={pillar.title}
@@ -82,7 +83,7 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
               <div>
                 <div className="flex items-center justify-between mb-5">
                   <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${pillar.accentColor} text-white flex items-center justify-center shadow-md`}>
-                    <Icon className="w-6 h-6" />
+                    <Icon icon={PillarIcon} size="md" className="text-white" />
                   </div>
                   <span className="text-xs font-normal px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground">
                     {pillar.stats}
@@ -107,7 +108,7 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
                   className="w-full flex items-center justify-between text-xs font-normal text-foreground group-hover:text-primary transition-colors cursor-pointer min-h-[44px]"
                 >
                   <span>Explore service</span>
-                  <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                  <Icon icon={ArrowRight} size="xs" className="transform group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>

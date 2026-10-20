@@ -5,6 +5,7 @@ import { Dialog as DialogPrimitive } from '@base-ui/react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from './Icon';
 
 export const dialogPopupVariants = cva(
   'fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-2xl border p-6 shadow-2xl outline-none max-h-[90vh] overflow-y-auto transition-all',
@@ -96,7 +97,7 @@ export function Dialog({
                     className="p-1.5 text-muted-foreground hover:text-foreground rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     aria-label="Close dialog"
                   >
-                    <X className="w-5 h-5" />
+                    <Icon icon={X} size="md" />
                   </button>
                 )}
               </div>
@@ -149,7 +150,7 @@ export function DialogPopup({
             className="absolute top-4 right-4 p-1.5 text-muted-foreground hover:text-foreground rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Close dialog"
           >
-            <X className="w-5 h-5" />
+            <Icon icon={X} size="md" />
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

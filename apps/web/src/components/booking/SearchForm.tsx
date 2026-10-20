@@ -11,6 +11,8 @@ import {
 import { ArrowLeftRight, Users, Calendar, MapPin, Search, ChevronDown } from 'lucide-react';
 import { DateField } from '../ui/DateField.tsx';
 import { Button } from '../ui/Button.tsx';
+import { NativeSelect } from '../ui/Select.tsx';
+import { Icon } from '../ui/Icon.tsx';
 import { cn } from '../../lib/utils.ts';
 
 export interface SearchFormProps {
@@ -210,7 +212,7 @@ export function SearchForm({
       className={cn(
         compact
           ? 'bg-transparent border-0 shadow-none p-0'
-          : 'bg-white rounded-2xl border border-slate-200/80 shadow-md p-5 sm:p-6 transition-all',
+          : 'bg-card rounded-2xl border border-border shadow-md p-5 sm:p-6 transition-all',
         className
       )}
     >
@@ -225,26 +227,24 @@ export function SearchForm({
         <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <label
             htmlFor="from-select"
-            className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
+            className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5"
           >
             Travelling From
           </label>
           <div className="relative">
-            <select
+            <NativeSelect
               id="from-select"
               name="from"
               value={fromCity}
               onChange={(e) => handleFromChange(e.target.value)}
-              className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border border-slate-200/90 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-h-[46px] appearance-none transition-all cursor-pointer"
+              startIcon={MapPin}
             >
               {SERVED_CITIES.map((city) => (
                 <option key={city} value={city}>
                   {city}
                 </option>
               ))}
-            </select>
-            <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </NativeSelect>
 
             {/* Inline floating swap button on desktop when compact */}
             {compact && (
@@ -253,13 +253,13 @@ export function SearchForm({
                 onClick={handleSwap}
                 aria-label="Swap origin and destination cities"
                 title="Swap cities"
-                className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white border border-slate-200 shadow-xs hover:border-brand-500 hover:text-brand-600 text-slate-500 items-center justify-center cursor-pointer transition-all active:scale-[0.92]"
+                className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-card border border-border shadow-xs hover:border-primary hover:text-primary text-muted-foreground items-center justify-center cursor-pointer transition-all active:scale-[0.92]"
               >
-                <ArrowLeftRight className="w-3.5 h-3.5" />
+                <Icon icon={ArrowLeftRight} size="sm" />
               </button>
             )}
           </div>
-          {errors.from && <p className="text-xs text-red-600 mt-1">{errors.from}</p>}
+          {errors.from && <p className="text-xs text-destructive mt-1">{errors.from}</p>}
         </div>
 
         {/* Swap Button (mobile / full layout) */}
@@ -269,9 +269,9 @@ export function SearchForm({
               type="button"
               onClick={handleSwap}
               aria-label="Swap origin and destination cities"
-              className="p-2 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-brand-600 transition-all min-h-[36px] min-w-[36px] w-9 h-9 flex items-center justify-center cursor-pointer focus:ring-2 focus:ring-brand-500 active:scale-[0.95]"
+              className="p-2 rounded-full border border-border bg-muted/40 hover:bg-muted text-foreground hover:text-primary transition-all min-h-[36px] min-w-[36px] w-9 h-9 flex items-center justify-center cursor-pointer focus:ring-2 focus:ring-primary active:scale-[0.95]"
             >
-              <ArrowLeftRight className="w-4 h-4" />
+              <Icon icon={ArrowLeftRight} />
             </button>
           </div>
         ) : (
@@ -280,9 +280,9 @@ export function SearchForm({
               type="button"
               onClick={handleSwap}
               aria-label="Swap origin and destination cities"
-              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer active:scale-[0.95]"
+              className="px-3 py-1.5 rounded-xl border border-border bg-muted/40 hover:bg-muted text-foreground text-xs font-semibold flex items-center gap-1.5 cursor-pointer active:scale-[0.95]"
             >
-              <ArrowLeftRight className="w-3.5 h-3.5 text-brand-600" />
+              <Icon icon={ArrowLeftRight} size="sm" />
               <span>Swap Cities</span>
             </button>
           </div>
@@ -292,28 +292,26 @@ export function SearchForm({
         <div className={compact ? 'lg:col-span-3' : 'lg:col-span-3'}>
           <label
             htmlFor="to-select"
-            className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5"
+            className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5"
           >
             Travelling To
           </label>
           <div className="relative">
-            <select
+            <NativeSelect
               id="to-select"
               name="to"
               value={toCity}
               onChange={(e) => handleToChange(e.target.value)}
-              className="w-full pl-9 pr-8 py-2.5 text-sm font-semibold rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-slate-900 border border-slate-200/90 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 min-h-[46px] appearance-none transition-all cursor-pointer"
+              startIcon={MapPin}
             >
               {servedDestinations.map((dest) => (
                 <option key={dest} value={dest}>
                   {dest}
                 </option>
               ))}
-            </select>
-            <MapPin className="w-4 h-4 text-brand-600 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </NativeSelect>
           </div>
-          {errors.to && <p className="text-xs text-red-600 mt-1">{errors.to}</p>}
+          {errors.to && <p className="text-xs text-destructive mt-1">{errors.to}</p>}
         </div>
 
         {/* Travel Date Field */}
@@ -330,36 +328,36 @@ export function SearchForm({
 
         {/* Passengers Stepper (1 to 5) */}
         <div className={compact ? 'lg:col-span-2' : 'lg:col-span-2'}>
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
             Passengers
           </label>
-          <div className="flex items-center border border-slate-200/90 rounded-xl bg-slate-50/70 min-h-[46px] overflow-hidden">
+          <div className="flex items-center border border-input rounded-xl bg-background min-h-[44px] overflow-hidden">
             <input type="hidden" name="passengers" value={passengers} />
             <button
               type="button"
               disabled={passengers <= 1}
               onClick={() => handlePassengerChange(-1)}
-              className="px-2.5 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[36px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
+              className="px-2.5 py-2 text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[36px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
               aria-label="Decrease passenger count"
             >
               -
             </button>
-            <div className="flex-1 text-center font-bold text-sm text-slate-900 flex items-center justify-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-slate-400" />
+            <div className="flex-1 text-center font-bold text-sm text-foreground flex items-center justify-center gap-1.5">
+              <Icon icon={Users} size="sm" />
               <span>{passengers}</span>
             </div>
             <button
               type="button"
               disabled={passengers >= 5}
               onClick={() => handlePassengerChange(1)}
-              className="px-2.5 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[36px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
+              className="px-2.5 py-2 text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[36px] flex items-center justify-center cursor-pointer transition-all active:scale-[0.95]"
               aria-label="Increase passenger count"
             >
               +
             </button>
           </div>
           {errors.passengers && (
-            <p className="text-xs text-red-600 mt-1">{errors.passengers}</p>
+            <p className="text-xs text-destructive mt-1">{errors.passengers}</p>
           )}
         </div>
 

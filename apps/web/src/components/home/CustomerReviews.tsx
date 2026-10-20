@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Star, ShieldCheck, Quote } from 'lucide-react';
+import { Star, ShieldCheck } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Review {
   name: string;
@@ -50,7 +51,7 @@ export function CustomerReviews() {
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
+        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Verified Passenger Testimonials
         </span>
         <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
@@ -72,9 +73,11 @@ export function CustomerReviews() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-1">
                   {[...Array(rev.rating)].map((_, i) => (
-                    <Star
+                    <Icon
                       key={i}
-                      className="w-4 h-4 fill-amber-400 text-amber-400"
+                      icon={Star}
+                      size="sm"
+                      className="fill-amber-400 text-amber-400"
                     />
                   ))}
                 </div>
@@ -99,7 +102,7 @@ export function CustomerReviews() {
               <div className="overflow-hidden">
                 <div className="text-xs sm:text-sm font-semibold font-heading text-foreground flex items-center gap-1.5">
                   <span className="truncate">{rev.name}</span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                  <Icon icon={ShieldCheck} size="xs" className="text-emerald-500 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-muted-foreground truncate">
                   {rev.role}

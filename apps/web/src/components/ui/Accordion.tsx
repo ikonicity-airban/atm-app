@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils.ts';
+import { Icon } from './Icon.tsx';
 
 export interface AccordionItem {
   id: string;
@@ -45,13 +46,14 @@ export function Accordion({
               type="button"
               onClick={() => toggleItem(item.id)}
               aria-expanded={isOpen}
-              className="w-full py-3.5 flex items-center justify-between text-left font-semibold text-foreground hover:text-[#ca2484] transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-[#ca2484] rounded px-1 cursor-pointer"
+              className="w-full py-3.5 flex items-center justify-between text-left font-semibold text-foreground hover:text-primary transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary rounded px-1 cursor-pointer"
             >
               <span className="text-sm sm:text-base pr-4">{item.title}</span>
-              <ChevronDown
+              <Icon
+                icon={ChevronDown}
                 className={cn(
-                  'w-4 h-4 text-muted-foreground flex-shrink-0 transition-transform duration-200',
-                  isOpen && 'transform rotate-180 text-[#ca2484]'
+                  'flex-shrink-0 transition-transform duration-200',
+                  isOpen && 'transform rotate-180 text-primary'
                 )}
               />
             </button>

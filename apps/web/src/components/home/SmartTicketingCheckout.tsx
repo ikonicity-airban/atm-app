@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { QrCode, ShieldCheck, ArrowRight, Plus, Minus, Check, Sparkles } from 'lucide-react';
+import { QrCode, ShieldCheck, ArrowRight, Plus, Minus, Check, Sparkles, Calendar } from 'lucide-react';
 import { formatNaira } from '@atm/shared';
+import { NativeSelect } from '@/components/ui/Select';
+import { Input } from '@/components/ui/Input';
+import { Icon } from '@/components/ui/Icon';
 
 interface CheckoutRoute {
   label: string;
@@ -15,7 +18,7 @@ interface CheckoutRoute {
 
 const CHECKOUT_ROUTES: CheckoutRoute[] = [
   {
-    label: 'Enugu (Ogui) → Abuja (Utako)',
+    label: 'Enugu (Ogui) ↁEAbuja (Utako)',
     from: 'Enugu',
     to: 'Abuja',
     fromCode: 'ENU',
@@ -23,7 +26,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3200000,
   },
   {
-    label: 'Lagos (Jibowu) → Enugu (Ogui)',
+    label: 'Lagos (Jibowu) ↁEEnugu (Ogui)',
     from: 'Lagos',
     to: 'Enugu',
     fromCode: 'LOS',
@@ -31,7 +34,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3800000,
   },
   {
-    label: 'Abuja (Utako) → Enugu (Ogui)',
+    label: 'Abuja (Utako) ↁEEnugu (Ogui)',
     from: 'Abuja',
     to: 'Enugu',
     fromCode: 'ABV',
@@ -39,7 +42,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3200000,
   },
   {
-    label: 'Lagos (Ajah) → Owerri (Control Post)',
+    label: 'Lagos (Ajah) ↁEOwerri (Control Post)',
     from: 'Lagos',
     to: 'Owerri',
     fromCode: 'LOS',
@@ -47,7 +50,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3600000,
   },
   {
-    label: 'Owerri (Control Post) → Abuja (Utako)',
+    label: 'Owerri (Control Post) ↁEAbuja (Utako)',
     from: 'Owerri',
     to: 'Abuja',
     fromCode: 'QOW',
@@ -187,13 +190,13 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                     Scan at terminal gate for immediate vehicle boarding
                   </div>
                   <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 pt-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <Icon icon={ShieldCheck} variant="success" size="sm" />
                     <span>Verified ATM Digital Ticket</span>
                   </div>
                 </div>
 
-                <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-xl p-2 border border-slate-200 dark:border-slate-700 flex items-center justify-center flex-shrink-0">
-                  <QrCode className="w-16 h-16 text-slate-900 dark:text-white" />
+                <div className="w-20 h-20 bg-muted/40 rounded-xl p-2 border border-border flex items-center justify-center flex-shrink-0">
+                  <Icon icon={QrCode} className="w-16 h-16 text-foreground" />
                 </div>
               </div>
             </div>
@@ -223,17 +226,16 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
               <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                 Select Corridor
               </label>
-              <select
+              <NativeSelect
                 value={selectedRouteIndex}
                 onChange={(e) => setSelectedRouteIndex(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-2xl bg-muted/50 border border-border text-xs sm:text-sm font-normal text-foreground focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px]"
               >
                 {CHECKOUT_ROUTES.map((route, idx) => (
                   <option key={route.label} value={idx}>
                     {route.label}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             {/* Travel Date & Passengers Count Row */}
@@ -242,11 +244,12 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                 <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                   Departure Date
                 </label>
-                <input
+                <Input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-muted/50 border border-border text-xs sm:text-sm font-normal text-foreground focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px]"
+                  startIcon={Calendar}
+                  className="min-h-[44px]"
                 />
               </div>
 
@@ -254,14 +257,14 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                 <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                   Passengers (Max 5)
                 </label>
-                <div className="flex items-center justify-between px-3 py-1.5 rounded-2xl bg-muted/50 border border-border min-h-[48px]">
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-background border border-input min-h-[44px]">
                   <button
                     type="button"
                     onClick={() => setPassengerCount(Math.max(1, passengerCount - 1))}
                     disabled={passengerCount <= 1}
                     className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border"
                   >
-                    <Minus className="w-3.5 h-3.5" />
+                    <Icon icon={Minus} size="sm" />
                   </button>
                   <span className="text-sm font-medium text-foreground">
                     {passengerCount} {passengerCount === 1 ? 'Seat' : 'Seats'}
@@ -272,7 +275,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                     disabled={passengerCount >= 5}
                     className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border"
                   >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Icon icon={Plus} size="sm" />
                   </button>
                 </div>
               </div>
@@ -282,11 +285,11 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           {/* Fare Summary Breakdown Box */}
           <div className="p-4 rounded-2xl bg-muted/30 border border-border space-y-2">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Base Fare ({passengerCount} × {formatNaira(currentRoute.baseFareKobo)})</span>
+              <span>Base Fare ({passengerCount} ÁE{formatNaira(currentRoute.baseFareKobo)})</span>
               <span className="font-medium text-foreground">{formatNaira(subtotalKobo)}</span>
             </div>
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Terminal &amp; Luggage Fee ({passengerCount} × {formatNaira(TERMINAL_SERVICE_FEE_KOBO)})</span>
+              <span>Terminal &amp; Luggage Fee ({passengerCount} ÁE{formatNaira(TERMINAL_SERVICE_FEE_KOBO)})</span>
               <span className="font-medium text-foreground">{formatNaira(feesKobo)}</span>
             </div>
             <div className="pt-2 border-t border-border flex items-center justify-between">
@@ -311,7 +314,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
             className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-normal text-xs sm:text-sm shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer min-h-[48px]"
           >
             <span>Hold Seat &amp; Proceed to Trips</span>
-            <ArrowRight className="w-4 h-4" />
+            <Icon icon={ArrowRight} size="default" className="text-white" />
           </button>
         </div>
       </div>

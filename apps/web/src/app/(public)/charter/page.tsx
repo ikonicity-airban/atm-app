@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useState } from 'react';
 import {
   formatNaira,
   calculateCharterQuote,
@@ -10,23 +10,22 @@ import {
 } from '@atm/shared';
 import { PageShell } from '../../../components/layout/Templates.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
+import { Input } from '../../../components/ui/Input.tsx';
+import { NativeSelect } from '../../../components/ui/Select.tsx';
+import { Icon } from '../../../components/ui/Icon.tsx';
 import {
   Car,
-  Shield,
   MapPin,
   Calendar,
   Users,
   CheckCircle2,
   Clock,
-  Sparkles,
   ArrowRight,
   CreditCard,
   FileText,
   Phone,
   Mail,
-  HelpCircle,
-  Briefcase,
-  Compass,
+  ShieldCheck,
 } from 'lucide-react';
 
 const MAJOR_CITIES = ['Enugu', 'Abuja', 'Lagos', 'Owerri', 'Port Harcourt', 'Onitsha', 'Awka', 'Asaba'];
@@ -132,10 +131,10 @@ export default function CharterPage() {
     >
       {/* Confirmation State */}
       {createdRequest && (
-        <div className="max-w-2xl mx-auto bg-card text-card-foreground rounded-2xl border border-border shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="max-w-2xl mx-auto bg-card/75 backdrop-blur-xl text-card-foreground rounded-2xl border border-border shadow-sm p-6 sm:p-8 space-y-6">
           <div className="flex items-center gap-3 pb-4 border-b border-border">
             <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-              <CheckCircle2 className="w-6 h-6" />
+              <Icon icon={CheckCircle2} size="md" className="text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded">
@@ -169,7 +168,7 @@ export default function CharterPage() {
 
           <div className="bg-amber-500/10 border border-amber-500/25 rounded-xl p-4 text-xs text-amber-700 dark:text-amber-300 space-y-2">
             <div className="font-bold flex items-center gap-2">
-              <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <Icon icon={Clock} size="xs" className="text-amber-600 dark:text-amber-400" />
               What Happens Next?
             </div>
             <p className="leading-relaxed">
@@ -203,7 +202,7 @@ export default function CharterPage() {
       {!createdRequest && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Main Form (8 Cols) */}
-          <div className="lg:col-span-8 bg-card text-card-foreground rounded-2xl border border-border shadow-sm p-6 sm:p-8">
+          <div className="lg:col-span-8 bg-card/75 backdrop-blur-xl text-card-foreground rounded-2xl border border-border shadow-sm p-6 sm:p-8">
             {/* Step Indicators */}
             <div className="flex items-center justify-between pb-6 mb-6 border-b border-border">
               <div className="flex items-center gap-2">
@@ -282,34 +281,34 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Origin City
                       </label>
-                      <select
+                      <NativeSelect
                         value={originCity}
                         onChange={(e) => setOriginCity(e.target.value)}
-                        className="w-full px-3 py-2.5 text-xs font-medium border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
+                        startIcon={MapPin}
                       >
                         {MAJOR_CITIES.map((c) => (
                           <option key={c} value={c}>
                             {c}
                           </option>
                         ))}
-                      </select>
+                      </NativeSelect>
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Destination City
                       </label>
-                      <select
+                      <NativeSelect
                         value={destinationCity}
                         onChange={(e) => setDestinationCity(e.target.value)}
-                        className="w-full px-3 py-2.5 text-xs font-medium border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
+                        startIcon={MapPin}
                       >
                         {MAJOR_CITIES.map((c) => (
                           <option key={c} value={c}>
                             {c}
                           </option>
                         ))}
-                      </select>
+                      </NativeSelect>
                     </div>
                   </div>
 
@@ -318,12 +317,11 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Exact Pickup Address (Door-to-Door)
                       </label>
-                      <input
+                      <Input
                         type="text"
                         value={originAddress}
                         onChange={(e) => setOriginAddress(e.target.value)}
                         placeholder="e.g. 14 Independence Layout, Enugu"
-                        className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
                       />
                     </div>
 
@@ -331,12 +329,11 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Exact Drop-off Address
                       </label>
-                      <input
+                      <Input
                         type="text"
                         value={destinationAddress}
                         onChange={(e) => setDestinationAddress(e.target.value)}
                         placeholder="e.g. Maitama District, Abuja"
-                        className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
                       />
                     </div>
                   </div>
@@ -346,11 +343,11 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Departure Date
                       </label>
-                      <input
+                      <Input
                         type="date"
                         value={departureDate}
                         onChange={(e) => setDepartureDate(e.target.value)}
-                        className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
+                        startIcon={Calendar}
                       />
                     </div>
 
@@ -359,11 +356,11 @@ export default function CharterPage() {
                         <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                           Return Date
                         </label>
-                        <input
+                        <Input
                           type="date"
                           value={returnDate}
                           onChange={(e) => setReturnDate(e.target.value)}
-                          className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
+                          startIcon={Calendar}
                         />
                       </div>
                     )}
@@ -373,13 +370,12 @@ export default function CharterPage() {
                         <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                           Duration (Days)
                         </label>
-                        <input
+                        <Input
                           type="number"
                           min={1}
                           max={30}
                           value={durationDays}
                           onChange={(e) => setDurationDays(parseInt(e.target.value, 10) || 1)}
-                          className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
                         />
                       </div>
                     )}
@@ -396,9 +392,9 @@ export default function CharterPage() {
                         setError(null);
                         setStep(2);
                       }}
-                      className="px-6"
+                      className="px-6 min-h-[44px]"
                     >
-                      Continue to Custom Options <ArrowRight className="w-4 h-4 ml-1.5" />
+                      Continue to Custom Options <Icon icon={ArrowRight} size="xs" className="ml-1.5 text-primary-foreground" />
                     </Button>
                   </div>
                 </div>
@@ -485,7 +481,7 @@ export default function CharterPage() {
                       Back
                     </Button>
                     <Button type="button" onClick={() => setStep(3)}>
-                      Review &amp; Contact Details <ArrowRight className="w-4 h-4 ml-1.5" />
+                      Review &amp; Contact Details <Icon icon={ArrowRight} size="xs" className="ml-1.5 text-primary-foreground" />
                     </Button>
                   </div>
                 </div>
@@ -499,12 +495,11 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Contact Person Name
                       </label>
-                      <input
+                      <Input
                         type="text"
                         value={contactName}
                         onChange={(e) => setContactName(e.target.value)}
                         placeholder="Chief Emeka Okafor"
-                        className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
                       />
                     </div>
 
@@ -512,12 +507,12 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Phone Number (E.164)
                       </label>
-                      <input
+                      <Input
                         type="tel"
                         value={contactPhone}
                         onChange={(e) => setContactPhone(e.target.value)}
                         placeholder="08031234567"
-                        className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
+                        startIcon={Phone}
                       />
                     </div>
 
@@ -525,12 +520,12 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Email Address
                       </label>
-                      <input
+                      <Input
                         type="email"
                         value={contactEmail}
                         onChange={(e) => setContactEmail(e.target.value)}
                         placeholder="emeka@primeholdings.ng"
-                        className="w-full px-3 py-2 text-xs border border-border rounded-xl bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[44px]"
+                        startIcon={Mail}
                       />
                     </div>
                   </div>
@@ -550,7 +545,7 @@ export default function CharterPage() {
                         }`}
                       >
                         <div className="text-xs font-bold flex items-center gap-1.5">
-                          <CreditCard className="w-3.5 h-3.5 text-primary" /> Online Card / Transfer
+                          <Icon icon={CreditCard} size="xs" className="text-primary" /> Online Card / Transfer
                         </div>
                         <div className="text-[11px] text-muted-foreground mt-0.5">Paystack Instant Checkout</div>
                       </button>
@@ -565,7 +560,7 @@ export default function CharterPage() {
                         }`}
                       >
                         <div className="text-xs font-bold flex items-center gap-1.5">
-                          <FileText className="w-3.5 h-3.5 text-primary" /> Invoice My Organization
+                          <Icon icon={FileText} size="xs" className="text-primary" /> Invoice My Organization
                         </div>
                         <div className="text-[11px] text-muted-foreground mt-0.5">Direct B2B Wire Invoice</div>
                       </button>
@@ -588,7 +583,7 @@ export default function CharterPage() {
           {/* Pricing & Sienna Specs Sidebar (4 Cols) */}
           <div className="lg:col-span-4 space-y-6">
             {/* Live Pricing Breakdown */}
-            <div className="bg-card text-card-foreground border border-border rounded-2xl p-6 shadow-md space-y-4">
+            <div className="bg-card/75 backdrop-blur-xl text-card-foreground border border-border rounded-2xl p-6 shadow-md space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
                 Transparent Fare Estimate
               </span>
@@ -647,26 +642,26 @@ export default function CharterPage() {
             </div>
 
             {/* Vehicle Specs Card */}
-            <div className="bg-card text-card-foreground rounded-2xl border border-border p-6 shadow-sm space-y-3">
+            <div className="bg-card/75 backdrop-blur-xl text-card-foreground rounded-2xl border border-border p-6 shadow-sm space-y-3">
               <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Car className="w-4 h-4 text-primary" />
+                <Icon icon={Car} size="xs" className="text-primary" />
                 Toyota Sienna XSE Fleet Standards
               </div>
               <ul className="text-xs text-muted-foreground space-y-2">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Icon icon={CheckCircle2} size="xs" className="text-emerald-600 dark:text-emerald-400" />
                   Max 5 passenger individual captain seats
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Icon icon={CheckCircle2} size="xs" className="text-emerald-600 dark:text-emerald-400" />
                   Dual high-efficiency AC climate controls
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Icon icon={CheckCircle2} size="xs" className="text-emerald-600 dark:text-emerald-400" />
                   USB rapid charging on every row
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Icon icon={CheckCircle2} size="xs" className="text-emerald-600 dark:text-emerald-400" />
                   Comprehensive speed-governor protection (100 km/h)
                 </li>
               </ul>

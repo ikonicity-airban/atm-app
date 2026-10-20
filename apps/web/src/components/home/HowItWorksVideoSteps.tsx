@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Search, Armchair, QrCode, Play, Pause, CheckCircle2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Step {
   number: string;
@@ -75,7 +76,7 @@ function StepCard({ step }: { step: Step }) {
     setIsPlaying(false);
   };
 
-  const Icon = step.icon;
+  const StepIcon = step.icon;
 
   return (
     <div
@@ -105,12 +106,12 @@ function StepCard({ step }: { step: Step }) {
             <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-md text-white border border-white/20 flex items-center gap-1.5">
               {isPlaying ? (
                 <>
-                  <Pause className="w-3 h-3 text-[#ca2484]" />
+                  <Icon icon={Pause} size="xs" className="text-[#ca2484]" />
                   <span>Preview active</span>
                 </>
               ) : (
                 <>
-                  <Play className="w-3 h-3 text-pink-300 fill-pink-300" />
+                  <Icon icon={Play} size="xs" className="text-pink-300 fill-pink-300" />
                   <span>Hover to preview</span>
                 </>
               )}
@@ -196,7 +197,7 @@ function StepCard({ step }: { step: Step }) {
                   <span className="text-emerald-600 font-semibold">VERIFIED</span>
                 </div>
                 <div className="w-16 h-16 mx-auto bg-slate-100 rounded-lg p-1 border border-slate-200 flex items-center justify-center">
-                  <QrCode className="w-12 h-12 text-slate-800" />
+                  <Icon icon={QrCode} size="xl" className="text-slate-800" />
                 </div>
                 <div className="text-[10px] font-mono text-slate-500 font-bold">
                   ATM-ENU-ABV-9812
@@ -206,7 +207,7 @@ function StepCard({ step }: { step: Step }) {
           </div>
 
           <div className="flex items-center gap-2 text-white text-xs font-semibold">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <Icon icon={CheckCircle2} size="sm" className="text-emerald-400" />
             <span>{step.subtitle}</span>
           </div>
         </div>
@@ -217,7 +218,7 @@ function StepCard({ step }: { step: Step }) {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-xl bg-accent text-[#ca2484] flex items-center justify-center">
-              <Icon className="w-4 h-4" />
+              <Icon icon={StepIcon} size="sm" className="text-[#ca2484]" />
             </div>
             <span className="text-xs font-bold text-[#ca2484] tracking-wide uppercase">
               Step {step.number}
@@ -239,7 +240,7 @@ export function HowItWorksVideoSteps() {
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
+        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Simple Reservation Flow
         </span>
         <h2 className="text-2xl sm:text-3xl font-bold font-heading text-foreground tracking-tight text-balance">
