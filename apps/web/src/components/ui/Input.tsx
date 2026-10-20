@@ -54,11 +54,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const renderIcon = (iconContent: React.ReactNode | React.ComponentType<{ className?: string }>) => {
       if (!iconContent) return null;
-      if (typeof iconContent === 'function') {
-        const IconComponent = iconContent as React.ComponentType<{ className?: string }>;
-        return <Icon icon={IconComponent} size={size === 'lg' ? 'md' : 'default'} />;
+      if (React.isValidElement(iconContent)) {
+        return <Icon size={size === 'lg' ? 'md' : 'default'}>{iconContent}</Icon>;
       }
-      return <Icon size={size === 'lg' ? 'md' : 'default'}>{iconContent}</Icon>;
+      const IconComponent = iconContent as React.ComponentType<{ className?: string }>;
+      return <Icon icon={IconComponent} size={size === 'lg' ? 'md' : 'default'} />;
     };
 
     if (startIcon || endIcon) {

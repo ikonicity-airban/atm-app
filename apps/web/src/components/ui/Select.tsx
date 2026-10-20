@@ -17,11 +17,11 @@ export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProp
   ({ className, containerClassName, hasError = false, startIcon, children, ...props }, ref) => {
     const renderStartIcon = () => {
       if (!startIcon) return null;
-      if (typeof startIcon === 'function') {
-        const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
-        return <Icon icon={IconComponent} />;
+      if (React.isValidElement(startIcon)) {
+        return <Icon>{startIcon}</Icon>;
       }
-      return <Icon>{startIcon}</Icon>;
+      const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
+      return <Icon icon={IconComponent} />;
     };
 
     return (
@@ -80,11 +80,11 @@ export const SelectTrigger = React.forwardRef<
 >(({ className, children, size = 'default', hasError, startIcon, ...props }, ref) => {
   const renderStartIcon = () => {
     if (!startIcon) return null;
-    if (typeof startIcon === 'function') {
-      const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
-      return <Icon icon={IconComponent} size={size === 'lg' ? 'md' : 'default'} />;
+    if (React.isValidElement(startIcon)) {
+      return <Icon size={size === 'lg' ? 'md' : 'default'}>{startIcon}</Icon>;
     }
-    return <Icon size={size === 'lg' ? 'md' : 'default'}>{startIcon}</Icon>;
+    const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
+    return <Icon icon={IconComponent} size={size === 'lg' ? 'md' : 'default'} />;
   };
 
   return (

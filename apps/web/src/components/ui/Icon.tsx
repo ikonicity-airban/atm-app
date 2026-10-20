@@ -54,6 +54,22 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
       );
     }
 
+    if (
+      children &&
+      !React.isValidElement(children) &&
+      (typeof children === 'function' ||
+        (typeof children === 'object' && children !== null && '$$typeof' in children))
+    ) {
+      const DynamicComponent = children as unknown as React.ComponentType<{ className?: string }>;
+      return (
+        <DynamicComponent
+          className={resolvedClasses}
+          aria-hidden="true"
+          {...(props as Record<string, unknown>)}
+        />
+      );
+    }
+
     return (
       <span ref={ref} className={resolvedClasses} aria-hidden="true" {...props}>
         {children}

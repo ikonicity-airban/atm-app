@@ -59,11 +59,11 @@ export const DropdownMenuItem = React.forwardRef<
 >(({ className, inset, startIcon, children, ...props }, ref) => {
   const renderStartIcon = () => {
     if (!startIcon) return null;
-    if (typeof startIcon === 'function') {
-      const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
-      return <Icon icon={IconComponent} className="mr-2" />;
+    if (React.isValidElement(startIcon)) {
+      return <Icon className="mr-2">{startIcon}</Icon>;
     }
-    return <Icon className="mr-2">{startIcon}</Icon>;
+    const IconComponent = startIcon as React.ComponentType<{ className?: string }>;
+    return <Icon icon={IconComponent} className="mr-2" />;
   };
 
   return (

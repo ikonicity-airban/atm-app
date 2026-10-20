@@ -1,5 +1,6 @@
 import React from 'react';
 import { BRAND, SEED_TERMINALS } from '@atm/shared';
+import { Logo } from '../ui/Logo.tsx';
 
 interface PublicFooterProps {
   onNavigate: (path: string) => void;
@@ -13,12 +14,7 @@ export function PublicFooter({ onNavigate }: PublicFooterProps) {
           {/* Column 1: Company Profile */}
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-black text-sm shadow-xs">
-                A
-              </div>
-              <span className="font-extrabold text-foreground text-base tracking-tight">
-                {BRAND.name}
-              </span>
+              <Logo variant="full" size="md" />
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Intercity passenger transport in 5-seat Toyota Siennas with air conditioning and extra legroom. Reliable express courier parcels. Founded {BRAND.foundedYear}.
