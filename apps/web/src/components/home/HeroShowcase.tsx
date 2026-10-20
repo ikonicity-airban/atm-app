@@ -60,6 +60,13 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const [isPromoOpen, setIsPromoOpen] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const lightVideoRef = useRef<HTMLVideoElement>(null);
+  const darkVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    lightVideoRef.current?.play().catch(() => {});
+    darkVideoRef.current?.play().catch(() => {});
+  }, []);
 
   const handleSwap = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -121,16 +128,38 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
 
   return (
     <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40">
-      {/* Ambient background glows matching theme */}
+      {/* Ambient background glows and theme responsive video backdrop */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         {/* Subtle radial ambient light */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-purple-500/10 via-[#ca2484]/15 to-indigo-500/10 dark:from-purple-900/30 dark:via-[#ca2484]/20 dark:to-indigo-900/30 rounded-full blur-[100px]" />
 
-        {/* Background visual image in dark mode */}
-        <div className="hidden dark:block absolute inset-0 opacity-20 mix-blend-screen">
-          <img
-            src="/images/hero/highway-sunset.jpg"
-            alt="Interstate Highway Corridor"
+        {/* Hero Video Backdrop: Light Mode */}
+        <div className="block dark:hidden absolute inset-0 overflow-hidden opacity-30 motion-reduce:hidden">
+          <video
+            ref={lightVideoRef}
+            src="/videos/hero/Minivan_driving_on_highway_20261020011710.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="w-full h-full object-cover object-center filter brightness-105 contrast-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
+        </div>
+
+        {/* Hero Video Backdrop: Dark Mode */}
+        <div className="hidden dark:block absolute inset-0 overflow-hidden opacity-30 mix-blend-screen motion-reduce:hidden">
+          <video
+            ref={darkVideoRef}
+            src="/videos/hero/Vehicles_driving_on_highway_20261020060547.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
             className="w-full h-full object-cover object-center filter contrast-125 brightness-75"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#07030f] via-transparent to-[#07030f]" />
