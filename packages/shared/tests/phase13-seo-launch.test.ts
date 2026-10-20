@@ -41,11 +41,11 @@ describe('Phase 13: SEO Landing Pages and Launch Preparation (Spec 0020)', () =>
 
       for (const corridor of CORRIDOR_SEO_PROFILES) {
         assert.ok(
-          validTerminalIds.has(corridor.originTerminalId),
+          validTerminalIds.has(corridor.originTerminalId as any),
           `Origin terminal ${corridor.originTerminalId} for ${corridor.slug} not found in SEED_TERMINALS`
         );
         assert.ok(
-          validTerminalIds.has(corridor.destinationTerminalId),
+          validTerminalIds.has(corridor.destinationTerminalId as any),
           `Destination terminal ${corridor.destinationTerminalId} for ${corridor.slug} not found in SEED_TERMINALS`
         );
         assert.notStrictEqual(

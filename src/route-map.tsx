@@ -16,7 +16,7 @@ import TrackParcelPage from '@/app/(public)/track/page.tsx';
 import CharterPage from '@/app/(public)/charter/page.tsx';
 import CorporatePage from '@/app/(public)/corporate/page.tsx';
 import RoutesPage from '@/app/(public)/routes/page.tsx';
-import RouteDetailPage from '@/app/(public)/routes/[slug]/page.tsx';
+import RouteDetailPage from '@/app/(public)/routes/[corridor]/page.tsx';
 import TerminalsPage from '@/app/(public)/terminals/page.tsx';
 import AboutPage from '@/app/(public)/about/page.tsx';
 import ContactPage from '@/app/(public)/contact/page.tsx';
@@ -79,8 +79,8 @@ export function renderRouteComponent({
   if (pathname === '/corporate') return <CorporatePage />;
   if (pathname === '/routes') return <RoutesPage onNavigate={onNavigate} />;
   if (pathname.startsWith('/routes/')) {
-    const slug = pathname.replace('/routes/', '') || 'enugu-abuja';
-    return <RouteDetailPage params={{ slug }} onNavigate={onNavigate} />;
+    const corridor = pathname.replace('/routes/', '') || 'enugu-abuja';
+    return <RouteDetailPage params={Promise.resolve({ corridor })} />;
   }
   if (pathname === '/terminals') return <TerminalsPage />;
   if (pathname === '/about') return <AboutPage />;
@@ -91,10 +91,10 @@ export function renderRouteComponent({
   if (pathname === '/design') return <DesignSystemPage />;
 
   // Account
-  if (pathname === '/account') return <AccountPage onNavigate={onNavigate} />;
+  if (pathname === '/account') return <AccountPage {...({ onNavigate } as any)} />;
 
   // Auth
-  if (pathname === '/login') return <CustomerLoginPage onLoginSuccess={onCustomerLogin} />;
+  if (pathname === '/login') return <CustomerLoginPage {...({ onLoginSuccess: onCustomerLogin } as any)} />;
   if (pathname === '/admin/login') return <AdminLoginPage onLoginSuccess={onStaffLogin} />;
 
   // Admin
