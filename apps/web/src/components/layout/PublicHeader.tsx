@@ -201,7 +201,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     <header
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out flex justify-center ${isScrolled
-        ? 'pt-3 sm:pt-4 px-2 sm:px-6 pointer-events-none'
+        ? 'pt-3 sm:pt-4 px-2 sm:px-4 pointer-events-none'
         : 'pt-0 px-4 sm:px-6 lg:px-8 bg-transparent'
         }`}
     >

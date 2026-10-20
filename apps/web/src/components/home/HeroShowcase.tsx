@@ -64,8 +64,8 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const darkVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    lightVideoRef.current?.play().catch(() => {});
-    darkVideoRef.current?.play().catch(() => {});
+    lightVideoRef.current?.play().catch(() => { });
+    darkVideoRef.current?.play().catch(() => { });
   }, []);
 
   const handleSwap = (e: React.MouseEvent) => {
@@ -127,7 +127,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const availableDestinations = getServedDestinations(fromCity);
 
   return (
-    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40">
+    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40 @container/hero">
       {/* Ambient background glows and theme responsive video backdrop */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         {/* Subtle radial ambient light */}
@@ -146,7 +146,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             aria-hidden="true"
             className="w-full h-full object-cover object-center filter brightness-105 contrast-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
+          <div className="absolute inset-0 bg-linear-to-b from-background/40 via-background/10 to-background/60" />
         </div>
 
         {/* Hero Video Backdrop: Dark Mode */}
@@ -170,21 +170,21 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         {/* 1. Centered Top Pill Badge */}
         <div className="flex justify-center">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-muted/60 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
-            <Star className="w-3.5 h-3.5 text-primary" />
+            <Icon icon={Star} size="xs" variant="primary" />
             <span>Nigeria Executive Interstate Fleet 2026</span>
           </div>
         </div>
 
         {/* 2. Main Typographic Headline */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <h1 className="text-[1vw] md:text-6xl font-heading font-black tracking-tight leading-[1.1] text-balance">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight leading-[1.1] text-balance">
             <span className="block text-foreground">Your Journey Begins in</span>
             <span className="block bg-linear-to-br from-purple-300 via-pink-700 to-[#9a2484] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#ca2484] bg-clip-text text-transparent">
               One Click
             </span>
           </h1>
 
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-normal">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-normal">
             Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
           </p>
         </div>
@@ -192,7 +192,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         {/* 3. Floating Glassmorphism Search Island */}
         <div
           ref={containerRef}
-          className="w-full max-w-4xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative"
+          className="w-full max-w-4xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative @container/search shadow-xl"
         >
           {/* Top Bar: Mode Tabs (Left) + Utility Options (Right) */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
@@ -201,7 +201,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setTripMode('one-way')}
-                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${tripMode === 'one-way'
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-[36px] active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'one-way'
                   ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
@@ -211,7 +211,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setTripMode('round-trip')}
-                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${tripMode === 'round-trip'
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-[36px] active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'round-trip'
                   ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
@@ -221,7 +221,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setTripMode('charter')}
-                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-colors cursor-pointer min-h-[36px] ${tripMode === 'charter'
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-[36px] active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'charter'
                   ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
@@ -234,7 +234,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             <div className="flex items-center gap-2">
               <Popover open={isPromoOpen} onOpenChange={setIsPromoOpen}>
                 <PopoverTrigger
-                  className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                  className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-all duration-200 cursor-pointer min-h-[36px] hover:-translate-y-0.5 active:scale-[0.98] motion-reduce:transform-none"
                 >
                   <Icon icon={Tag} size="sm" />
                   <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
@@ -271,7 +271,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => onNavigate ? onNavigate('/terminals') : (window.location.href = '/terminals')}
-                className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer min-h-[36px]"
+                className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-all duration-200 cursor-pointer min-h-[36px] hover:-translate-y-0.5 active:scale-[0.98] motion-reduce:transform-none"
               >
                 <Icon icon={SlidersHorizontal} size="sm" />
                 <span>Terminals</span>
@@ -279,10 +279,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
           </div>
 
-          {/* Search Inputs Row with Distinct Labels Above Inputs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 pt-4 items-end">
+          {/* Search Inputs Row with Container Queries */}
+          <div className="grid grid-cols-1 @sm/search:grid-cols-2 @lg/search:grid-cols-12 gap-3 pt-4 items-end">
             {/* 1. FROM City */}
-            <div className="lg:col-span-3 space-y-1 relative">
+            <div className="@lg/search:col-span-3 space-y-1 relative">
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 From
               </label>
@@ -328,20 +328,20 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
 
             {/* Swap Button (Cleanly integrated between FROM and TO) */}
-            <div className="hidden lg:flex lg:col-span-1 justify-center pb-2">
+            <div className="hidden @lg/search:flex @lg/search:col-span-1 justify-center pb-2">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handleSwap}
                 aria-label="Swap origin and destination"
-                className="w-9 h-9 rounded-full"
+                className="w-9 h-9 rounded-full transition-transform active:scale-95 duration-150 motion-reduce:transform-none"
               >
                 <Icon icon={ArrowRightLeft} size="sm" />
               </Button>
             </div>
 
             {/* 2. TO City */}
-            <div className="lg:col-span-3 space-y-1 relative">
+            <div className="@lg/search:col-span-3 space-y-1 relative">
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 To
               </label>
@@ -387,7 +387,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
 
             {/* 3. DATE */}
-            <div className="lg:col-span-3 space-y-1">
+            <div className="@lg/search:col-span-3 space-y-1">
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 Date
               </label>
@@ -401,7 +401,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
 
             {/* 4. PASSENGERS & CLASS */}
-            <div className="lg:col-span-2 space-y-1 relative">
+            <div className="@lg/search:col-span-2 space-y-1 relative">
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 Passengers
               </label>
@@ -427,7 +427,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                         type="button"
                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
                         disabled={passengers <= 1}
-                        className="w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-30 text-foreground font-normal flex items-center justify-center cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-30 text-foreground font-normal flex items-center justify-center cursor-pointer transition-transform active:scale-90 motion-reduce:transform-none"
                       >
                         -
                       </button>
@@ -436,7 +436,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                         type="button"
                         onClick={() => setPassengers(Math.min(5, passengers + 1))}
                         disabled={passengers >= 5}
-                        className="w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-30 text-foreground font-normal flex items-center justify-center cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-30 text-foreground font-normal flex items-center justify-center cursor-pointer transition-transform active:scale-90 motion-reduce:transform-none"
                       >
                         +
                       </button>
@@ -456,7 +456,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               variant="default"
               size="default"
               onClick={handleSearch}
-              className="w-full sm:w-auto px-8 font-normal text-xs sm:text-sm min-h-[48px] shadow-md"
+              className="w-full sm:w-auto px-8 font-normal text-xs sm:text-sm min-h-[48px] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 motion-reduce:transform-none"
               leftIcon={<Search className="w-4 h-4" />}
             >
               Search Now
@@ -469,7 +469,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-amber-500">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                <Icon key={i} icon={Star} size="xs" className="fill-amber-500 text-amber-500" />
               ))}
             </div>
             <span className="font-medium text-foreground">4.9/5</span>
@@ -477,12 +477,12 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           </div>
 
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <Icon icon={ShieldCheck} size="sm" variant="success" />
             <span>100% Secure Checkout</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <Globe className="w-4 h-4 text-primary" />
+            <Icon icon={Globe} size="sm" variant="primary" />
             <span>15,000+ Completed Trips</span>
           </div>
         </div>
@@ -494,9 +494,9 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Direct WhatsApp Dispatch Support"
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer"
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 flex items-center justify-center transition-all duration-200 cursor-pointer motion-reduce:transform-none"
       >
-        <MessageCircle className="w-5 h-5" />
+        <Icon icon={MessageCircle} size="default" className="text-primary-foreground" />
         <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-normal flex items-center justify-center">
           1
         </span>

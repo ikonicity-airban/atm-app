@@ -7,7 +7,8 @@ import { AppError } from '../../../apps/web/src/lib/errors.ts';
 
 test('BookingRepository contract: createHold, seat lock, idempotency, and release', async () => {
   const repo = new StaticBookingRepository();
-  const tripId = 'trip-sch-ogui-utako-morning-2026-10-20';
+  const futureDate = new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0];
+  const tripId = `trip-sch-enugu-abuja-morning-${futureDate}`;
 
   // 1. Initial seats are free
   const initialOccupied = await repo.getOccupiedSeats(tripId);

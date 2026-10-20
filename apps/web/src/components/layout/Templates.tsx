@@ -47,7 +47,7 @@ export function PageShell({
   const densityClass = DENSITY_CLASSES[density] || DENSITY_CLASSES.comfortable;
 
   return (
-    <div className={cn(widthClass, 'mx-auto px-4 sm:px-6 lg:px-8', densityClass, className)}>
+    <div className={cn(widthClass, '@container/page mx-auto px-4 sm:px-6 lg:px-8', densityClass, className)}>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <div className="mb-6">
           <Breadcrumb items={breadcrumbs} />

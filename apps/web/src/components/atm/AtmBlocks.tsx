@@ -317,7 +317,7 @@ export function TerminalCard({
   return (
     <div
       className={cn(
-        'p-5 border border-border rounded-xl bg-card text-card-foreground shadow-xs flex flex-col justify-between space-y-4',
+        'p-5 border border-border rounded-2xl bg-card/75 backdrop-blur-xl text-card-foreground shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 motion-reduce:transform-none',
         className
       )}
     >
@@ -340,7 +340,7 @@ export function TerminalCard({
             <a
               key={phone}
               href={`tel:${phone}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border font-medium min-h-[44px]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border font-medium min-h-[44px] hover:-translate-y-0.5 active:scale-95 transition-all motion-reduce:transform-none"
             >
               <Phone className="w-3.5 h-3.5 text-primary" />
               <span>{phone}</span>
@@ -353,7 +353,7 @@ export function TerminalCard({
             href={terminal.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold min-h-[36px]"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold min-h-[36px] hover:translate-x-0.5 transition-transform motion-reduce:transform-none"
           >
             <span>Get Directions (Google Maps)</span>
             <ExternalLink className="w-3.5 h-3.5" />

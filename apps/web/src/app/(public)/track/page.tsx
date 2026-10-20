@@ -234,29 +234,29 @@ export default function TrackHubPage(props?: any) {
     >
       {/* Mode Switcher Segmented Control */}
       <div className="flex items-center justify-center mb-8">
-        <div className="inline-flex p-1.5 rounded-2xl bg-slate-200/80 border border-slate-300/70 shadow-inner">
+        <div className="inline-flex p-1.5 rounded-2xl bg-muted/60 border border-border shadow-inner">
           <button
             type="button"
             onClick={() => setActiveTab('journey')}
-            className={`min-h-[44px] px-6 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+            className={`min-h-[44px] px-6 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 hover:-translate-y-0.5 active:scale-95 motion-reduce:transform-none ${
               activeTab === 'journey'
-                ? 'bg-white text-brand-900 shadow-sm border border-slate-200/60'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-card text-foreground shadow-sm border border-border'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Compass className="w-4 h-4 text-brand-600" />
+            <Compass className="w-4 h-4 text-primary" />
             <span>Passenger Journey</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('parcel')}
-            className={`min-h-[44px] px-6 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+            className={`min-h-[44px] px-6 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 hover:-translate-y-0.5 active:scale-95 motion-reduce:transform-none ${
               activeTab === 'parcel'
-                ? 'bg-white text-brand-900 shadow-sm border border-slate-200/60'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-card text-foreground shadow-sm border border-border'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Package className="w-4 h-4 text-brand-600" />
+            <Package className="w-4 h-4 text-primary" />
             <span>Courier Freight</span>
           </button>
         </div>
@@ -265,41 +265,41 @@ export default function TrackHubPage(props?: any) {
       {/* TAB 1: PASSENGER JOURNEY TRACKING */}
       {activeTab === 'journey' && (
         <div className="space-y-8 animate-in fade-in duration-200">
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             <form onSubmit={handleJourneySearch} className="max-w-2xl space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="journey-ref-input" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                  <label htmlFor="journey-ref-input" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Booking Reference Code
                   </label>
                   <div className="relative">
-                    <Navigation className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <Navigation className="w-4 h-4 absolute left-3.5 top-3.5 text-muted-foreground" />
                     <input
                       id="journey-ref-input"
                       type="text"
                       placeholder="e.g. ATM-7K9W2P"
                       value={bookingRef}
                       onChange={(e) => setBookingRef(e.target.value)}
-                      className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white pl-10 pr-4 py-2.5 text-slate-900 text-sm font-mono font-bold focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 uppercase"
+                      className="w-full min-h-[44px] rounded-xl border border-input bg-background pl-10 pr-4 py-2.5 text-foreground text-sm font-mono font-bold focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring uppercase"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="journey-phone-input" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+                  <label htmlFor="journey-phone-input" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Passenger Phone Number
                   </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-muted-foreground" />
                     <input
                       id="journey-phone-input"
                       type="text"
                       placeholder="e.g. 08031234567"
                       value={passengerPhone}
                       onChange={(e) => setPassengerPhone(e.target.value)}
-                      className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white pl-10 pr-4 py-2.5 text-slate-900 text-sm font-semibold focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                      className="w-full min-h-[44px] rounded-xl border border-input bg-background pl-10 pr-4 py-2.5 text-foreground text-sm font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                   </div>
                 </div>
@@ -309,7 +309,7 @@ export default function TrackHubPage(props?: any) {
                 <button
                   type="submit"
                   disabled={isJourneyLoading}
-                  className="w-full sm:w-auto min-h-[44px] py-3 px-8 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 shadow-md shadow-brand-600/20 disabled:opacity-50"
+                  className="w-full sm:w-auto min-h-[44px] py-3 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 motion-reduce:transform-none"
                 >
                   {isJourneyLoading ? (
                     <span>Verifying Journey...</span>
@@ -321,7 +321,7 @@ export default function TrackHubPage(props?: any) {
                   )}
                 </button>
 
-                <div className="text-xs text-slate-500 text-center sm:text-right">
+                <div className="text-xs text-muted-foreground text-center sm:text-right">
                   <span>Demo active reference: </span>
                   <button
                     type="button"
@@ -329,7 +329,7 @@ export default function TrackHubPage(props?: any) {
                       setBookingRef('ATM-7K9W2P');
                       setPassengerPhone('08031234567');
                     }}
-                    className="font-mono text-brand-700 hover:text-brand-900 font-bold underline ml-1"
+                    className="font-mono text-primary hover:underline font-bold ml-1"
                   >
                     ATM-7K9W2P
                   </button>
@@ -380,8 +380,8 @@ export default function TrackHubPage(props?: any) {
       {/* TAB 2: COURIER FREIGHT TRACKING */}
       {activeTab === 'parcel' && (
         <div className="space-y-8 animate-in fade-in duration-200">
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             <form
               onSubmit={(e) => {
@@ -390,32 +390,32 @@ export default function TrackHubPage(props?: any) {
               }}
               className="max-w-2xl"
             >
-              <label htmlFor="parcel-input" className="block text-xs uppercase font-bold text-slate-500 tracking-wider mb-2">
+              <label htmlFor="parcel-input" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                 Waybill Tracking Code or Phone Number
               </label>
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Search className="w-5 h-5 absolute left-3.5 top-3.5 text-slate-400" />
+                  <Search className="w-5 h-5 absolute left-3.5 top-3.5 text-muted-foreground" />
                   <input
                     id="parcel-input"
                     type="text"
                     placeholder="e.g. ATM-EXP-7K3N9R or 08031234567"
                     value={parcelQuery}
                     onChange={(e) => setParcelQuery(e.target.value)}
-                    className="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white pl-11 pr-4 py-3 text-slate-900 text-sm font-semibold focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 placeholder:text-slate-400 placeholder:font-normal"
+                    className="w-full min-h-[44px] rounded-xl border border-input bg-background pl-11 pr-4 py-3 text-foreground text-sm font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground/60"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isParcelLoading}
-                  className="min-h-[44px] py-3 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 shadow-md shadow-brand-600/20 disabled:opacity-50"
+                  className="min-h-[44px] py-3 px-6 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 motion-reduce:transform-none"
                 >
                   {isParcelLoading ? <span>Searching...</span> : <span>Track Freight</span>}
                 </button>
               </div>
             </form>
 
-            <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span>Sample test codes:</span>
               <button
                 type="button"
@@ -423,7 +423,7 @@ export default function TrackHubPage(props?: any) {
                   setParcelQuery('ATM-EXP-7K3N9R');
                   performParcelSearch('ATM-EXP-7K3N9R');
                 }}
-                className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 font-mono text-brand-800 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-md bg-muted hover:bg-muted/80 border border-border font-mono text-primary font-semibold transition-colors cursor-pointer"
               >
                 ATM-EXP-7K3N9R (In Transit)
               </button>
@@ -433,7 +433,7 @@ export default function TrackHubPage(props?: any) {
                   setParcelQuery('ATM-EXP-2M8W4P');
                   performParcelSearch('ATM-EXP-2M8W4P');
                 }}
-                className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 font-mono text-emerald-800 font-semibold transition-colors"
+                className="px-2.5 py-1 rounded-md bg-muted hover:bg-muted/80 border border-border font-mono text-emerald-600 dark:text-emerald-400 font-semibold transition-colors cursor-pointer"
               >
                 ATM-EXP-2M8W4P (Ready for Pickup)
               </button>
@@ -441,8 +441,8 @@ export default function TrackHubPage(props?: any) {
           </div>
 
           {parcelErrorMsg && (
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/25 text-destructive flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" />
               <div className="text-sm font-medium">{parcelErrorMsg}</div>
             </div>
           )}
@@ -450,25 +450,25 @@ export default function TrackHubPage(props?: any) {
           {currentParcel && (
             <div className="space-y-8 animate-in fade-in duration-300">
               {/* Header card */}
-              <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent" />
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
                 <div>
                   <div className="flex items-center gap-3 mb-1.5">
-                    <span className="text-2xl font-mono font-extrabold text-slate-900">
+                    <span className="text-2xl font-mono font-extrabold text-foreground">
                       {currentParcel.trackingCode}
                     </span>
                     <button
                       type="button"
                       onClick={handleCopyParcelCode}
-                      className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-1 transition-colors"
+                      className="px-2.5 py-1 rounded-md bg-muted hover:bg-muted/80 border border-border text-xs font-semibold text-foreground flex items-center gap-1 transition-all active:scale-95 cursor-pointer motion-reduce:transform-none"
                     >
                       <Copy className="w-3.5 h-3.5" />
                       <span>{parcelCopied ? 'Copied' : 'Copy'}</span>
                     </button>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                    <span className="font-semibold text-slate-900">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">
                       {originTerminal?.city} → {destinationTerminal?.city}
                     </span>
                     <span>·</span>
@@ -485,45 +485,45 @@ export default function TrackHubPage(props?: any) {
                 </div>
               </div>
 
-              {/* Progress Stepper */}
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-                <h3 className="text-xs uppercase font-bold text-slate-500 tracking-wider mb-6">
+              {/* Progress Stepper with Container Queries */}
+              <div className="rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
+                <h3 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-6">
                   Shipment Progression
                 </h3>
 
-                <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                <div className="grid grid-cols-2 @md/page:grid-cols-6 gap-3">
                   {TRACKING_STAGES.map((stage, idx) => {
                     const isCompleted = idx <= activeStageIndex;
                     const isCurrent = idx === activeStageIndex;
-                    const Icon = stage.icon;
+                    const IconComp = stage.icon;
 
                     return (
                       <div
                         key={stage.key}
                         className={`p-3.5 rounded-xl border flex flex-col items-center text-center transition-all ${
                           isCurrent
-                            ? 'bg-brand-50/80 border-brand-500 shadow-sm'
+                            ? 'bg-primary/10 border-primary shadow-xs'
                             : isCompleted
-                            ? 'bg-slate-50 border-slate-200'
-                            : 'bg-white border-dashed border-slate-200 opacity-60'
+                            ? 'bg-muted/50 border-border'
+                            : 'bg-card border-dashed border-border opacity-50'
                         }`}
                       >
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
                             isCurrent
-                              ? 'bg-brand-600 text-white'
+                              ? 'bg-primary text-primary-foreground'
                               : isCompleted
-                              ? 'bg-slate-800 text-white'
-                              : 'bg-slate-100 text-slate-400'
+                              ? 'bg-foreground/80 text-background'
+                              : 'bg-muted text-muted-foreground'
                           }`}
                         >
-                          <Icon className="w-4 h-4" />
+                          <IconComp className="w-4 h-4" />
                         </div>
-                        <span className="text-xs font-bold text-slate-900 leading-tight">
+                        <span className="text-xs font-bold text-foreground leading-tight">
                           {stage.label}
                         </span>
                         {isCurrent && (
-                          <span className="text-[10px] text-brand-700 font-bold mt-1">
+                          <span className="text-[10px] text-primary font-bold mt-1">
                             Current Stage
                           </span>
                         )}
@@ -534,34 +534,34 @@ export default function TrackHubPage(props?: any) {
               </div>
 
               {/* Custody Event History */}
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-                <h3 className="text-xs uppercase font-bold text-slate-500 tracking-wider mb-6">
+              <div className="rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
+                <h3 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-6">
                   Custody Event History
                 </h3>
 
-                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
                   {currentTimeline.map((ev, index) => {
                     const terminal = SEED_TERMINALS.find((t) => t.id === ev.locationTerminalId);
 
                     return (
                       <div key={ev.id || index} className="relative">
-                        <div className="absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full bg-brand-600 ring-4 ring-white shadow-sm" />
+                        <div className="absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-background shadow-sm" />
                         <div>
                           <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                            <span className="text-xs font-bold text-slate-900 capitalize">
+                            <span className="text-xs font-bold text-foreground capitalize">
                               {ev.status.replace(/_/g, ' ')}
                             </span>
-                            <span className="text-[11px] text-slate-400">·</span>
-                            <span className="text-[11px] text-slate-500 font-medium">
+                            <span className="text-[11px] text-muted-foreground/60">·</span>
+                            <span className="text-[11px] text-muted-foreground font-medium">
                               {formatWatDateTime(ev.createdAt)}
                             </span>
                             {terminal && (
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-medium">
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted border border-border text-foreground font-medium">
                                 {terminal.city} ({terminal.code})
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-slate-600 leading-relaxed">
+                          <p className="text-xs text-muted-foreground leading-relaxed">
                             {ev.description}
                           </p>
                         </div>
@@ -572,17 +572,17 @@ export default function TrackHubPage(props?: any) {
               </div>
 
               {/* Book parcel callout */}
-              <div className="p-6 rounded-2xl border border-brand-200/80 bg-gradient-to-r from-brand-50/90 to-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-6 rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h4 className="text-sm font-bold text-brand-950 mb-0.5">Need to book another package?</h4>
-                  <p className="text-xs text-slate-600">
+                  <h4 className="text-sm font-bold text-foreground mb-0.5">Need to book another package?</h4>
+                  <p className="text-xs text-muted-foreground">
                     Book express courier freight with same-day departure across our fleet.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => navigate('/courier')}
-                  className="min-h-[44px] py-2.5 px-5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/20 transition-all flex items-center gap-2 whitespace-nowrap"
+                  className="min-h-[44px] py-2.5 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs shadow-md shadow-primary/20 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer motion-reduce:transform-none"
                 >
                   <span>Book Parcel Delivery</span>
                   <ArrowRight className="w-3.5 h-3.5" />

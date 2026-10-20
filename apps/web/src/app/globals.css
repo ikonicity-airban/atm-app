@@ -90,7 +90,7 @@
        Body: 'Inter', 'Roboto', system sans-serif
        ------------------------------------------------------------------------- */
     --font-sans: var(--font-inter), 'Inter', 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-heading: 'Frutiger', 'Frutiger Linotype', 'Univers', var(--font-overpass), 'Overpass', var(--font-sans);
+    --font-heading: 'Montserrat', 'Frutiger', 'Frutiger Linotype', 'Univers', var(--font-overpass), 'Overpass', var(--font-sans);
     --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
     /* -------------------------------------------------------------------------
@@ -107,7 +107,8 @@
     --brand-300: #f5a7d7;
     --brand-400: #ed70bd;
     --brand-500: #df3ea1;
-    --brand-600: #ca2484; /* Core Brand Accent */
+    --brand-600: #ca2484;
+    /* Core Brand Accent */
     --brand-700: #aa1769;
     --brand-800: #8c1656;
     --brand-900: #741749;
@@ -140,7 +141,8 @@
     --popover: #ffffff;
     --popover-foreground: #0f172a;
 
-    --primary: #ca2484; /* Mapped directly to ATM Brand-600 */
+    --primary: #ca2484;
+    /* Mapped directly to ATM Brand-600 */
     --primary-foreground: #ffffff;
 
     --secondary: --alpha(var(--color-black) / 4%);
@@ -149,7 +151,8 @@
     --muted: --alpha(var(--color-black) / 4%);
     --muted-foreground: #64748b;
 
-    --accent: #fdf2f9; /* Mapped directly to ATM Brand-50 */
+    --accent: #fdf2f9;
+    /* Mapped directly to ATM Brand-50 */
     --accent-foreground: #ca2484;
 
     --destructive: #ef4444;
@@ -274,7 +277,12 @@
     min-height: 100vh;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     letter-spacing: -0.02em;
   }
@@ -284,7 +292,10 @@
    Accessibility: Motion Reduction
    ----------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -312,6 +323,7 @@
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -323,6 +335,7 @@
     opacity: 0;
     transform: translateY(-8px) scale(0.99);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -354,5 +367,3 @@
   border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
   box-shadow: 0 12px 36px color-mix(in srgb, black 8%, transparent);
 }
-
-

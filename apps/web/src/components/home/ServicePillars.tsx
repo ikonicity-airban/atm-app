@@ -59,7 +59,7 @@ const PILLARS: Pillar[] = [
 
 export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => void }) {
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 @container/section">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Executive Mobility Standards
@@ -72,13 +72,13 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 @sm/section:grid-cols-2 @xl/section:grid-cols-4 gap-6">
         {PILLARS.map((pillar) => {
           const PillarIcon = pillar.icon;
           return (
             <div
               key={pillar.title}
-              className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-lg hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1"
+              className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-lg hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] motion-reduce:transform-none"
             >
               <div>
                 <div className="flex items-center justify-between mb-5">
@@ -108,7 +108,7 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
                   className="w-full flex items-center justify-between text-xs font-normal text-foreground group-hover:text-primary transition-colors cursor-pointer min-h-[44px]"
                 >
                   <span>Explore service</span>
-                  <Icon icon={ArrowRight} size="xs" className="transform group-hover:translate-x-1 transition-transform" />
+                  <Icon icon={ArrowRight} size="xs" className="transform group-hover:translate-x-1 transition-transform motion-reduce:transform-none" />
                 </button>
               </div>
             </div>

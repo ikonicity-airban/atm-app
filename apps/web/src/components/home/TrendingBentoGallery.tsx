@@ -136,10 +136,10 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
   const rest = filteredCorridors.slice(1);
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 @container/section">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
         <div className="space-y-2 max-w-2xl">
-          <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
+          <span className="text-xs font-semibold uppercase tracking-wider text-primary">
             Trending Travel Corridors
           </span>
           <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
@@ -150,21 +150,21 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
           </p>
         </div>
 
-        {/* Filter Pills */}
+        {/* Filter Pills with Tactile Spring Micro-Interactions */}
         <div className="flex flex-wrap items-center gap-1.5 p-1 bg-muted/50 rounded-full border border-border">
           {[
             { id: 'all', label: 'All Corridors' },
-            { id: 'enugu-abuja', label: 'Enugu ↁEAbuja' },
-            { id: 'lagos-enugu', label: 'Lagos ↁEEnugu' },
-            { id: 'lagos-owerri', label: 'Lagos ↁEOwerri' },
+            { id: 'enugu-abuja', label: 'Enugu → Abuja' },
+            { id: 'lagos-enugu', label: 'Lagos → Enugu' },
+            { id: 'lagos-owerri', label: 'Lagos → Owerri' },
           ].map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
-              className={`px-3.5 py-1.5 text-xs font-normal rounded-full transition-colors cursor-pointer min-h-[36px] ${
+              className={`px-3.5 py-1.5 text-xs font-normal rounded-full transition-all duration-150 cursor-pointer min-h-[36px] active:scale-95 motion-reduce:transform-none ${
                 activeFilter === tab.id
-                  ? 'bg-card text-foreground shadow-xs border border-border'
+                  ? 'bg-card text-foreground shadow-xs border border-border font-medium'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -174,11 +174,11 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
         </div>
       </div>
 
-      {/* Asymmetrical Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Large Featured Card (Spans 2 rows on large) */}
+      {/* Asymmetrical Bento Grid with Container Queries */}
+      <div className="grid grid-cols-1 @md/section:grid-cols-2 @lg/section:grid-cols-3 gap-6">
+        {/* Large Featured Card (Spans 2 columns on large container) */}
         {featured && (
-          <div className="lg:col-span-2 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[380px] sm:min-h-[440px] flex flex-col justify-between p-6 sm:p-8 shadow-xl border border-slate-800 group">
+          <div className="@lg/section:col-span-2 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[380px] sm:min-h-[440px] flex flex-col justify-between p-6 sm:p-8 shadow-xl border border-slate-800 group hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 motion-reduce:transform-none">
             {/* Background Image with Gradient */}
             <div className="absolute inset-0 z-0">
               <img
@@ -241,7 +241,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                 <button
                   type="button"
                   onClick={() => handleBook(featured.from, featured.to)}
-                  className="px-6 py-3 bg-primary hover:opacity-90 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
+                  className="px-6 py-3 bg-primary hover:opacity-90 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer min-h-[44px] motion-reduce:transform-none"
                 >
                   <span>Book Seat Now</span>
                   <Icon icon={ArrowRight} size="default" className="text-primary-foreground" />
@@ -255,7 +255,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
         {rest.map((corridor) => (
           <div
             key={corridor.id}
-            className="relative rounded-3xl overflow-hidden bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-md hover:shadow-xl hover:border-primary/40 transition-all duration-300 flex flex-col justify-between p-5 group"
+            className="relative rounded-3xl overflow-hidden bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-md hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] flex flex-col justify-between p-5 group motion-reduce:transform-none"
           >
             <div>
               <div className="relative h-40 w-full rounded-2xl overflow-hidden mb-4">
@@ -276,7 +276,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
 
               <div className="space-y-1">
                 <div className="text-xs text-muted-foreground font-normal truncate">
-                  {corridor.fromHub} ↁE{corridor.toHub}
+                  {corridor.fromHub} → {corridor.toHub}
                 </div>
                 <h4 className="text-base font-heading font-semibold text-foreground">
                   {corridor.from} to {corridor.to}
@@ -297,7 +297,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               <button
                 type="button"
                 onClick={() => handleBook(corridor.from, corridor.to)}
-                className="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-xs font-normal rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer min-h-[44px]"
+                className="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-xs font-normal rounded-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 cursor-pointer min-h-[44px] motion-reduce:transform-none"
               >
                 <span>Select</span>
                 <Icon icon={ArrowRight} size="sm" />

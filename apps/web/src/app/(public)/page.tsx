@@ -14,6 +14,7 @@ import { Accordion, type AccordionItem } from '../../components/ui/Accordion.tsx
 import { getOrganizationJsonLd } from '../../lib/seo.ts';
 import { BRAND, VEHICLE_DESCRIPTION } from '@atm/shared';
 import { ArrowRight } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export interface HomePageProps {
   onNavigate?: (path: string) => void;
@@ -62,7 +63,7 @@ export default function HomePage(props?: any) {
   };
 
   return (
-    <div className="space-y-12 sm:space-y-20 pb-16 bg-background text-foreground transition-colors">
+    <div className="space-y-12 sm:space-y-20 pb-16 bg-background text-foreground transition-colors @container/page">
       {/* Structured SEO Data Script */}
       <script
         type="application/ld+json"
@@ -103,7 +104,7 @@ export default function HomePage(props?: any) {
       <CustomerReviews />
 
       {/* FREQUENTLY ASKED QUESTIONS SUMMARY */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 @container/section">
         <div className="flex justify-between items-end border-b border-border pb-3 mb-6">
           <div>
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
@@ -116,10 +117,10 @@ export default function HomePage(props?: any) {
           <button
             type="button"
             onClick={() => onNavigate ? onNavigate('/faq') : (window.location.href = '/faq')}
-            className="text-xs font-normal text-primary hover:opacity-80 flex items-center gap-1 min-h-[44px] cursor-pointer"
+            className="text-xs font-normal text-primary hover:text-primary/80 flex items-center gap-1.5 min-h-[44px] cursor-pointer hover:-translate-y-0.5 active:scale-95 transition-all motion-reduce:transform-none"
           >
             <span>View all FAQs</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <Icon icon={ArrowRight} size="xs" />
           </button>
         </div>
 

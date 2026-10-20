@@ -198,11 +198,11 @@ export default function CharterPage() {
         </div>
       )}
 
-      {/* Booking Wizard */}
+      {/* Booking Wizard with Container Queries */}
       {!createdRequest && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 @lg/page:grid-cols-12 gap-8 items-start">
           {/* Main Form (8 Cols) */}
-          <div className="lg:col-span-8 bg-card/75 backdrop-blur-xl text-card-foreground rounded-2xl border border-border shadow-sm p-6 sm:p-8">
+          <div className="@lg/page:col-span-8 bg-card/75 backdrop-blur-xl text-card-foreground rounded-2xl border border-border shadow-sm p-6 sm:p-8">
             {/* Step Indicators */}
             <div className="flex items-center justify-between pb-6 mb-6 border-b border-border">
               <div className="flex items-center gap-2">
@@ -581,7 +581,7 @@ export default function CharterPage() {
           </div>
 
           {/* Pricing & Sienna Specs Sidebar (4 Cols) */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="@lg/page:col-span-4 space-y-6 @lg/page:sticky @lg/page:top-24">
             {/* Live Pricing Breakdown */}
             <div className="bg-card/75 backdrop-blur-xl text-card-foreground border border-border rounded-2xl p-6 shadow-md space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-primary">

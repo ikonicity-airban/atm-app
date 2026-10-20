@@ -220,10 +220,10 @@ export default function CourierPage(props?: any) {
         </div>
       </div>
 
-      {/* Main Grid: Form + Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Main Grid: Form + Summary with Container Queries */}
+      <div className="grid grid-cols-1 @lg/page:grid-cols-12 gap-8 items-start">
         {/* Left Column: Booking Form */}
-        <div className="lg:col-span-8 relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
+        <div className="@lg/page:col-span-8 relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
           {/* Top specular highlight */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
@@ -550,8 +550,8 @@ export default function CourierPage(props?: any) {
           </form>
         </div>
 
-        {/* Right Column: Sticky Summary & Guarantees */}
-        <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        {/* Right Column: Sticky Summary & Guarantees with Container Queries */}
+        <div className="@lg/page:col-span-4 space-y-6 @lg/page:sticky @lg/page:top-24">
           {/* Live Pricing Breakdown Card */}
           <div className="relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 shadow-sm">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />

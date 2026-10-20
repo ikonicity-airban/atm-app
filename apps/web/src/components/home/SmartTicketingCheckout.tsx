@@ -18,7 +18,7 @@ interface CheckoutRoute {
 
 const CHECKOUT_ROUTES: CheckoutRoute[] = [
   {
-    label: 'Enugu (Ogui) ↁEAbuja (Utako)',
+    label: 'Enugu (Ogui) → Abuja (Utako)',
     from: 'Enugu',
     to: 'Abuja',
     fromCode: 'ENU',
@@ -26,7 +26,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3200000,
   },
   {
-    label: 'Lagos (Jibowu) ↁEEnugu (Ogui)',
+    label: 'Lagos (Jibowu) → Enugu (Ogui)',
     from: 'Lagos',
     to: 'Enugu',
     fromCode: 'LOS',
@@ -34,7 +34,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3800000,
   },
   {
-    label: 'Abuja (Utako) ↁEEnugu (Ogui)',
+    label: 'Abuja (Utako) → Enugu (Ogui)',
     from: 'Abuja',
     to: 'Enugu',
     fromCode: 'ABV',
@@ -42,7 +42,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3200000,
   },
   {
-    label: 'Lagos (Ajah) ↁEOwerri (Control Post)',
+    label: 'Lagos (Ajah) → Owerri (Control Post)',
     from: 'Lagos',
     to: 'Owerri',
     fromCode: 'LOS',
@@ -50,7 +50,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     baseFareKobo: 3600000,
   },
   {
-    label: 'Owerri (Control Post) ↁEAbuja (Utako)',
+    label: 'Owerri (Control Post) → Abuja (Utako)',
     from: 'Owerri',
     to: 'Abuja',
     fromCode: 'QOW',
@@ -89,9 +89,9 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 @container/section">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-        <span className="text-xs font-normal uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full inline-block">
+        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Digital Ticketing &amp; Direct Reservation
         </span>
         <h2 className="text-2xl sm:text-3xl font-heading font-bold text-foreground tracking-tight text-balance">
@@ -102,10 +102,10 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="grid grid-cols-1 @lg/section:grid-cols-12 gap-8 items-center">
         {/* Left Side: Authentic Digital Boarding Pass Graphic */}
-        <div className="lg:col-span-6 flex justify-center">
-          <div className="w-full max-w-md bg-card/75 backdrop-blur-xl rounded-3xl shadow-xl border border-border overflow-hidden relative">
+        <div className="@lg/section:col-span-6 flex justify-center">
+          <div className="w-full max-w-md bg-card/75 backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-border overflow-hidden relative motion-reduce:transform-none">
             {/* Top Pass Header */}
             <div className="bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] p-6 text-white">
               <div className="flex items-center justify-between mb-4">
@@ -204,7 +204,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
         </div>
 
         {/* Right Side: Interactive Quick Checkout & Fare Calculator */}
-        <div className="lg:col-span-6 bg-card/75 backdrop-blur-xl text-card-foreground rounded-3xl p-6 sm:p-8 border border-border shadow-xl space-y-6">
+        <div className="@lg/section:col-span-6 bg-card/75 backdrop-blur-xl text-card-foreground rounded-3xl p-6 sm:p-8 border border-border shadow-xl space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-heading font-semibold text-foreground">
@@ -262,7 +262,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                     type="button"
                     onClick={() => setPassengerCount(Math.max(1, passengerCount - 1))}
                     disabled={passengerCount <= 1}
-                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border"
+                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border active:scale-95 transition-all duration-150 motion-reduce:transform-none"
                   >
                     <Icon icon={Minus} size="sm" />
                   </button>
@@ -273,7 +273,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                     type="button"
                     onClick={() => setPassengerCount(Math.min(5, passengerCount + 1))}
                     disabled={passengerCount >= 5}
-                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border"
+                    className="w-8 h-8 rounded-lg bg-card text-foreground flex items-center justify-center disabled:opacity-30 cursor-pointer shadow-xs border border-border active:scale-95 transition-all duration-150 motion-reduce:transform-none"
                   >
                     <Icon icon={Plus} size="sm" />
                   </button>
@@ -285,11 +285,11 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           {/* Fare Summary Breakdown Box */}
           <div className="p-4 rounded-2xl bg-muted/30 border border-border space-y-2">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Base Fare ({passengerCount} ÁE{formatNaira(currentRoute.baseFareKobo)})</span>
+              <span>Base Fare ({passengerCount} × {formatNaira(currentRoute.baseFareKobo)})</span>
               <span className="font-medium text-foreground">{formatNaira(subtotalKobo)}</span>
             </div>
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Terminal &amp; Luggage Fee ({passengerCount} ÁE{formatNaira(TERMINAL_SERVICE_FEE_KOBO)})</span>
+              <span>Terminal &amp; Luggage Fee ({passengerCount} × {formatNaira(TERMINAL_SERVICE_FEE_KOBO)})</span>
               <span className="font-medium text-foreground">{formatNaira(feesKobo)}</span>
             </div>
             <div className="pt-2 border-t border-border flex items-center justify-between">
@@ -311,7 +311,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           <button
             type="button"
             onClick={handleProceed}
-            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-normal text-xs sm:text-sm shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer min-h-[48px]"
+            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-normal text-xs sm:text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer min-h-[48px] motion-reduce:transform-none"
           >
             <span>Hold Seat &amp; Proceed to Trips</span>
             <Icon icon={ArrowRight} size="default" className="text-white" />

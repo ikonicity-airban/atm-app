@@ -617,9 +617,9 @@ export default function TripsSearchPage(rawProps?: any) {
                 return (
                   <div
                     key={trip.id}
-                    className={`relative overflow-hidden rounded-2xl border bg-card p-6 sm:p-8 transition-all shadow-sm hover:shadow-md animate-fluid-fade ${
+                    className={`relative overflow-hidden rounded-2xl border bg-card p-6 sm:p-8 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 animate-fluid-fade @container/card motion-reduce:transform-none ${
                       trip.bookable
-                        ? 'border-border hover:border-border/80'
+                        ? 'border-border hover:border-primary/40'
                         : 'border-border/60 opacity-60 bg-muted/30'
                     }`}
                   >
@@ -635,13 +635,13 @@ export default function TripsSearchPage(rawProps?: any) {
                       </div>
                     )}
 
-                    <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
+                    <div className="flex flex-col @lg/card:flex-row items-stretch @lg/card:items-center justify-between gap-6">
                       {/* Left: Airline-Style Timeline & Corridor */}
                       <div className="flex-1 space-y-4">
                         {/* Corridor Timeline Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                        <div className="grid grid-cols-1 @sm/card:grid-cols-12 gap-3 items-center">
                           {/* Departure Point */}
-                          <div className="sm:col-span-4 space-y-0.5">
+                          <div className="@sm/card:col-span-4 space-y-0.5">
                             <div className="text-xl sm:text-2xl font-black font-mono text-foreground tracking-tight">
                               <TimeText utcDateString={trip.departureTimeUtc} format="short" />
                             </div>
@@ -654,7 +654,7 @@ export default function TripsSearchPage(rawProps?: any) {
                           </div>
 
                           {/* Transit Connector & Duration */}
-                          <div className="sm:col-span-4 text-center py-1 sm:py-0 space-y-1">
+                          <div className="@sm/card:col-span-4 text-center py-1 sm:py-0 space-y-1">
                             <span className="text-[11px] font-bold text-muted-foreground block">
                               {trip.durationHours || 7.5}h Direct
                             </span>
@@ -670,7 +670,7 @@ export default function TripsSearchPage(rawProps?: any) {
                           </div>
 
                           {/* Arrival Point */}
-                          <div className="sm:col-span-4 text-left sm:text-right space-y-0.5">
+                          <div className="@sm/card:col-span-4 text-left sm:text-right space-y-0.5">
                             <div className="text-xl sm:text-2xl font-black font-mono text-foreground tracking-tight">
                               {arrivalTimeWat}
                             </div>
@@ -716,7 +716,7 @@ export default function TripsSearchPage(rawProps?: any) {
                       </div>
 
                       {/* Right: Fare Column & Tactile CTA Block (Skyloop reference) */}
-                      <div className="flex sm:flex-row lg:flex-col justify-between lg:justify-center items-end border-t lg:border-t-0 lg:border-l border-border pt-4 lg:pt-0 lg:pl-6 min-w-[210px]">
+                      <div className="flex flex-col @sm/card:flex-row @lg/card:flex-col justify-between @lg/card:justify-center items-end border-t @lg/card:border-t-0 @lg/card:border-l border-border pt-4 @lg/card:pt-0 @lg/card:pl-6 min-w-[210px]">
                         <div className="text-left lg:text-right space-y-0.5">
                           <div className="flex items-center lg:justify-end gap-2">
                             <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
@@ -754,7 +754,7 @@ export default function TripsSearchPage(rawProps?: any) {
                             <button
                               type="button"
                               onClick={() => navigate(`/book/${trip.id}?passengers=${passengersParam}`)}
-                              className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.97]"
+                              className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs shadow-md shadow-primary/20 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.97] motion-reduce:transform-none"
                             >
                               <span>Select Seats</span>
                               <ArrowRight className="w-4 h-4" />

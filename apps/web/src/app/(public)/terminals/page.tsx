@@ -34,7 +34,7 @@ export default function TerminalsPage() {
               <p className="text-xs text-muted-foreground">{group.state}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 @md/page:grid-cols-2 @xl/page:grid-cols-3 gap-6">
               {group.terminals.map((terminal) => (
                 <TerminalCard key={terminal.id} terminal={terminal} />
               ))}

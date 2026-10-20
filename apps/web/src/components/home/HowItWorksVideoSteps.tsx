@@ -82,7 +82,7 @@ function StepCard({ step }: { step: Step }) {
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group flex flex-col rounded-3xl bg-card/75 dark:bg-slate-900/75 backdrop-blur-xl border border-border shadow-lg hover:shadow-xl hover:border-primary/40 transition-all duration-300 overflow-hidden"
+      className="group flex flex-col rounded-3xl bg-card/75 dark:bg-slate-900/75 backdrop-blur-xl border border-border shadow-lg hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] overflow-hidden motion-reduce:transform-none"
     >
       {/* Interactive Media Container with Hover-to-Play Video & Fallback Simulator */}
       <div className="relative h-56 sm:h-64 w-full bg-slate-950 overflow-hidden flex items-center justify-center">
@@ -238,7 +238,7 @@ function StepCard({ step }: { step: Step }) {
 
 export function HowItWorksVideoSteps() {
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 @container/section">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Simple Reservation Flow
@@ -251,7 +251,7 @@ export function HowItWorksVideoSteps() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      <div className="grid grid-cols-1 @md/section:grid-cols-3 gap-6 sm:gap-8">
         {STEPS.map((step) => (
           <StepCard key={step.number} step={step} />
         ))}

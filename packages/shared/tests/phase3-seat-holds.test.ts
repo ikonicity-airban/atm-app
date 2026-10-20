@@ -77,7 +77,8 @@ test('Spec 0009 (AC-3 & AC-10): Passenger manifest validation with emergency nex
 
 test('Spec 0009 (AC-5 & AC-6): Hold token cryptography and atomic collision rejection', async () => {
   const repo = new StaticBookingRepository();
-  const tripId = 'trip-sch-ogui-utako-morning-2026-10-20';
+  const futureDate = new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0];
+  const tripId = `trip-sch-enugu-abuja-morning-${futureDate}`;
 
   // User A holds Seat 1
   const holdA = await repo.createHold({
@@ -138,7 +139,8 @@ test('Spec 0009 (AC-5 & AC-6): Hold token cryptography and atomic collision reje
 
 test('Spec 0009 (AC-8): Manual hold release returns seats to inventory immediately', async () => {
   const repo = new StaticBookingRepository();
-  const tripId = 'trip-sch-utako-ogui-morning-2026-10-20';
+  const futureDate = new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0];
+  const tripId = `trip-sch-abuja-enugu-morning-${futureDate}`;
 
   const hold = await repo.createHold({
     tripId,

@@ -21,9 +21,9 @@ const STATIONS: Station[] = [
 
 export function StationStrip({ onSelectStation }: { onSelectStation?: (city: string) => void }) {
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 @container/section">
       <div className="bg-card/75 text-card-foreground rounded-3xl p-5 sm:p-8 border border-border shadow-lg backdrop-blur-xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-5 mb-5">
+        <div className="flex flex-col @md/section:flex-row @md/section:items-center justify-between gap-4 border-b border-border pb-5 mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-accent text-primary flex items-center justify-center font-bold shadow-2xs">
               <Icon icon={MapPin} variant="primary" size="md" />
@@ -54,14 +54,14 @@ export function StationStrip({ onSelectStation }: { onSelectStation?: (city: str
           </div>
         </div>
 
-        {/* Station Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        {/* Station Cards Grid with Container Queries and Spring Hover Micro-Interactions */}
+        <div className="grid grid-cols-2 @md/section:grid-cols-3 @xl/section:grid-cols-5 gap-3.5">
           {STATIONS.map((station) => (
             <button
               key={`${station.city}-${station.hub}`}
               type="button"
               onClick={() => onSelectStation?.(station.city)}
-              className="group text-left p-3.5 rounded-2xl bg-card/60 backdrop-blur-md hover:bg-card/90 border border-border hover:border-primary/40 transition-all duration-200 cursor-pointer min-h-[50px] shadow-xs"
+              className="group text-left p-3.5 rounded-2xl bg-card/60 backdrop-blur-md hover:bg-card/90 border border-border hover:border-primary/40 transition-all duration-200 cursor-pointer min-h-[50px] shadow-xs hover:shadow-md hover:-translate-y-1 active:scale-[0.98] motion-reduce:transform-none"
             >
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-normal px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground font-mono">
