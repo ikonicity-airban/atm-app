@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { Logo } from '../ui/Logo.tsx';
 import { ThemeToggle } from '../theme/ThemeToggle.tsx';
+import { SoundToggle } from '../theme/SoundToggle.tsx';
 import { Button } from '../ui/Button.tsx';
 import { Icon } from '../ui/Icon.tsx';
 import { GooeyInput } from '../ui/gooey-input.tsx';
@@ -613,6 +614,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           {/* Theme Switcher Toggle */}
           <ThemeToggle />
 
+          {/* Sound Toggle */}
+          <div className="hidden sm:flex items-center">
+            <SoundToggle />
+          </div>
+
           {/* Track Parcel / Search Utility Button */}
           <Button
             variant="glass"
@@ -864,6 +870,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                   <div className="flex items-center justify-between px-2 py-1">
                     <span className="text-xs font-medium text-muted-foreground">Theme</span>
                     <ThemeToggle showLabel />
+                  </div>
+                  <div className="flex items-center justify-between px-2 py-1">
+                    <span className="text-xs font-medium text-muted-foreground">Turn On Sound</span>
+                    <SoundToggle showLabel />
                   </div>
                   <Button
                     variant="outline"

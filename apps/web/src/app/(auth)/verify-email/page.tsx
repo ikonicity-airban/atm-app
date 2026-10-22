@@ -34,21 +34,21 @@ export default function VerifyEmailPage() {
         ) : (
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-foreground mb-1.5">
                 Registered Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200/90 rounded-xl text-sm text-slate-900"
+                className="w-full px-4 py-3 bg-muted/40 border border-border rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-background"
               />
             </div>
 
             <button
               type="button"
               onClick={() => setSent(true)}
-              className="w-full py-3.5 px-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white font-semibold text-sm rounded-xl shadow-xs transition-transform active:scale-[0.98] cursor-pointer"
+              className="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm rounded-xl shadow-xs transition-transform active:scale-[0.98] cursor-pointer"
             >
               Send Verification Email
             </button>

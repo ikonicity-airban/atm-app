@@ -27,9 +27,9 @@ export function AuthSplitLayout({
   showcaseCopy = 'Experience seamless Toyota Sienna highway transit connecting Enugu, Abuja, Lagos, and Owerri with instant seat holds and guaranteed departures.',
 }: AuthSplitLayoutProps) {
   return (
-    <div className="min-h-screen bg-[#f3f4f6] flex items-center justify-center p-3 sm:p-6 md:p-8 font-sans">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-3 sm:p-6 md:p-8 font-sans">
       {/* Outer Card Container mirroring CoLabs reference card */}
-      <div className="w-full max-w-5xl bg-white rounded-[2rem] shadow-2xl border border-slate-200/80 p-5 sm:p-8 md:p-10 flex flex-col md:flex-row gap-8 lg:gap-12 relative overflow-hidden">
+      <div className="w-full max-w-5xl bg-card text-card-foreground rounded-[2rem] shadow-2xl border border-border p-5 sm:p-8 md:p-10 flex flex-col md:flex-row gap-8 lg:gap-12 relative overflow-hidden">
         
         {/* Left Column: Form & Interaction Surface */}
         <div className="w-full md:w-[50%] flex flex-col justify-between py-2 sm:py-4">
@@ -38,14 +38,14 @@ export function AuthSplitLayout({
             <div className="mb-8">
               <Link
                 href="/"
-                className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-indigo-50/70 hover:bg-indigo-100/70 border border-indigo-100 transition-colors group cursor-pointer"
+                className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 transition-colors group cursor-pointer"
               >
                 {/* Two overlapping glowing circles logo mark */}
                 <div className="flex items-center -space-x-1.5">
-                  <div className="w-4 h-4 rounded-full bg-indigo-600 shadow-xs" />
-                  <div className="w-4 h-4 rounded-full bg-indigo-400 opacity-80" />
+                  <div className="w-4 h-4 rounded-full bg-primary shadow-xs" />
+                  <div className="w-4 h-4 rounded-full bg-primary/60 opacity-80" />
                 </div>
-                <span className="text-sm font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <span className="text-sm font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
                   {brandTag}
                 </span>
               </Link>
@@ -53,11 +53,11 @@ export function AuthSplitLayout({
 
             {/* Title resting directly on canvas without wrapper badges */}
             <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
                 {title}
               </h1>
               {subtitle && (
-                <p className="text-xs sm:text-sm text-slate-500 mt-1.5">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1.5">
                   {subtitle}
                 </p>
               )}
@@ -71,11 +71,11 @@ export function AuthSplitLayout({
 
           {/* Bottom Switch Link */}
           {footerPrompt && footerLinkText && footerLinkHref && (
-            <div className="mt-8 pt-4 border-t border-slate-100 text-center text-xs sm:text-sm text-slate-600">
+            <div className="mt-8 pt-4 border-t border-border text-center text-xs sm:text-sm text-muted-foreground">
               {footerPrompt}{' '}
               <Link
                 href={footerLinkHref}
-                className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer"
+                className="font-semibold text-primary hover:underline transition-colors cursor-pointer"
               >
                 {footerLinkText}
               </Link>

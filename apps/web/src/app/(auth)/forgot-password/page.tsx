@@ -55,14 +55,14 @@ export default function ForgotPasswordPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-sm font-bold text-slate-900">Check Your Email</h3>
-          <p className="text-xs text-slate-600">
+          <h3 className="text-sm font-bold text-foreground">Check Your Email</h3>
+          <p className="text-xs text-muted-foreground">
             We sent instructions to <strong>{email}</strong>. Follow the link to choose a new password.
           </p>
           <div className="pt-2">
             <Link
               href="/reset-password?token=dev-sample-reset-token"
-              className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 underline"
+              className="text-xs font-semibold text-primary hover:underline"
             >
               Continue to Reset Password Form (Demo Link)
             </Link>
@@ -71,13 +71,13 @@ export default function ForgotPasswordPage() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700">
+            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-xl text-xs text-destructive">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-foreground mb-1.5">
               Account Email Address
             </label>
             <input
@@ -86,14 +86,14 @@ export default function ForgotPasswordPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
               required
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200/90 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 focus:bg-white transition-all"
+              className="w-full px-4 py-3 bg-muted/40 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-background transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white font-semibold text-sm rounded-xl shadow-xs transition-transform active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center min-h-[46px]"
+            className="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm rounded-xl shadow-xs transition-transform active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center min-h-[46px]"
           >
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>

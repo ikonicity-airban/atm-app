@@ -16,14 +16,14 @@ export default function PrivacyPage() {
       lastUpdated="October 2026 // TODO(client/legal): NDPA registration and DPO review"
     >
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">1. Scope &amp; Legal Framework</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">1. Scope &amp; Legal Framework</h2>
         <p>
           {BRAND.name} (&quot;ATM Nigeria&quot;, &quot;we&quot;, &quot;our&quot;) is committed to handling your personal data responsibly and in strict compliance with the Nigeria Data Protection Act (NDPA 2023) and regulations issued by the Nigeria Data Protection Commission (NDPC).
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">2. Information We Collect</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">2. Information We Collect</h2>
         <p>
           To issue tickets, prepare statutory travel manifests, and deliver courier shipments, we collect:
         </p>
@@ -36,7 +36,7 @@ export default function PrivacyPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">3. How Your Data is Used</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">3. How Your Data is Used</h2>
         <p>
           Your data is used solely for the following purposes:
         </p>
@@ -52,17 +52,17 @@ export default function PrivacyPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">4. Data Security &amp; Retention</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">4. Data Security &amp; Retention</h2>
         <p>
           All electronic transmission of passenger information and booking records is encrypted using Transport Layer Security (TLS). Data is housed in secure cloud databases with restricted role-based staff access controls.
         </p>
-        <p className="text-xs text-slate-500 italic">
+        <p className="text-xs text-muted-foreground italic">
           // TODO(client/legal): Confirm exact data retention schedules (e.g. 5-year manifest retention for regulatory compliance).
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">5. Your Rights as a Data Subject</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">5. Your Rights as a Data Subject</h2>
         <p>
           Under the NDPA 2023, you have the right to request access to your travel records, rectify inaccurate phone numbers, or request the erasure of your profile. To exercise these rights, contact our Data Protection Officer at:
         </p>

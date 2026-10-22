@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { Overpass, Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '../components/theme/ThemeProvider.tsx';
+import { SoundProvider } from '../components/theme/SoundProvider.tsx';
 import { LoadingProvider } from '../components/ui/LoadingProvider.tsx';
 
 const overpass = Overpass({
@@ -57,11 +58,13 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen bg-background text-foreground font-sans transition-colors duration-200">
         <ThemeProvider>
-          <Suspense fallback={null}>
-            <LoadingProvider>
-              {children}
-            </LoadingProvider>
-          </Suspense>
+          <SoundProvider>
+            <Suspense fallback={null}>
+              <LoadingProvider>
+                {children}
+              </LoadingProvider>
+            </Suspense>
+          </SoundProvider>
         </ThemeProvider>
       </body>
     </html>

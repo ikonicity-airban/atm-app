@@ -438,15 +438,15 @@ export default function BookTripPage(props?: any) {
         </div>
         <div className="space-y-2">
           {/* Hard ban: plain typography, no pill or card */}
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight text-balance">Trip Not Found</h1>
-          <p className="text-xs text-slate-600 leading-relaxed text-pretty">
+          <h1 className="text-2xl font-black text-foreground tracking-tight text-balance">Trip Not Found</h1>
+          <p className="text-xs text-muted-foreground leading-relaxed text-pretty">
             The trip you requested does not exist or has been removed from our dispatch schedule.
           </p>
         </div>
         <button
           type="button"
           onClick={() => navigate('/trips')}
-          className="px-5 py-2.5 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] cursor-pointer"
+          className="px-5 py-2.5 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-xl min-h-[44px] cursor-pointer"
         >
           Back to Search Results
         </button>
@@ -461,17 +461,17 @@ export default function BookTripPage(props?: any) {
           <AlertTriangle className="w-6 h-6" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight text-balance">
+          <h1 className="text-2xl font-black text-foreground tracking-tight text-balance">
             Booking Unavailable ({trip.unavailableReason || 'Closed'})
           </h1>
-          <p className="text-xs text-slate-600 leading-relaxed text-pretty">
+          <p className="text-xs text-muted-foreground leading-relaxed text-pretty">
             This scheduled departure is no longer open for online reservations. Bookings close 60 minutes prior to departure.
           </p>
         </div>
         <button
           type="button"
           onClick={() => navigate('/trips')}
-          className="px-5 py-2.5 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl min-h-[44px] cursor-pointer"
+          className="px-5 py-2.5 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-xl min-h-[44px] cursor-pointer"
         >
           View Later Departures
         </button>
@@ -487,7 +487,7 @@ export default function BookTripPage(props?: any) {
       </div>
 
       {/* Navigation Header & Stepper */}
-      <div className="space-y-4 border-b border-slate-200 pb-6">
+      <div className="space-y-4 border-b border-border pb-6">
         <div className="flex items-center justify-between">
           <button
             type="button"
@@ -495,27 +495,27 @@ export default function BookTripPage(props?: any) {
               if (currentStep > 0) updateStepInUrl(currentStep - 1);
               else handleReleaseAndExit();
             }}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 min-h-[44px] cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground min-h-[44px] cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{currentStep === 0 ? 'Back to Trips' : 'Previous Step'}</span>
           </button>
 
-          <span className="text-xs font-mono text-slate-500">
+          <span className="text-xs font-mono text-muted-foreground">
             Toyota Sienna &bull; 5 Seats
           </span>
         </div>
 
         {/* Hard ban: Plain bold typography, NO pill or card wrapping title */}
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight text-balance">
+          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight text-balance">
             {currentStep === 0
               ? 'Select Your Seats'
               : currentStep === 1
               ? 'Passenger Details'
               : 'Review & Confirm Hold'}
           </h1>
-          <p className="text-xs text-slate-600 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {trip.routeTitle} &bull; <TimeText utcDateString={trip.departureTimeUtc} />
           </p>
         </div>
@@ -532,9 +532,9 @@ export default function BookTripPage(props?: any) {
           {errorMessage && (
             <div
               role="alert"
-              className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-start gap-3"
+              className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-start gap-3"
             >
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold block">Attention</span>
                 <span>{errorMessage}</span>
@@ -546,35 +546,35 @@ export default function BookTripPage(props?: any) {
           {currentStep === 0 && (
             <div className="space-y-6">
               {/* Passenger count control */}
-              <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between gap-4">
+              <div className="p-4 bg-card text-card-foreground border border-border rounded-xl flex items-center justify-between gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-foreground">
                     Passengers
                   </label>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-muted-foreground">
                     Maximum 5 passengers per Toyota Sienna
                   </span>
                 </div>
 
-                <div className="flex items-center border border-slate-300 rounded bg-white min-h-[44px]">
+                <div className="flex items-center border border-border rounded bg-muted/40 min-h-[44px]">
                   <button
                     type="button"
                     disabled={passengersCount <= 1}
                     onClick={() => handlePassengerCountChange(-1)}
-                    className="px-3 py-2 text-slate-600 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[40px] flex items-center justify-center cursor-pointer"
+                    className="px-3 py-2 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[40px] flex items-center justify-center cursor-pointer"
                     aria-label="Decrease passenger count"
                   >
                     -
                   </button>
-                  <div className="px-4 text-center font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5 text-slate-400" />
+                  <div className="px-4 text-center font-bold text-sm text-foreground flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>{passengersCount}</span>
                   </div>
                   <button
                     type="button"
                     disabled={passengersCount >= 5}
                     onClick={() => handlePassengerCountChange(1)}
-                    className="px-3 py-2 text-slate-600 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[40px] flex items-center justify-center cursor-pointer"
+                    className="px-3 py-2 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed font-bold text-base min-h-[44px] min-w-[40px] flex items-center justify-center cursor-pointer"
                     aria-label="Increase passenger count"
                   >
                     +
@@ -583,7 +583,7 @@ export default function BookTripPage(props?: any) {
               </div>
 
               {passengersCount === 5 && (
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Travelling with a group of more than 5?{' '}
                   <a
                     href="/corporate"
@@ -591,7 +591,7 @@ export default function BookTripPage(props?: any) {
                       e.preventDefault();
                       navigate('/corporate');
                     }}
-                    className="text-[#ca2484] hover:underline font-semibold"
+                    className="text-primary hover:underline font-semibold"
                   >
                     Request a corporate group booking
                   </a>
@@ -600,23 +600,23 @@ export default function BookTripPage(props?: any) {
               )}
 
               {/* Instructions */}
-              <div className="bg-pink-50/50 border border-pink-100 rounded-lg p-3.5 text-xs text-slate-700 flex items-center justify-between">
+              <div className="bg-primary/10 border border-primary/20 rounded-lg p-3.5 text-xs text-foreground flex items-center justify-between">
                 <div>
-                  <span className="font-bold text-slate-900">
+                  <span className="font-bold text-foreground">
                     Select {passengersCount} seat{passengersCount > 1 ? 's' : ''}:
                   </span>{' '}
                   <span>Currently selected {selectedSeats.length} of {passengersCount}</span>
                 </div>
                 {selectedSeats.length === passengersCount && (
-                  <span className="text-emerald-700 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     Complete
                   </span>
                 )}
               </div>
 
               {/* Interactive SeatMap */}
-              <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs">
+              <div className="bg-card text-card-foreground border border-border rounded-xl p-4 sm:p-6 shadow-xs">
                 <SeatMap
                   layout={SIENNA_5_SEAT_LAYOUT}
                   selectedSeats={selectedSeats}
@@ -672,64 +672,64 @@ export default function BookTripPage(props?: any) {
           {currentStep === 2 && heldBooking && (
             <div className="space-y-6">
               {/* Hold Expiry Countdown Banner (Hard ban: NO animate-pulse, static plain text) */}
-              <div className="bg-slate-900 text-white rounded-xl p-5 space-y-2 border border-slate-800">
+              <div className="bg-card text-card-foreground rounded-xl p-5 space-y-2 border border-border shadow-xs">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-pink-400" />
-                    <span className="font-bold text-sm tracking-tight">Active Seat Hold</span>
+                    <Clock className="w-5 h-5 text-primary" />
+                    <span className="font-bold text-sm tracking-tight text-foreground">Active Seat Hold</span>
                   </div>
-                  <span className="text-xs font-mono bg-slate-800 text-pink-300 px-2.5 py-1 rounded border border-slate-700 font-bold">
+                  <span className="text-xs font-mono bg-muted text-primary px-2.5 py-1 rounded border border-border font-bold">
                     Ref: {heldBooking.ref}
                   </span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   Your seats are temporarily reserved. Complete payment before the countdown expires to prevent release:
                 </p>
                 <div className="pt-1">
-                  <span className="text-2xl font-black font-mono text-white tracking-wider">
+                  <span className="text-2xl font-black font-mono text-foreground tracking-wider">
                     {formatCountdown(holdSeconds)}
                   </span>
-                  <span className="text-xs text-slate-400 ml-2">remaining</span>
+                  <span className="text-xs text-muted-foreground ml-2">remaining</span>
                 </div>
               </div>
 
               {/* Trip & Passenger Review Card */}
-              <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 shadow-xs">
+              <div className="bg-card text-card-foreground border border-border rounded-xl p-6 space-y-6 shadow-xs">
                 <div>
-                  <h2 className="text-base font-bold text-slate-900 tracking-tight">
+                  <h2 className="text-base font-bold text-foreground tracking-tight">
                     Departure &amp; Passenger Summary
                   </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     Please verify your boarding details before proceeding to payment.
                   </p>
                 </div>
 
-                <div className="divide-y divide-slate-100 text-xs">
+                <div className="divide-y divide-border text-xs">
                   <div className="py-2.5 flex justify-between">
-                    <span className="text-slate-500">Corridor</span>
-                    <span className="font-bold text-slate-900">{heldBooking.trip.routeTitle}</span>
+                    <span className="text-muted-foreground">Corridor</span>
+                    <span className="font-bold text-foreground">{heldBooking.trip.routeTitle}</span>
                   </div>
                   <div className="py-2.5 flex justify-between">
-                    <span className="text-slate-500">Departure Station</span>
-                    <span className="font-medium text-slate-900">{heldBooking.trip.originTerminal.name}</span>
+                    <span className="text-muted-foreground">Departure Station</span>
+                    <span className="font-medium text-foreground">{heldBooking.trip.originTerminal.name}</span>
                   </div>
                   <div className="py-2.5 flex justify-between">
-                    <span className="text-slate-500">Arrival Station</span>
-                    <span className="font-medium text-slate-900">{heldBooking.trip.destinationTerminal.name}</span>
+                    <span className="text-muted-foreground">Arrival Station</span>
+                    <span className="font-medium text-foreground">{heldBooking.trip.destinationTerminal.name}</span>
                   </div>
                   <div className="py-2.5 flex justify-between">
-                    <span className="text-slate-500">Departure Time</span>
-                    <span className="font-medium text-slate-900">
+                    <span className="text-muted-foreground">Departure Time</span>
+                    <span className="font-medium text-foreground">
                       <TimeText utcDateString={heldBooking.trip.departureTimeUtc} />
                     </span>
                   </div>
                   <div className="py-2.5 flex justify-between">
-                    <span className="text-slate-500">Vehicle</span>
-                    <span className="font-medium text-slate-900">Toyota Sienna (5 seats, A/C, refreshments)</span>
+                    <span className="text-muted-foreground">Vehicle</span>
+                    <span className="font-medium text-foreground">Toyota Sienna (5 seats, A/C, refreshments)</span>
                   </div>
                   <div className="py-2.5 flex justify-between">
-                    <span className="text-slate-500">Contact Lead</span>
-                    <span className="font-medium text-slate-900">
+                    <span className="text-muted-foreground">Contact Lead</span>
+                    <span className="font-medium text-foreground">
                       {heldBooking.contact.fullName} ({heldBooking.contact.phone})
                     </span>
                   </div>
@@ -737,25 +737,25 @@ export default function BookTripPage(props?: any) {
 
                 {/* Seat Assignment List */}
                 <div className="space-y-3 pt-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
                     Seat Assignments ({heldBooking.seats.length})
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {heldBooking.passengers.map((p) => (
                       <div
                         key={p.seatNo}
-                        className="p-2.5 bg-slate-50 border border-slate-200 rounded text-xs flex items-center justify-between"
+                        className="p-2.5 bg-muted/40 border border-border rounded text-xs flex items-center justify-between"
                       >
-                        <span className="font-bold text-[#ca2484]">Seat {p.seatNo}</span>
-                        <span className="font-medium text-slate-800 truncate ml-2">{p.fullName}</span>
+                        <span className="font-bold text-primary">Seat {p.seatNo}</span>
+                        <span className="font-medium text-foreground truncate ml-2">{p.fullName}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Cancellation Policy Note */}
-                <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1 text-slate-600 leading-relaxed">
-                  <span className="font-bold text-slate-900 block">Carriage &amp; Cancellation Policy</span>
+                <div className="p-4 bg-muted/40 border border-border rounded-lg text-xs space-y-1 text-muted-foreground leading-relaxed">
+                  <span className="font-bold text-foreground block">Carriage &amp; Cancellation Policy</span>
                   <p>
                     Cancellations more than 24 hours prior to departure incur a 10% processing fee. Cancellations between 6 and 24 hours incur 25%. No refunds within 2 hours of departure. // TODO(client): confirm policy with terminal management
                   </p>
@@ -779,38 +779,38 @@ export default function BookTripPage(props?: any) {
 
         {/* Right Column: Persistent Desktop Trip Summary Sidebar */}
         <div className="lg:col-span-5 hidden lg:block sticky top-6">
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 shadow-xs">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">
+          <div className="bg-card text-card-foreground border border-border rounded-xl p-6 space-y-6 shadow-xs">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-foreground">
               Trip Summary
             </h2>
 
             <div className="space-y-4">
               <div>
-                <span className="text-base font-black text-slate-900 block">
+                <span className="text-base font-black text-foreground block">
                   {trip.routeTitle}
                 </span>
-                <span className="text-xs text-slate-500">Toyota Sienna &bull; 5 Seats</span>
+                <span className="text-xs text-muted-foreground">Toyota Sienna &bull; 5 Seats</span>
               </div>
 
-              <div className="space-y-2 text-xs text-slate-600">
+              <div className="space-y-2 text-xs text-muted-foreground">
                 <div className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-[#ca2484] flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-slate-900 block">{trip.originTerminal.name}</span>
-                    <span className="text-slate-500">{trip.originTerminal.address}</span>
+                    <span className="font-semibold text-foreground block">{trip.originTerminal.name}</span>
+                    <span className="text-muted-foreground">{trip.originTerminal.address}</span>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2 pt-1">
-                  <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-slate-900 block">{trip.destinationTerminal.name}</span>
-                    <span className="text-slate-500">{trip.destinationTerminal.address}</span>
+                    <span className="font-semibold text-foreground block">{trip.destinationTerminal.name}</span>
+                    <span className="text-muted-foreground">{trip.destinationTerminal.address}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 pt-1">
-                  <Clock className="w-4 h-4 text-slate-400" />
+                  <Clock className="w-4 h-4 text-muted-foreground" />
                   <span>
                     <TimeText utcDateString={trip.departureTimeUtc} />
                   </span>
@@ -818,29 +818,29 @@ export default function BookTripPage(props?: any) {
               </div>
             </div>
 
-            <div className="border-t border-slate-200 pt-4 space-y-2 text-xs">
-              <div className="flex justify-between text-slate-600">
+            <div className="border-t border-border pt-4 space-y-2 text-xs">
+              <div className="flex justify-between text-muted-foreground">
                 <span>Per-Seat Fare:</span>
                 <MoneyText kobo={currentPerSeatFare} isPlaceholder={trip.isPlaceholder} />
               </div>
 
-              <div className="flex justify-between text-slate-600">
+              <div className="flex justify-between text-muted-foreground">
                 <span>Selected Seats:</span>
-                <span className="font-bold text-slate-900">
+                <span className="font-bold text-foreground">
                   {selectedSeats.length > 0 ? selectedSeats.join(', ') : `${passengersCount} pending`}
                 </span>
               </div>
 
-              <div className="border-t border-slate-100 pt-3 flex justify-between items-baseline">
-                <span className="text-sm font-bold text-slate-900">Total Fare:</span>
-                <div className="text-xl font-black text-slate-900">
+              <div className="border-t border-border pt-3 flex justify-between items-baseline">
+                <span className="text-sm font-bold text-foreground">Total Fare:</span>
+                <div className="text-xl font-black text-foreground">
                   <MoneyText kobo={currentTotalKobo} isPlaceholder={trip.isPlaceholder} />
                 </div>
               </div>
             </div>
 
             <div className="pt-2">
-              <ul className="text-[11px] text-slate-500 space-y-1">
+              <ul className="text-[11px] text-muted-foreground space-y-1">
                 <li>&bull; Instant 10-minute hold upon passenger completion</li>
                 <li>&bull; Safe Paystack checkout (Cards, Transfers, USSD)</li>
                 <li>&bull; Direct departures without roadside pickups</li>
@@ -851,13 +851,13 @@ export default function BookTripPage(props?: any) {
       </div>
 
       {/* Mobile Sticky Bottom Bar (min-height 44px, total + primary action) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-lg z-40 flex items-center justify-between gap-4">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card text-card-foreground border-t border-border p-4 shadow-lg z-40 flex items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] uppercase font-bold text-slate-500 block">Total Fare</span>
-          <div className="text-lg font-black text-slate-900">
+          <span className="text-[10px] uppercase font-bold text-muted-foreground block">Total Fare</span>
+          <div className="text-lg font-black text-foreground">
             <MoneyText kobo={currentTotalKobo} isPlaceholder={trip.isPlaceholder} />
           </div>
-          <span className="text-[10px] text-slate-500 block">
+          <span className="text-[10px] text-muted-foreground block">
             {selectedSeats.length || passengersCount} passenger seat{passengersCount > 1 ? 's' : ''}
           </span>
         </div>
@@ -943,55 +943,55 @@ export default function BookTripPage(props?: any) {
       >
         <div className="space-y-5 pt-2">
           {/* Reservation Summary */}
-          <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
-            <div className="flex items-center justify-between text-xs text-slate-500">
+          <div className="p-4 bg-muted/40 border border-border rounded-xl space-y-3">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Booking Reference</span>
-              <strong className="font-mono text-slate-900 text-sm">{heldBooking?.ref}</strong>
+              <strong className="font-mono text-foreground text-sm">{heldBooking?.ref}</strong>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-slate-500">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Reserved Seats</span>
-              <strong className="text-slate-900">Seat(s): {heldBooking?.seats.join(', ')}</strong>
+              <strong className="text-foreground">Seat(s): {heldBooking?.seats.join(', ')}</strong>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-200 pt-2">
-              <span className="font-semibold text-slate-700">Trip Fare Total</span>
-              <span className="text-base font-bold text-slate-900">
+            <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border pt-2">
+              <span className="font-semibold text-foreground">Trip Fare Total</span>
+              <span className="text-base font-bold text-foreground">
                 <MoneyText kobo={heldBooking?.totalFareKobo} />
               </span>
             </div>
 
             {/* ATM Store Credit Deduction Section (AC-8) */}
             {customerCreditsKobo > 0 && (
-              <div className="pt-3 border-t border-slate-200 space-y-2">
-                <label className="flex items-center justify-between p-2.5 bg-indigo-50/80 border border-indigo-100 rounded-lg cursor-pointer">
+              <div className="pt-3 border-t border-border space-y-2">
+                <label className="flex items-center justify-between p-2.5 bg-primary/10 border border-primary/20 rounded-lg cursor-pointer">
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
                       checked={applyStoreCredit}
                       onChange={(e) => setApplyStoreCredit(e.target.checked)}
-                      className="rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                      className="rounded text-primary focus:ring-primary cursor-pointer"
                     />
-                    <span className="text-xs font-bold text-indigo-950">
+                    <span className="text-xs font-bold text-foreground">
                       Apply ATM Store Credit
                     </span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-indigo-700">
+                  <span className="text-xs font-mono font-bold text-primary">
                     Avail: ₦{(customerCreditsKobo / 100).toLocaleString()}
                   </span>
                 </label>
 
                 {applyStoreCredit && (
                   <div className="space-y-1 text-xs">
-                    <div className="flex justify-between text-indigo-700 font-medium">
+                    <div className="flex justify-between text-primary font-medium">
                       <span>Store Credit Deduction:</span>
                       <span className="font-mono">
                         -₦{(Math.min(heldBooking?.totalFareKobo || 0, customerCreditsKobo) / 100).toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between text-slate-900 font-bold border-t border-slate-200 pt-1">
+                    <div className="flex justify-between text-foreground font-bold border-t border-border pt-1">
                       <span>Net Payable:</span>
-                      <span className="font-mono text-base text-[#ca2484]">
+                      <span className="font-mono text-base text-primary">
                         ₦{(Math.max(0, (heldBooking?.totalFareKobo || 0) - customerCreditsKobo) / 100).toLocaleString()}
                       </span>
                     </div>
@@ -1003,28 +1003,28 @@ export default function BookTripPage(props?: any) {
 
           {/* Payment Channels Grid */}
           <div className="space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground block">
               {applyStoreCredit && customerCreditsKobo >= (heldBooking?.totalFareKobo || 0)
                 ? 'Payment Method'
                 : 'Supported Payment Channels'}
             </span>
 
             {applyStoreCredit && customerCreditsKobo >= (heldBooking?.totalFareKobo || 0) ? (
-              <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-2 text-xs text-emerald-800">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                 <span>
                   <strong>100% Covered by Store Credit!</strong> No debit card or bank transfer required. Booking will be confirmed immediately.
                 </span>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-[#ca2484]" />
-                  <span className="font-medium text-slate-800">Cards (Verve, Visa, MC)</span>
+                <div className="p-2.5 bg-muted/40 border border-border rounded-lg flex items-center gap-2">
+                  <CreditCard className="w-4 h-4 text-primary" />
+                  <span className="font-medium text-foreground">Cards (Verve, Visa, MC)</span>
                 </div>
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span className="font-medium text-slate-800">Bank Transfer &amp; USSD</span>
+                <div className="p-2.5 bg-muted/40 border border-border rounded-lg flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="font-medium text-foreground">Bank Transfer &amp; USSD</span>
                 </div>
               </div>
             )}

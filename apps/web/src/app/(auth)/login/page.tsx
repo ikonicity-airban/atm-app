@@ -79,7 +79,7 @@ export default function CustomerLoginPage() {
 
         {/* Email or Phone Input */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Email or Nigerian mobile
           </label>
           <input
@@ -88,13 +88,13 @@ export default function CustomerLoginPage() {
             onChange={(e) => setIdentifier(e.target.value)}
             placeholder="Email or phone number"
             required
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200/90 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 focus:bg-white transition-all"
+            className="w-full px-4 py-3 bg-muted/40 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-background transition-all"
           />
         </div>
 
         {/* Password Input with Eye Toggle */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Password
           </label>
           <div className="relative">
@@ -104,12 +104,12 @@ export default function CustomerLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
               required
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200/90 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 focus:bg-white transition-all pr-11"
+              className="w-full px-4 py-3 bg-muted/40 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-background transition-all pr-11"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 focus:outline-none cursor-pointer"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 focus:outline-none cursor-pointer"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
@@ -135,15 +135,15 @@ export default function CustomerLoginPage() {
               onChange={(e) => setRememberMe(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-8 h-4.5 bg-slate-200 peer-checked:bg-indigo-600 rounded-full transition-colors relative">
-              <div className={`absolute top-0.5 left-0.5 w-3.5 h-3.5 bg-white rounded-full transition-transform ${rememberMe ? 'translate-x-3.5' : ''}`} />
+            <div className="w-8 h-4.5 bg-muted peer-checked:bg-primary rounded-full transition-colors relative">
+              <div className={`absolute top-0.5 left-0.5 w-3.5 h-3.5 bg-card rounded-full transition-transform ${rememberMe ? 'translate-x-3.5' : ''}`} />
             </div>
-            <span className="text-xs text-slate-600 font-medium">Remember me</span>
+            <span className="text-xs text-muted-foreground font-medium">Remember me</span>
           </label>
 
           <Link
             href="/forgot-password"
-            className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer"
+            className="text-xs font-semibold text-primary hover:underline transition-colors cursor-pointer"
           >
             Forgot password?
           </Link>
@@ -153,7 +153,7 @@ export default function CustomerLoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 px-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white font-semibold text-sm rounded-xl shadow-xs transition-transform duration-150 ease-out active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center min-h-[46px]"
+          className="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm rounded-xl shadow-xs transition-transform duration-150 ease-out active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center min-h-[46px]"
         >
           {loading ? 'Signing in...' : 'Sign in'}
         </button>
@@ -161,10 +161,10 @@ export default function CustomerLoginPage() {
         {/* Divider */}
         <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200/80" />
+            <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-white px-3 text-slate-400">or continue with</span>
+            <span className="bg-card px-3 text-muted-foreground">or continue with</span>
           </div>
         </div>
 
@@ -174,7 +174,7 @@ export default function CustomerLoginPage() {
           <button
             type="button"
             onClick={handleDevQuickFill}
-            className="w-full py-2.5 px-4 bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 font-medium text-xs sm:text-sm rounded-xl transition-transform active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2.5 shadow-2xs"
+            className="w-full py-2.5 px-4 bg-card hover:bg-muted border border-border text-foreground font-medium text-xs sm:text-sm rounded-xl transition-transform active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2.5 shadow-2xs"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path
@@ -202,7 +202,7 @@ export default function CustomerLoginPage() {
             <button
               type="button"
               onClick={handleDevQuickFill}
-              className="py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 font-medium text-xs rounded-xl transition-transform active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+              className="py-2.5 px-3 bg-card hover:bg-muted border border-border text-foreground font-medium text-xs rounded-xl transition-transform active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
             >
               <svg className="w-3.5 h-3.5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -212,9 +212,9 @@ export default function CustomerLoginPage() {
 
             <Link
               href="/verify-phone"
-              className="py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 font-medium text-xs rounded-xl transition-transform active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 bg-card hover:bg-muted border border-border text-foreground font-medium text-xs rounded-xl transition-transform active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5"
             >
-              <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
               <span>Phone OTP</span>

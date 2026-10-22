@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { playCarHaltingSound, playCarSpeedingSound } from '../../lib/sound.ts';
 
 export interface CinematicLoadingScreenProps {
   /**
@@ -74,6 +75,7 @@ export function CinematicLoadingScreen({
     const totalExitDuration = prefersReducedMotion ? 250 : 630;
 
     if (phase === 'entering') {
+      playCarHaltingSound();
       entranceTimeoutRef.current = setTimeout(() => {
         setPhase('holding');
       }, totalEntranceDuration);
@@ -102,6 +104,7 @@ export function CinematicLoadingScreen({
     }
 
     if (phase === 'exiting') {
+      playCarSpeedingSound();
       exitTimeoutRef.current = setTimeout(() => {
         setPhase('completed');
         onAnimationComplete?.();

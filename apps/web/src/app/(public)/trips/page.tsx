@@ -771,7 +771,7 @@ export default function TripsSearchPage(rawProps?: any) {
           <SlidersHorizontal className="w-4 h-4" />
           <span>Search &amp; Filter Trips</span>
           {activeFiltersCount > 0 && (
-            <span className="w-5 h-5 rounded-full bg-white text-slate-900 text-[10px] font-black flex items-center justify-center">
+            <span className="w-5 h-5 rounded-full bg-primary-foreground text-primary text-[10px] font-black flex items-center justify-center">
               {activeFiltersCount}
             </span>
           )}

@@ -339,35 +339,35 @@ export default function TrackHubPage(props?: any) {
           </div>
 
           {journeyErrorMsg && (
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/25 text-destructive flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-destructive" />
               <div className="text-sm font-medium">{journeyErrorMsg}</div>
             </div>
           )}
 
           {journeyResult && (
-            <div className="p-6 rounded-2xl border border-emerald-200 bg-emerald-50/70 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="p-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold uppercase tracking-wider">
                     {journeyResult.status.replace(/_/g, ' ')}
                   </span>
-                  <span className="text-xs font-mono font-bold text-slate-700">
+                  <span className="text-xs font-mono font-bold text-foreground">
                     {journeyResult.bookingReference}
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-foreground">
                   {journeyResult.corridor}
                 </h3>
-                <p className="text-xs text-slate-600 mt-0.5">
-                  Estimated Terminal Arrival: <span className="font-bold text-slate-900">{journeyResult.estimatedArrivalWat}</span>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Estimated Terminal Arrival: <span className="font-bold text-foreground">{journeyResult.estimatedArrivalWat}</span>
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={() => navigate(journeyResult.trackingUrl)}
-                className="min-h-[44px] py-2.5 px-6 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-md shadow-emerald-700/20 transition-all flex items-center gap-2 whitespace-nowrap"
+                className="min-h-[44px] py-2.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer"
               >
                 <span>Open Live Journey Timeline</span>
                 <ExternalLink className="w-4 h-4" />

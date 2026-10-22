@@ -124,8 +124,8 @@ export default function CorporatePage() {
       description="Scheduled employee transport, executive delegation convoys, and dedicated express cargo agreements across Nigeria."
     >
       {createdRequest && (
-        <div className="max-w-2xl mx-auto bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+        <div className="max-w-2xl mx-auto bg-card text-card-foreground rounded-xl border border-border shadow-sm p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-3 pb-4 border-b border-border">
             <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
               <CheckCircle2 className="w-6 h-6" />
             </div>
@@ -133,25 +133,25 @@ export default function CorporatePage() {
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded">
                 Corporate Order Placed
               </span>
-              <h2 className="text-xl font-black text-slate-900 mt-1">
+              <h2 className="text-xl font-black text-foreground mt-1">
                 Ref: {createdRequest.reference}
               </h2>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div className="bg-slate-50 p-4 rounded-lg space-y-1">
-              <span className="text-xs text-slate-500 font-medium">B2B Account</span>
-              <div className="font-bold text-slate-900">{createdRequest.organizationName}</div>
-              <div className="text-xs text-slate-600">TIN/RC: {createdRequest.organizationTaxId}</div>
+            <div className="bg-muted/40 p-4 rounded-lg space-y-1">
+              <span className="text-xs text-muted-foreground font-medium">B2B Account</span>
+              <div className="font-bold text-foreground">{createdRequest.organizationName}</div>
+              <div className="text-xs text-muted-foreground">TIN/RC: {createdRequest.organizationTaxId}</div>
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-lg space-y-1">
-              <span className="text-xs text-slate-500 font-medium">Corridor Estimate</span>
-              <div className="font-black text-[#ca2484] text-lg">
+            <div className="bg-muted/40 p-4 rounded-lg space-y-1">
+              <span className="text-xs text-muted-foreground font-medium">Corridor Estimate</span>
+              <div className="font-black text-primary text-lg">
                 {formatNaira(createdRequest.estimatedFareKobo)}
               </div>
-              <div className="text-xs text-slate-500">
+              <div className="text-xs text-muted-foreground">
                 Payment: Corporate Invoice (PO: {createdRequest.invoiceReference || 'Pending'})
               </div>
             </div>

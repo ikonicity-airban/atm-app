@@ -127,14 +127,14 @@ function VerifyPhoneContent() {
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
             placeholder="e.g. 123456"
             required
-            className="w-full text-center tracking-[0.4em] font-mono text-xl py-3 px-4 bg-slate-50 border border-slate-200/90 rounded-xl text-slate-900 placeholder:text-slate-300 placeholder:tracking-normal focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 focus:bg-white transition-all"
+            className="w-full text-center tracking-[0.4em] font-mono text-xl py-3 px-4 bg-muted/40 border border-border rounded-xl text-foreground placeholder:text-muted-foreground placeholder:tracking-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-background transition-all"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading || code.length !== 6}
-          className="w-full py-3.5 px-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white font-semibold text-sm rounded-xl shadow-xs transition-transform active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center min-h-[46px]"
+          className="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm rounded-xl shadow-xs transition-transform active:scale-[0.98] cursor-pointer disabled:opacity-60 flex items-center justify-center min-h-[46px]"
         >
           {loading ? 'Verifying...' : 'Verify & Continue'}
         </button>

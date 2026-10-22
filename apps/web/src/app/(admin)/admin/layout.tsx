@@ -45,7 +45,7 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-50">
+    <div className="min-h-screen flex bg-background text-foreground">
       <div className="hidden md:block">
         <AdminSidebar currentPath="/admin" onNavigate={handleNavigate} />
       </div>

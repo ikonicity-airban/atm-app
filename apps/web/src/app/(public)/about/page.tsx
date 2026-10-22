@@ -18,7 +18,7 @@ export default function AboutPage() {
       lastUpdated="October 2026"
     >
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Overview</h2>
+        <h2 className="text-xl font-bold text-foreground tracking-tight">Overview</h2>
         <p>
           Ascent Transport Management ({BRAND.shortName}) provides scheduled passenger transport and express parcel delivery connecting Enugu, Abuja, Lagos, and Owerri.
         </p>

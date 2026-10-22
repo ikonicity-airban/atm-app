@@ -22,14 +22,14 @@ export default function TermsPage() {
       lastUpdated="October 2026 // TODO(client/legal): finalize with legal counsel"
     >
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">1. General Overview &amp; Acceptance</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">1. General Overview &amp; Acceptance</h2>
         <p>
           By booking a ticket, chartering a vehicle, or dropping off cargo at any terminal operated by {BRAND.name}, you enter into an agreement governed by the laws of the Federal Republic of Nigeria.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">2. Seat Reservations &amp; Seat Holds</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">2. Seat Reservations &amp; Seat Holds</h2>
         <p>
           When you initiate an online reservation, your chosen seat is held in pending status for 15 minutes. If payment is not completed within 15 minutes, the hold expires and the seat returns to availability.
         </p>
@@ -39,44 +39,44 @@ export default function TermsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">3. Check-In &amp; Departures</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">3. Check-In &amp; Departures</h2>
         <p>
           Passengers must arrive at their boarding terminal in good time before departure.
         </p>
-        <p className="text-xs text-slate-500 italic">
+        <p className="text-xs text-muted-foreground italic">
           // TODO(client): Confirm policy with the terminal regarding exact reporting times.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">4. Cancellation &amp; Refund Policy</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">4. Cancellation &amp; Refund Policy</h2>
         {cancellationPolicy ? (
           <div>
             <p>Ticket cancellations are processed according to the terminal cancellation policy:</p>
-            <p className="text-xs text-slate-500 italic mt-1">
+            <p className="text-xs text-muted-foreground italic mt-1">
               // TODO(client): Confirm policy with the terminal regarding cancellation deduction percentages.
             </p>
           </div>
         ) : (
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-muted-foreground">
             Cancellation rules and fee deductions apply based on departure timing. Confirm policy with the terminal prior to departure.
           </p>
         )}
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">5. Luggage Guidelines</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">5. Luggage Guidelines</h2>
         {luggagePolicy ? (
           <p>{String(luggagePolicy)}</p>
         ) : (
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-muted-foreground">
             Luggage allowances are subject to vehicle capacity. Confirm policy with the terminal for bulky or excess luggage; excess luggage can be booked as courier freight.
           </p>
         )}
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">6. Courier Freight Liability</h2>
+        <h2 className="text-lg font-bold text-foreground tracking-tight">6. Courier Freight Liability</h2>
         <p>
           Senders must declare the category and nature of courier items upon terminal drop-off.
         </p>
