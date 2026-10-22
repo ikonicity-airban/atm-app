@@ -674,9 +674,6 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
               {/* Mobile Gooey Search */}
               <div className="flex justify-center w-full py-1">
                 <GooeyInput
-                  classNames={{
-                    root: "bg-white"
-                  }}
                   placeholder="Search trips, waybills..."
                   collapsedWidth={120}
                   expandedWidth={230}

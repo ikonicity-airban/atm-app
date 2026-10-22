@@ -10,6 +10,8 @@ import {
 } from '@atm/shared';
 import { Stepper, MoneyText, TimeText, PhoneInput } from '@/components/atm/AtmBlocks.tsx';
 import { SeatMap } from '@/components/booking/SeatMap.tsx';
+import { PassengerCheckoutForm } from '@/components/forms/booking/PassengerCheckoutForm';
+import type { PassengerCheckoutFormValues } from '@/components/forms/booking/booking.schema';
 import { Dialog } from '@/components/ui/Dialog.tsx';
 import { Button } from '@/components/ui/Button.tsx';
 import { PageShell } from '@/components/layout/Templates.tsx';
@@ -314,56 +316,31 @@ export default function BookTripPage(props?: any) {
   };
 
   // Step 2 -> Step 3: Create or replace seat hold
-  const handleSecureHoldAndReview = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCheckoutSubmit = async (values: PassengerCheckoutFormValues) => {
     setErrorMessage(null);
     setFormErrors({});
 
-    // Validate Passenger Names
-    const newErrors: Record<string, string> = {};
-    for (const seatNo of selectedSeats) {
-      const name = (passengerNames[seatNo] || '').trim();
-      if (!name || name.length < 2) {
-        newErrors[`passenger_${seatNo}`] = `Please enter the full name for Seat ${seatNo}`;
-      }
-    }
-
-    if (!contactName.trim() || contactName.trim().length < 2) {
-      newErrors['contact_name'] = 'Lead contact name is required (min 2 characters)';
-    }
-
-    if (!contactPhone.trim() || contactPhone.trim().length < 10) {
-      newErrors['contact_phone'] = 'A valid Nigerian phone number is required';
-    }
-
-    if (!smsConsent) {
-      newErrors['consent'] = 'You must agree to receive departure notices and tickets via SMS/WhatsApp';
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setFormErrors(newErrors);
-      // Focus first error element
-      const firstErrorKey = Object.keys(newErrors)[0];
-      const el = document.getElementById(firstErrorKey || '');
-      el?.focus();
-      return;
-    }
-
-    // Prepare shared schema payload
-    const passengersPayload = selectedSeats.map((seatNo) => ({
-      seatNo,
-      fullName: (passengerNames[seatNo] || '').trim(),
-    }));
+    const pMap: Record<number, string> = {};
+    values.passengers.forEach((p) => {
+      pMap[p.seatNo] = p.fullName;
+    });
+    setPassengerNames(pMap);
+    setContactName(values.contact.fullName);
+    setContactPhone(values.contact.phone);
+    if (values.contact.email) setContactEmail(values.contact.email);
+    if (values.contact.nextOfKinPhone) setNextOfKinPhone(values.contact.nextOfKinPhone);
+    setSmsConsent(values.smsConsent);
+    setApplyStoreCredit(values.applyStoreCredit);
 
     const holdPayload: BookingHoldInput = {
       tripId: resolvedTripId,
-      seats: selectedSeats,
-      passengers: passengersPayload,
+      seats: values.seats,
+      passengers: values.passengers,
       contact: {
-        fullName: contactName.trim(),
-        phone: contactPhone.trim(),
-        email: contactEmail.trim() || undefined,
-        nextOfKinPhone: nextOfKinPhone.trim() || undefined,
+        fullName: values.contact.fullName.trim(),
+        phone: values.contact.phone.trim(),
+        email: values.contact.email?.trim() || undefined,
+        nextOfKinPhone: values.contact.nextOfKinPhone?.trim() || undefined,
       },
       consent: true,
       idempotencyKey: idempotencyKeyRef.current || `idem-${Date.now()}`,
@@ -666,178 +643,29 @@ export default function BookTripPage(props?: any) {
 
           {/* ================= STEP 2: PASSENGERS ================= */}
           {currentStep === 1 && (
-            <form onSubmit={handleSecureHoldAndReview} className="space-y-6">
-              {/* Sections for each selected seat */}
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">
-                    Passenger Names for Selected Seats
-                  </h2>
-                </div>
-
-                {/* Saved Companions 1-Tap Auto-fill Bar (AC-7) */}
-                {savedCompanions.length > 0 && (
-                  <div className="p-3 bg-indigo-50/80 border border-indigo-100 rounded-xl space-y-1.5">
-                    <span className="text-[11px] font-bold text-indigo-900 block">
-                      Saved Companions (1-Tap Auto-Fill):
-                    </span>
-                    <div className="flex flex-wrap gap-2">
-                      {savedCompanions.map((comp) => (
-                        <button
-                          key={comp.id}
-                          type="button"
-                          onClick={() => {
-                            const unfilledSeat = selectedSeats.find((s) => !passengerNames[s]) || selectedSeats[0];
-                            if (unfilledSeat) {
-                              setPassengerNames((prev) => ({ ...prev, [unfilledSeat]: comp.fullName }));
-                            }
-                            if (!contactName) setContactName(comp.fullName);
-                            if (!contactPhone) setContactPhone(comp.phone);
-                          }}
-                          className="px-2.5 py-1 text-xs font-semibold bg-white border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-100 hover:border-indigo-300 transition-all shadow-2xs active:scale-95 cursor-pointer"
-                        >
-                          + {comp.fullName}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {selectedSeats.map((seatNo, idx) => (
-                  <div
-                    key={seatNo}
-                    className="p-4 bg-white border border-slate-200 rounded-lg space-y-2 shadow-xs"
-                  >
-                    <label
-                      htmlFor={`passenger_${seatNo}`}
-                      className="block text-xs font-bold text-slate-800"
-                    >
-                      Seat {seatNo} Passenger Full Name{' '}
-                      {idx === 0 && <span className="text-[#ca2484]">(Lead Traveller)</span>}
-                    </label>
-                    <input
-                      id={`passenger_${seatNo}`}
-                      type="text"
-                      placeholder="e.g. Chukwuemeka Obi"
-                      value={passengerNames[seatNo] || ''}
-                      onChange={(e) =>
-                        setPassengerNames({
-                          ...passengerNames,
-                          [seatNo]: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[44px]"
-                      aria-describedby={
-                        formErrors[`passenger_${seatNo}`] ? `err_p_${seatNo}` : undefined
-                      }
-                    />
-                    {formErrors[`passenger_${seatNo}`] && (
-                      <p id={`err_p_${seatNo}`} className="text-xs text-red-600 font-medium">
-                        {formErrors[`passenger_${seatNo}`]}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Contact Block */}
-              <div className="p-5 bg-white border border-slate-200 rounded-xl space-y-4 shadow-xs">
-                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">
-                  Lead Passenger Contact Details
-                </h2>
-
-                {/* Lead Name */}
-                <div className="space-y-1">
-                  <label htmlFor="contact_name" className="block text-xs font-bold text-slate-700">
-                    Full Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="contact_name"
-                    type="text"
-                    placeholder="e.g. Chukwuemeka Obi"
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[44px]"
-                  />
-                  {formErrors['contact_name'] && (
-                    <p className="text-xs text-red-600 font-medium">{formErrors['contact_name']}</p>
-                  )}
-                </div>
-
-                {/* Lead Phone */}
-                <div>
-                  <PhoneInput
-                    value={contactPhone}
-                    onChange={setContactPhone}
-                    label="Phone Number (SMS / WhatsApp Delivery) *"
-                    placeholder="09070000625"
-                    hasError={Boolean(formErrors['contact_phone'])}
-                    errorMessage={formErrors['contact_phone']}
-                  />
-                </div>
-
-                {/* Optional Email */}
-                <div className="space-y-1">
-                  <label htmlFor="contact_email" className="block text-xs font-bold text-slate-700">
-                    Email Address <span className="text-slate-400 font-normal">(Optional for receipt)</span>
-                  </label>
-                  <input
-                    id="contact_email"
-                    type="email"
-                    placeholder="traveller@example.com"
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-[#ca2484] min-h-[44px]"
-                  />
-                </div>
-
-                {/* Optional Next of Kin */}
-                <div>
-                  <PhoneInput
-                    value={nextOfKinPhone}
-                    onChange={setNextOfKinPhone}
-                    label="Next of Kin Phone (Optional for manifest) // TODO(client): confirm policy"
-                    placeholder="08023456789"
-                  />
-                </div>
-
-                {/* Consent Checkbox */}
-                <div className="pt-2 border-t border-slate-100">
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={smsConsent}
-                      onChange={(e) => setSmsConsent(e.target.checked)}
-                      className="mt-1 w-4 h-4 text-[#ca2484] border-slate-300 rounded focus:ring-[#ca2484] cursor-pointer"
-                    />
-                    <span className="text-xs text-slate-700 leading-relaxed">
-                      I agree to receive booking confirmation, digital boarding pass, and departure notifications via SMS and WhatsApp. <span className="text-red-500">*</span>
-                    </span>
-                  </label>
-                  {formErrors['consent'] && (
-                    <p className="text-xs text-red-600 font-medium mt-1">{formErrors['consent']}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Desktop Submit Button */}
-              <div className="pt-2 hidden lg:block">
-                <Button
-                  type="submit"
-                  disabled={isSubmittingHold}
-                  className="w-full min-h-[48px] text-sm font-bold bg-[#ca2484] hover:bg-[#aa1769] text-white"
-                >
-                  {isSubmittingHold ? (
-                    <span>Reserving Seats (10 min hold)...</span>
-                  ) : (
-                    <>
-                      <span>Secure 10-Minute Hold &amp; Review</span>
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            </form>
+            <PassengerCheckoutForm
+              tripId={resolvedTripId}
+              selectedSeats={selectedSeats}
+              initialValues={{
+                passengers: selectedSeats.map((seatNo) => ({
+                  seatNo,
+                  fullName: passengerNames[seatNo] || '',
+                })),
+                contact: {
+                  fullName: contactName,
+                  phone: contactPhone,
+                  email: contactEmail,
+                  nextOfKinPhone: nextOfKinPhone,
+                },
+                smsConsent: smsConsent,
+                applyStoreCredit: applyStoreCredit,
+              }}
+              savedCompanions={savedCompanions}
+              customerCreditsKobo={customerCreditsKobo}
+              isSubmitting={isSubmittingHold}
+              onBack={() => setCurrentStep(0)}
+              onSubmit={handleCheckoutSubmit}
+            />
           )}
 
           {/* ================= STEP 3: REVIEW ================= */}
@@ -1050,7 +878,10 @@ export default function BookTripPage(props?: any) {
           {currentStep === 1 && (
             <Button
               type="button"
-              onClick={handleSecureHoldAndReview}
+              onClick={() => {
+                const formEl = document.querySelector('form');
+                formEl?.requestSubmit();
+              }}
               disabled={isSubmittingHold}
               className="px-5 py-2.5 text-xs font-bold bg-[#ca2484] text-white min-h-[44px]"
             >

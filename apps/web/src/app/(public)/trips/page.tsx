@@ -9,15 +9,8 @@ import {
 } from '../../../components/atm/AtmBlocks.tsx';
 import { PageShell } from '../../../components/layout/Templates.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
-import { Calendar as CossCalendar } from '../../../components/ui/Calendar.tsx';
 import { Sheet } from '../../../components/ui/Sheet.tsx';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectPopup,
-  SelectItem,
-} from '../../../components/ui/Select.tsx';
+import { SearchTripForm } from '@/components/forms/booking/SearchTripForm';
 import {
   tripRepository,
   type TripSearchResult,
@@ -149,25 +142,6 @@ export default function TripsSearchPage(rawProps?: any) {
   const [timeFilter, setTimeFilter] = useState<TimeWindowFilter>('all');
   const [savedTrips, setSavedTrips] = useState<Set<string>>(new Set());
   const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
-
-  // Form draft state for sidebar and mobile sheet
-  const [draftFrom, setDraftFrom] = useState(fromParam);
-  const [draftTo, setDraftTo] = useState(toParam);
-  const [draftPassengers, setDraftPassengers] = useState(passengersParam);
-  const [draftDate, setDraftDate] = useState(dateParam);
-  const [draftTimeFilter, setDraftTimeFilter] = useState<TimeWindowFilter>(timeFilter);
-  const [draftTerminal, setDraftTerminal] = useState(terminalFilter);
-  const [draftSort, setDraftSort] = useState<'earliest' | 'cheapest'>(sortParam);
-
-  // Sync draft state whenever URL params change
-  useEffect(() => {
-    setDraftFrom(fromParam);
-    setDraftTo(toParam);
-    setDraftPassengers(passengersParam);
-    setDraftDate(dateParam);
-    setDraftTerminal(terminalFilter);
-    setDraftSort(sortParam);
-  }, [fromParam, toParam, passengersParam, dateParam, terminalFilter, sortParam]);
 
   const [loading, setLoading] = useState(true);
   const [trips, setTrips] = useState<TripSearchResult[]>([]);
@@ -302,50 +276,30 @@ export default function TripsSearchPage(rawProps?: any) {
     }
   };
 
-  const handleApplySearch = (options?: {
-    from?: string;
-    to?: string;
-    date?: string;
-    passengers?: number;
+  const handleApplySearch = (options: {
+    from: string;
+    to: string;
+    date: string;
+    passengers: number;
     terminal?: string;
     sort?: string;
     time?: TimeWindowFilter;
   }) => {
-    const targetFrom = options?.from ?? draftFrom;
-    const targetTo = options?.to ?? draftTo;
-    const targetDate = options?.date ?? draftDate;
-    const targetPassengers = options?.passengers ?? draftPassengers;
-    const targetTerminal = options?.terminal ?? draftTerminal;
-    const targetSort = options?.sort ?? draftSort;
-    const targetTime = options?.time ?? draftTimeFilter;
-
-    setTimeFilter(targetTime);
+    if (options.time) {
+      setTimeFilter(options.time);
+    }
 
     const query = new URLSearchParams();
-    query.set('from', targetFrom);
-    query.set('to', targetTo);
-    query.set('date', targetDate);
-    query.set('passengers', String(targetPassengers));
-    if (targetTerminal !== 'all') query.set('terminal', targetTerminal);
-    if (targetSort !== 'earliest') query.set('sort', targetSort);
+    query.set('from', options.from);
+    query.set('to', options.to);
+    query.set('date', options.date);
+    query.set('passengers', String(options.passengers));
+    if (options.terminal && options.terminal !== 'all') query.set('terminal', options.terminal);
+    if (options.sort && options.sort !== 'earliest') query.set('sort', options.sort);
 
     navigate(`/trips?${query.toString()}`);
     setIsMobileSheetOpen(false);
   };
-
-  const handleSwapCities = () => {
-    const nextFrom = draftTo;
-    const nextTo = draftFrom;
-    setDraftFrom(nextFrom);
-    const destinations = getServedDestinations(nextFrom);
-    if (destinations.includes(nextTo as ServedCity)) {
-      setDraftTo(nextTo);
-    } else if (destinations[0]) {
-      setDraftTo(destinations[0]);
-    }
-  };
-
-  const servedDestinationsForDraft = getServedDestinations(draftFrom);
   const canGoPrev = dateParam > todayLagos;
 
   // Active filters count for mobile indicator
@@ -354,266 +308,7 @@ export default function TripsSearchPage(rawProps?: any) {
     (terminalFilter !== 'all' ? 1 : 0) +
     (sortParam !== 'earliest' ? 1 : 0);
 
-  // Reusable Search & Filter Component used in both Desktop Sidebar and Mobile Bottom Sheet
-  const renderSearchFilterForm = (isSheet: boolean = false) => (
-    <div className="space-y-4 sm:space-y-5">
-      {/* 1. Origin & Destination Corridor */}
-      <div className="space-y-2.5">
-        <label className="text-xs font-bold text-foreground uppercase tracking-wider block">
-          Travel Corridor
-        </label>
 
-        <div className="space-y-2">
-          {/* Origin selector */}
-          <div className="space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-primary" />
-              <span>Origin City</span>
-            </span>
-            <Select
-              value={draftFrom}
-              onValueChange={(val) => {
-                if (typeof val === 'string') {
-                  setDraftFrom(val);
-                  const validDests = getServedDestinations(val);
-                  if (!validDests.includes(draftTo as ServedCity) && validDests[0]) {
-                    setDraftTo(validDests[0]);
-                  }
-                }
-              }}
-            >
-              <SelectTrigger className="w-full text-xs font-semibold min-h-[40px] bg-background">
-                <SelectValue placeholder="Select Origin" />
-              </SelectTrigger>
-              <SelectPopup>
-                {SERVED_CITIES.map((city) => (
-                  <SelectItem key={city} value={city}>
-                    {city} Hub
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-          </div>
-
-          {/* Fast swap button */}
-          <div className="flex justify-center -my-1">
-            <button
-              type="button"
-              onClick={handleSwapCities}
-              className="p-1.5 rounded-full border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-all shadow-xs cursor-pointer active:scale-90"
-              title="Swap origin and destination"
-              aria-label="Swap cities"
-            >
-              <ArrowLeftRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Destination selector */}
-          <div className="space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Destination City</span>
-            </span>
-            <Select
-              value={draftTo}
-              onValueChange={(val) => {
-                if (typeof val === 'string') setDraftTo(val);
-              }}
-            >
-              <SelectTrigger className="w-full text-xs font-semibold min-h-[40px] bg-background">
-                <SelectValue placeholder="Select Destination" />
-              </SelectTrigger>
-              <SelectPopup>
-                {servedDestinationsForDraft.map((city) => (
-                  <SelectItem key={city} value={city}>
-                    {city} Hub
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Passenger Headcount */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-bold text-foreground uppercase tracking-wider block">
-          Passengers
-        </label>
-        <div className="grid grid-cols-5 gap-1.5">
-          {[1, 2, 3, 4, 5].map((count) => {
-            const isSelected = draftPassengers === count;
-            return (
-              <button
-                key={count}
-                type="button"
-                onClick={() => setDraftPassengers(count)}
-                className={`min-h-[36px] rounded-xl text-xs font-bold transition-all border cursor-pointer active:scale-95 ${isSelected
-                  ? 'bg-primary text-primary-foreground border-primary shadow-xs'
-                  : 'bg-background hover:bg-muted text-foreground border-border'
-                  }`}
-              >
-                {count} {count === 1 ? 'Seat' : 'Seats'}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 3. Interactive Coss UI Calendar */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between">
-          <label className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1.5">
-            <CalendarIcon className="w-3.5 h-3.5 text-primary" />
-            <span>Select Travel Date</span>
-          </label>
-          <span className="text-[11px] font-mono text-muted-foreground font-semibold">
-            {draftDate}
-          </span>
-        </div>
-
-        <div className="rounded-2xl border border-border bg-background p-2 shadow-xs overflow-hidden flex justify-center [--cell-size:2rem]">
-          <CossCalendar
-            mode="single"
-            selected={parseDateParam(draftDate)}
-            onSelect={(selectedDay) => {
-              if (selectedDay) {
-                const formatted = toDateString(selectedDay);
-                setDraftDate(formatted);
-              }
-            }}
-            disabled={{ before: parseDateParam(todayLagos) }}
-            className="w-full"
-          />
-        </div>
-      </div>
-
-      {/* 4. Departure Time Filter */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-bold text-foreground uppercase tracking-wider block">
-          Departure Time
-        </label>
-        <div className="grid grid-cols-3 gap-1.5">
-          <button
-            type="button"
-            onClick={() => setDraftTimeFilter('all')}
-            className={`min-h-[34px] px-2 rounded-xl text-xs font-bold transition-all border cursor-pointer active:scale-95 ${draftTimeFilter === 'all'
-              ? 'bg-card text-foreground border-primary shadow-xs font-black'
-              : 'bg-background hover:bg-muted text-muted-foreground border-border'
-              }`}
-          >
-            All Day
-          </button>
-          <button
-            type="button"
-            onClick={() => setDraftTimeFilter('morning')}
-            className={`min-h-[34px] px-2 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-1 cursor-pointer active:scale-95 ${draftTimeFilter === 'morning'
-              ? 'bg-primary text-primary-foreground border-primary shadow-xs font-black'
-              : 'bg-background hover:bg-muted text-muted-foreground border-border'
-              }`}
-          >
-            <Sun className="w-3 h-3" />
-            <span>Morning</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setDraftTimeFilter('afternoon')}
-            className={`min-h-[34px] px-2 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-1 cursor-pointer active:scale-95 ${draftTimeFilter === 'afternoon'
-              ? 'bg-primary text-primary-foreground border-primary shadow-xs font-black'
-              : 'bg-background hover:bg-muted text-muted-foreground border-border'
-              }`}
-          >
-            <Sunset className="w-3 h-3" />
-            <span>Afternoon</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 5. Sort Order */}
-      <div className="space-y-1.5">
-        <label className="text-xs font-bold text-foreground uppercase tracking-wider block">
-          Sort Results
-        </label>
-        <Select
-          value={draftSort}
-          onValueChange={(val) => {
-            if (val === 'earliest' || val === 'cheapest') setDraftSort(val);
-          }}
-        >
-          <SelectTrigger className="w-full text-xs font-semibold min-h-[40px] bg-background">
-            <SelectValue placeholder="Sort Trips" />
-          </SelectTrigger>
-          <SelectPopup>
-            <SelectItem value="earliest">Earliest Departure Time</SelectItem>
-            <SelectItem value="cheapest">Lowest Fare First</SelectItem>
-          </SelectPopup>
-        </Select>
-      </div>
-
-      {/* 6. Lagos Terminal Filter (if corridor involves Lagos) */}
-      {(draftFrom === 'Lagos' || draftTo === 'Lagos') && (
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-foreground uppercase tracking-wider block">
-            Lagos Terminal Hub
-          </label>
-          <Select
-            value={draftTerminal}
-            onValueChange={(val) => {
-              if (typeof val === 'string') setDraftTerminal(val);
-            }}
-          >
-            <SelectTrigger className="w-full text-xs font-semibold min-h-[40px] bg-background">
-              <SelectValue placeholder="All Terminals" />
-            </SelectTrigger>
-            <SelectPopup>
-              <SelectItem value="all">All Lagos Terminals</SelectItem>
-              <SelectItem value="jibowu">Jibowu (Yaba)</SelectItem>
-              <SelectItem value="ajah">Ajah (Lekki)</SelectItem>
-              <SelectItem value="festac">Festac Town</SelectItem>
-            </SelectPopup>
-          </Select>
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="pt-2 space-y-2">
-        <button
-          type="button"
-          onClick={() => handleApplySearch()}
-          className="w-full min-h-[42px] rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs shadow-md shadow-primary/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
-        >
-          <span>Apply Search &amp; Filters</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setDraftFrom('Enugu');
-            setDraftTo('Abuja');
-            setDraftDate(todayLagos);
-            setDraftPassengers(1);
-            setDraftTimeFilter('all');
-            setDraftTerminal('all');
-            setDraftSort('earliest');
-            handleApplySearch({
-              from: 'Enugu',
-              to: 'Abuja',
-              date: todayLagos,
-              passengers: 1,
-              terminal: 'all',
-              sort: 'earliest',
-              time: 'all',
-            });
-          }}
-          className="w-full min-h-[36px] rounded-xl bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset to Defaults</span>
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <PageShell width="standard" density="comfortable" className="pb-32 flex flex-col gap-8 sm:gap-10 ">
@@ -680,7 +375,41 @@ export default function TripsSearchPage(rawProps?: any) {
               </h2>
             </div>
 
-            {renderSearchFilterForm(false)}
+            <SearchTripForm
+              key={`desktop-${fromParam}-${toParam}-${dateParam}-${passengersParam}`}
+              initialValues={{
+                from: fromParam as ServedCity,
+                to: toParam as ServedCity,
+                date: dateParam,
+                passengers: passengersParam,
+                timeWindow: timeFilter,
+                sortBy: sortParam,
+                terminal: terminalFilter,
+              }}
+              variant="sidebar"
+              onSearchSubmit={(data) => {
+                handleApplySearch({
+                  from: data.from,
+                  to: data.to,
+                  date: data.date,
+                  passengers: data.passengers,
+                  time: data.timeWindow as TimeWindowFilter,
+                  sort: data.sortBy,
+                  terminal: data.terminal,
+                });
+              }}
+              onReset={() => {
+                handleApplySearch({
+                  from: 'Enugu',
+                  to: 'Abuja',
+                  date: todayLagos,
+                  passengers: 1,
+                  time: 'all',
+                  sort: 'earliest',
+                  terminal: 'all',
+                });
+              }}
+            />
           </div>
         </aside>
 
@@ -1058,7 +787,41 @@ export default function TripsSearchPage(rawProps?: any) {
         className="max-h-[88vh]"
       >
         <div className="pb-8">
-          {renderSearchFilterForm(true)}
+          <SearchTripForm
+            key={`mobile-${fromParam}-${toParam}-${dateParam}-${passengersParam}`}
+            initialValues={{
+              from: fromParam as ServedCity,
+              to: toParam as ServedCity,
+              date: dateParam,
+              passengers: passengersParam,
+              timeWindow: timeFilter,
+              sortBy: sortParam,
+              terminal: terminalFilter,
+            }}
+            variant="sidebar"
+            onSearchSubmit={(data) => {
+              handleApplySearch({
+                from: data.from,
+                to: data.to,
+                date: data.date,
+                passengers: data.passengers,
+                time: data.timeWindow as TimeWindowFilter,
+                sort: data.sortBy,
+                terminal: data.terminal,
+              });
+            }}
+            onReset={() => {
+              handleApplySearch({
+                from: 'Enugu',
+                to: 'Abuja',
+                date: todayLagos,
+                passengers: 1,
+                time: 'all',
+                sort: 'earliest',
+                terminal: 'all',
+              });
+            }}
+          />
         </div>
       </Sheet>
 
@@ -1086,7 +849,6 @@ export default function TripsSearchPage(rawProps?: any) {
         <p className="text-xs sm:text-sm text-primary-foreground/90 leading-relaxed">
           All Sienna departures leave strictly on schedule. Please report to your boarding terminal 30 minutes prior to scheduled departure with your booking reference.
         </p>
-
       </SectionBanner>
     </PageShell>
   );

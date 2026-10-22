@@ -1,131 +1,69 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { PageShell } from '../../../components/layout/Templates.tsx';
 import {
-  PhoneInput,
   WhatsAppButton,
   CallButton,
   SectionBanner,
 } from '../../../components/atm/AtmBlocks.tsx';
-import { Input } from '../../../components/ui/Input.tsx';
-import { Textarea } from '../../../components/ui/Textarea.tsx';
-import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../../../components/ui/Select.tsx';
-import { Button } from '../../../components/ui/Button.tsx';
-import { FormField } from '../../../components/ui/FormField.tsx';
-import { Alert } from '../../../components/ui/Alert.tsx';
-import { BRAND, SEED_TERMINALS, complaintSchema } from '@atm/shared';
-import { Mail, Phone, MapPin, CheckCircle2 } from 'lucide-react';
+import { ContactInquiryForm } from '@/components/forms/inquiry/ContactInquiryForm';
+import { BRAND, SEED_TERMINALS } from '@atm/shared';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
-export default function ContactPage() {
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [category, setCategory] = useState<'trip_delay' | 'driver_conduct' | 'lost_parcel' | 'vehicle_condition' | 'refund_issue' | 'other'>('other');
-  const [bookingRef, setBookingRef] = useState('');
-  const [message, setMessage] = useState('');
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-    setIsSuccess(false);
-
-    // Validate using shared Zod schema
-    const result = complaintSchema.safeParse({
-      fullName,
-      phone,
-      email: email || undefined,
-      category,
-      bookingRef: bookingRef || undefined,
-      message,
-    });
-
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      for (const issue of result.error.issues) {
-        const field = issue.path[0];
-        if (field) fieldErrors[String(field)] = issue.message;
-      }
-      setErrors(fieldErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(result.data),
-      });
-
-      if (res.ok) {
-        setIsSuccess(true);
-        setFullName('');
-        setPhone('');
-        setEmail('');
-        setMessage('');
-        setBookingRef('');
-      } else {
-        setErrors({ form: 'Unable to submit your message. Please contact terminal helpline.' });
-      }
-    } catch {
-      // Fallback for preview environment
-      setIsSuccess(true);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+export default function ContactPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
   return (
-    <PageShell
-      breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Contact & Support' }]}
-      title="Contact Customer Support"
-      description="Speak directly with our station managers, request support, or submit feedback regarding your travel or courier shipment."
-    >
+    <PageShell density="comfortable" width="standard" className="py-8 sm:py-12 space-y-12">
+      {/* Title resting on background per ATM rules */}
+      <div>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+          Contact &amp; Terminal Support
+        </h1>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-2 max-w-2xl leading-relaxed">
+          Need assistance with your booking, parcel pickup, or charter service? Contact our 24/7 central dispatch desk or call your departure terminal directly.
+        </p>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Contact Info & Terminal Telephone Directory */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="p-6 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+          <div className="p-6 bg-card border border-border rounded-2xl space-y-4 shadow-xs">
+            <h2 className="text-lg font-bold text-foreground tracking-tight">
               Headquarters &amp; Dispatch
             </h2>
-            <div className="space-y-3 text-xs text-slate-700">
+            <div className="space-y-3 text-xs text-muted-foreground">
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#ca2484] mt-0.5 flex-shrink-0" />
-                <span>263 Ogui Road, Opp. Fire Service, Enugu State, Nigeria</span>
+                <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                <span className="text-foreground">263 Ogui Road, Opp. Fire Service, Enugu State, Nigeria</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
-                <a href={`mailto:${BRAND.supportEmail}`} className="text-[#ca2484] hover:underline font-medium">
+                <Mail className="w-4 h-4 text-primary shrink-0" />
+                <a href={`mailto:${BRAND.supportEmail}`} className="text-primary hover:underline font-medium">
                   {BRAND.supportEmail}
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#ca2484] flex-shrink-0" />
-                <span>{BRAND.contactPhones[0]} &bull; {BRAND.contactPhones[1]}</span>
+                <Phone className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-foreground font-mono">{BRAND.contactPhones[0]} &bull; {BRAND.contactPhones[1]}</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-200 flex flex-col gap-2">
+            <div className="pt-4 border-t border-border flex flex-col gap-2">
               <WhatsAppButton phone={BRAND.contactPhones[0]} />
               <CallButton phone={BRAND.contactPhones[0]} label="Call Central Dispatch" />
             </div>
           </div>
 
           {/* Quick Terminal Phones List */}
-          <div className="p-6 bg-white border border-slate-200 rounded-lg space-y-3">
-            <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+          <div className="p-6 bg-card border border-border rounded-2xl space-y-3 shadow-xs">
+            <h3 className="text-sm font-bold text-foreground tracking-tight">
               Direct Terminal Phone Lines
             </h3>
             <div className="space-y-2 text-xs">
               {SEED_TERMINALS.map((t) => (
-                <div key={t.id} className="flex justify-between items-center py-1 border-b border-slate-100 last:border-b-0">
-                  <span className="font-semibold text-slate-800">{t.name}:</span>
-                  <a href={`tel:${t.phones[0]}`} className="text-[#ca2484] hover:underline font-mono">
+                <div key={t.id} className="flex justify-between items-center py-1.5 border-b border-border/50 last:border-b-0">
+                  <span className="font-semibold text-foreground">{t.name}:</span>
+                  <a href={`tel:${t.phones[0]}`} className="text-primary hover:underline font-mono">
                     {t.phones[0]}
                   </a>
                 </div>
@@ -135,115 +73,25 @@ export default function ContactPage() {
         </div>
 
         {/* Right: Validated Contact / Support Form */}
-        <div className="lg:col-span-7 p-6 sm:p-8 bg-white border border-slate-200 rounded-lg shadow-xs space-y-6">
+        <div className="lg:col-span-7 p-6 sm:p-8 bg-card border border-border rounded-2xl shadow-xs space-y-6">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+            <h2 className="text-lg font-bold text-foreground tracking-tight">
               Send an Inquiry or Support Request
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
-              Messages are routed directly to the duty operations supervisor.
+            <p className="text-xs text-muted-foreground mt-1">
+              Messages are validated with Zod and routed directly to the duty operations supervisor.
             </p>
           </div>
 
-          {isSuccess && (
-            <Alert variant="success" title="Message Received">
-              Thank you. Your inquiry has been submitted and assigned a support ticket. A terminal representative will contact your phone shortly.
-            </Alert>
-          )}
-
-          {errors.form && (
-            <Alert variant="danger">
-              {errors.form}
-            </Alert>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <FormField label="Full Name" isRequired errorMessage={errors.fullName}>
-              <Input
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Chukwuemeka Okafor"
-                hasError={Boolean(errors.fullName)}
-              />
-            </FormField>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <PhoneInput
-                value={phone}
-                onChange={setPhone}
-                errorMessage={errors.phone}
-                hasError={Boolean(errors.phone)}
-              />
-
-              <FormField label="Email Address (Optional)" errorMessage={errors.email}>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  hasError={Boolean(errors.email)}
-                />
-              </FormField>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Inquiry Category" isRequired>
-                <Select
-                  value={category}
-                  onValueChange={(val) => {
-                    if (val) setCategory(val as typeof category);
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                  <SelectPopup>
-                    <SelectItem value="other">General Question</SelectItem>
-                    <SelectItem value="trip_delay">Schedule & Departure Inquiries</SelectItem>
-                    <SelectItem value="lost_parcel">Courier & Parcel Tracking</SelectItem>
-                    <SelectItem value="vehicle_condition">Private Charter Request</SelectItem>
-                    <SelectItem value="refund_issue">Ticket Refund / Cancellation</SelectItem>
-                    <SelectItem value="driver_conduct">Customer Service Feedback</SelectItem>
-                  </SelectPopup>
-                </Select>
-              </FormField>
-
-              <FormField label="Booking Reference / Tracking Code (Optional)">
-                <Input
-                  value={bookingRef}
-                  onChange={(e) => setBookingRef(e.target.value)}
-                  placeholder="e.g. ATM-7K9W2P or ATM-EXP-..."
-                />
-              </FormField>
-            </div>
-
-            <FormField
-              label="Your Message"
-              isRequired
-              helpText="Please provide clear details regarding your trip date, terminal, or parcel description."
-              errorMessage={errors.message}
-            >
-              <Textarea
-                rows={4}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="How can our terminal team assist you?"
-                hasError={Boolean(errors.message)}
-              />
-            </FormField>
-
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              className="w-full"
-              isLoading={isSubmitting}
-            >
-              Submit Support Request
-            </Button>
-          </form>
+          <ContactInquiryForm />
         </div>
       </div>
+
+      <SectionBanner title="Ascent Passenger Rights Charter">
+        <p className="text-xs sm:text-sm text-primary-foreground/90 leading-relaxed">
+          Ascent Transport operates under strict customer service commitments. If your scheduled trip is delayed beyond 60 minutes for avoidable mechanical reasons, our automatic refund or rescheduling guarantee takes immediate effect.
+        </p>
+      </SectionBanner>
     </PageShell>
   );
 }

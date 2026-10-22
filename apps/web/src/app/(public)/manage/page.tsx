@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { PageShell } from '@/components/layout/Templates.tsx';
 import { TicketPassCard } from '@/components/booking/TicketPassCard.tsx';
 import { CancellationModal } from '@/components/booking/CancellationModal.tsx';
+import { TicketManageForm, type TicketLookupValues } from '@/components/forms/booking';
 import type { HeldBooking } from '@/server/repositories/bookings.ts';
 import type { ManageBookingDetails } from '@/server/repositories/manage-booking.ts';
 import {
@@ -174,64 +175,26 @@ export default function ManageBookingPage(props?: any) {
               </div>
             )}
 
-            <form onSubmit={handleLookup} className="space-y-5">
-              <div>
-                <label htmlFor="booking-ref" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
-                  Booking Reference Code
-                </label>
-                <div className="relative">
-                  <input
-                    id="booking-ref"
-                    type="text"
-                    required
-                    value={refInput}
-                    onChange={(e) => setRefInput(e.target.value.toUpperCase())}
-                    placeholder="e.g. ATM-7K9W2P"
-                    maxLength={10}
-                    className="w-full min-h-[44px] rounded-xl border border-border bg-card pl-4 pr-10 text-sm font-semibold tracking-wider text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-muted-foreground">
-                    <ShieldCheck className="h-4 w-4" />
-                  </div>
-                </div>
-                <p className="mt-1.5 text-xs text-muted-foreground">
-                  Provided in your booking confirmation SMS and on your payment receipt.
-                </p>
-              </div>
+            <TicketManageForm
+              initialRef={refInput}
+              initialPhone={phoneInput}
+              isLoading={loading}
+              onSubmit={async (values) => {
+                setRefInput(values.bookingRef);
+                setPhoneInput(values.phone);
+                await handleLookup(undefined, values.bookingRef, values.phone);
+              }}
+            />
 
-              <div>
-                <label htmlFor="customer-phone" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
-                  Booked Phone Number
-                </label>
-                <input
-                  id="customer-phone"
-                  type="tel"
-                  required
-                  value={phoneInput}
-                  onChange={(e) => setPhoneInput(e.target.value)}
-                  placeholder="e.g. 0803 123 4567 or +234..."
-                  className="w-full min-h-[44px] rounded-xl border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={handleQuickDemo}
-                  className="min-h-[44px] px-3 text-xs font-semibold text-primary hover:opacity-80 text-left transition-colors"
-                >
-                  ⚡ Autofill Demo Booking (ATM-7K9W2P)
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="min-h-[44px] px-7 rounded-xl bg-primary hover:opacity-90 text-primary-foreground text-sm font-bold shadow-md transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  {loading ? 'Verifying...' : 'Retrieve Booking'}
-                  {!loading && <ArrowRight className="h-4 w-4" />}
-                </button>
-              </div>
-            </form>
+            <div className="pt-3 border-t border-border mt-4 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={handleQuickDemo}
+                className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+              >
+                ⚡ Autofill Demo Booking (ATM-7K9W2P)
+              </button>
+            </div>
           </div>
 
           {/* Policy Information Surface */}
