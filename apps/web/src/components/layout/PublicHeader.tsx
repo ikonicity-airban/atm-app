@@ -84,6 +84,17 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Prevent background page scrolling while mobile navigation drawer is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow || '';
+      };
+    }
+  }, [isMobileMenuOpen]);
+
   // 1. Travel Links (Passenger Transport)
   const travelLinks: DropdownLink[] = [
     {
@@ -663,173 +674,216 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
       {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-20 left-4 right-4 bg-card/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-border p-5 z-50 max-h-[85vh] overflow-y-auto"
-          >
-            <div className="space-y-6">
-              {/* Mobile Gooey Search */}
-              <div className="flex justify-center w-full py-1">
-                <GooeyInput
-                  placeholder="Search trips, waybills..."
-                  collapsedWidth={120}
-                  expandedWidth={230}
-                  expandedOffset={40}
-                  onSubmit={handleHeaderSearch}
-                />
+          <div className="md:hidden fixed inset-0 z-50 flex justify-end">
+            {/* Backdrop overlay prevents touching or scrolling page behind */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+
+            {/* Sliding Drawer Container */}
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu drawer"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 320, mass: 0.82 }}
+              className="relative w-full max-w-sm sm:max-w-md h-full bg-card text-card-foreground shadow-2xl border-l border-border z-10 flex flex-col focus:outline-none"
+            >
+              {/* Drawer Header */}
+              <div className="p-4 sm:p-5 border-b border-border flex items-center justify-between shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleNav('/')}
+                  className="flex items-center text-left focus:outline-hidden cursor-pointer"
+                  aria-label="Ascent Transport Management Home"
+                >
+                  <Logo variant="mark" size="sm" />
+                  <span className="ml-2 font-bold text-sm tracking-tight text-foreground">Menu</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-muted-foreground hover:text-foreground rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center focus:ring-2 focus:ring-primary cursor-pointer active:scale-95 transition-all"
+                  aria-label="Close navigation menu drawer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* High Visibility "Find Trips" Button */}
-              <button
-                type="button"
-                onClick={() => handleNav('/trips')}
-                className="w-full min-h-12 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Bus className="w-4 h-4 text-primary-foreground" />
-                  <span>Find Scheduled Trips</span>
+              {/* Scrollable Drawer Body */}
+              <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-6 scroll-smooth touch-pan-y">
+                {/* Mobile Gooey Search */}
+                <div className="flex justify-center w-full py-1">
+                  <GooeyInput
+                    placeholder="Search trips, waybills..."
+                    collapsedWidth={120}
+                    expandedWidth={230}
+                    expandedOffset={40}
+                    onSubmit={handleHeaderSearch}
+                  />
                 </div>
-                <span className="text-xs bg-primary-foreground/20 px-2 py-0.5 rounded-md font-semibold">
-                  5 Seat Sienna
-                </span>
-              </button>
 
-              {/* 1. Passenger Travel Section */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                  Passenger Travel
-                </span>
-                <div className="grid grid-cols-1 gap-1">
-                  {travelLinks.map((item) => {
-                    const LinkIcon = item.icon;
-                    return (
+                {/* High Visibility Find Trips Button */}
+                <button
+                  type="button"
+                  onClick={() => handleNav('/trips')}
+                  className="w-full min-h-12 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Bus className="w-4 h-4 text-primary-foreground" />
+                    <span>Find Scheduled Trips</span>
+                  </div>
+                  <span className="text-xs bg-primary-foreground/20 px-2 py-0.5 rounded-md font-semibold">
+                    5 Seat Sienna
+                  </span>
+                </button>
+
+                {/* 1. Passenger Travel Section */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
+                    Passenger Travel
+                  </span>
+                  <div className="grid grid-cols-1 gap-1">
+                    {travelLinks.map((item) => {
+                      const LinkIcon = item.icon;
+                      return (
+                        <button
+                          key={item.path}
+                          type="button"
+                          onClick={() => handleNav(item.path)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${
+                            currentPath.startsWith(item.path)
+                              ? 'bg-primary/10 text-primary font-bold'
+                              : 'text-foreground hover:bg-muted'
+                          }`}
+                        >
+                          <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
+                          <div>
+                            <div className="text-xs font-semibold leading-tight">{item.label}</div>
+                            <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Express Courier Section */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
+                    Express Courier
+                  </span>
+                  <div className="grid grid-cols-1 gap-1">
+                    {courierLinks.map((item) => {
+                      const LinkIcon = item.icon;
+                      return (
+                        <button
+                          key={item.path}
+                          type="button"
+                          onClick={() => handleNav(item.path)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${
+                            currentPath.startsWith(item.path)
+                              ? 'bg-primary/10 text-primary font-bold'
+                              : 'text-foreground hover:bg-muted'
+                          }`}
+                        >
+                          <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
+                          <div>
+                            <div className="text-xs font-semibold leading-tight">{item.label}</div>
+                            <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 3. Charter & Fleet Section */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
+                    Charter &amp; Corporate
+                  </span>
+                  <div className="grid grid-cols-1 gap-1">
+                    {charterLinks.map((item) => {
+                      const LinkIcon = item.icon;
+                      return (
+                        <button
+                          key={item.path}
+                          type="button"
+                          onClick={() => handleNav(item.path)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${
+                            currentPath.startsWith(item.path)
+                              ? 'bg-primary/10 text-primary font-bold'
+                              : 'text-foreground hover:bg-muted'
+                          }`}
+                        >
+                          <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
+                          <div>
+                            <div className="text-xs font-semibold leading-tight">{item.label}</div>
+                            <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 4. Support & Policies Section */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
+                    Customer Support &amp; Policies
+                  </span>
+                  <div className="grid grid-cols-2 gap-1 text-xs">
+                    {supportLinks.map((item) => (
                       <button
                         key={item.path}
                         type="button"
                         onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-primary/10 text-primary font-bold'
-                          : 'text-foreground hover:bg-muted'
-                          }`}
-                      >
-                        <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 2. Express Courier Section */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                  Express Courier
-                </span>
-                <div className="grid grid-cols-1 gap-1">
-                  {courierLinks.map((item) => {
-                    const LinkIcon = item.icon;
-                    return (
-                      <button
-                        key={item.path}
-                        type="button"
-                        onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-primary/10 text-primary font-bold'
-                          : 'text-foreground hover:bg-muted'
-                          }`}
-                      >
-                        <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 3. Charter & Fleet Section */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                  Charter &amp; Corporate
-                </span>
-                <div className="grid grid-cols-1 gap-1">
-                  {charterLinks.map((item) => {
-                    const LinkIcon = item.icon;
-                    return (
-                      <button
-                        key={item.path}
-                        type="button"
-                        onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'bg-primary/10 text-primary font-bold'
-                          : 'text-foreground hover:bg-muted'
-                          }`}
-                      >
-                        <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                          <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 4. Support & Policies Section */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                  Customer Support &amp; Policies
-                </span>
-                <div className="grid grid-cols-2 gap-1 text-xs">
-                  {supportLinks.map((item) => (
-                    <button
-                      key={item.path}
-                      type="button"
-                      onClick={() => handleNav(item.path)}
-                      className={`text-left px-3 py-2 rounded-lg min-h-11 flex items-center cursor-pointer ${currentPath.startsWith(item.path)
-                        ? 'text-primary font-bold bg-primary/10'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        className={`text-left px-3 py-2 rounded-lg min-h-11 flex items-center cursor-pointer ${
+                          currentPath.startsWith(item.path)
+                            ? 'text-primary font-bold bg-primary/10'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                         }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Self-Service Action Bar at Bottom of Mobile Menu */}
-              <div className="pt-3 border-t border-border flex flex-col gap-2">
-                <div className="flex items-center justify-between px-2 py-1">
-                  <span className="text-xs font-medium text-muted-foreground">Theme</span>
-                  <ThemeToggle showLabel />
+                {/* Self-Service Action Bar at Bottom of Mobile Menu */}
+                <div className="pt-3 border-t border-border flex flex-col gap-2">
+                  <div className="flex items-center justify-between px-2 py-1">
+                    <span className="text-xs font-medium text-muted-foreground">Theme</span>
+                    <ThemeToggle showLabel />
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleNav('/track')}
+                    className="w-full rounded-xl text-xs font-bold gap-2 min-h-11"
+                  >
+                    <Icon icon={Search} size="xs" />
+                    <span>Track Waybill Parcel</span>
+                  </Button>
+                  <Button
+                    variant="default"
+                    onClick={() => handleNav('/manage')}
+                    className="w-full rounded-xl text-xs font-bold gap-2 min-h-11"
+                  >
+                    Manage Booking
+                  </Button>
                 </div>
-                <Button
-                  variant="outline"
-                  onClick={() => handleNav('/track')}
-                  className="w-full rounded-xl text-xs font-bold gap-2 min-h-11"
-                >
-                  <Icon icon={Search} size="xs" />
-                  <span>Track Waybill Parcel</span>
-                </Button>
-                <Button
-                  variant="default"
-                  onClick={() => handleNav('/manage')}
-                  className="w-full rounded-xl text-xs font-bold gap-2 min-h-11"
-                >
-                  Manage Booking
-                </Button>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </header>

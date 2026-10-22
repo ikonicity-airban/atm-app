@@ -6,7 +6,7 @@ import { CharterRequestForm } from '@/components/forms/charter/CharterRequestFor
 import { Icon } from '@/components/ui/Icon';
 import { Car, CheckCircle2, ShieldCheck, Clock, Users } from 'lucide-react';
 
-export default function CharterPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
+export default function CharterPage() {
   return (
     <PageShell
       breadcrumbs={[
