@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatNaira, formatWatDateTime, normalisePhone, type CustomerProfile, type CompanionPassenger } from '@atm/shared';
 import { auth, type AuthSession } from '../../../lib/auth.ts';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../../../components/ui/Select.tsx';
 
 type AccountTab = 'overview' | 'wallet' | 'trips' | 'companions';
 
@@ -667,15 +668,23 @@ export default function CustomerAccountDashboard() {
                       <label className="block text-xs font-semibold text-slate-700 mb-1">
                         Gender
                       </label>
-                      <select
+                      <Select
                         value={compGender}
-                        onChange={(e) => setCompGender(e.target.value as 'male' | 'female' | 'other')}
-                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"
+                        onValueChange={(val) => {
+                          if (val === 'male' || val === 'female' || val === 'other') {
+                            setCompGender(val);
+                          }
+                        }}
                       >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </select>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select Gender" />
+                        </SelectTrigger>
+                        <SelectPopup>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectPopup>
+                      </Select>
                     </div>
 
                     <div>

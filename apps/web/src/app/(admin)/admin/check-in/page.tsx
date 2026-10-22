@@ -24,6 +24,7 @@ import {
   type CheckInBookingResult,
   type CheckInPassenger,
 } from '@atm/shared';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
 import { dispatchRepository } from '@/server/repositories/dispatch.ts';
 
 export default function AdminCheckInPage() {
@@ -264,23 +265,24 @@ export default function AdminCheckInPage() {
         </div>
 
         {/* Terminal Station Selector */}
-        <div className="flex items-center gap-2">
-          <label htmlFor="terminal-select" className="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-orange-600" />
-            Terminal Bay:
-          </label>
-          <select
-            id="terminal-select"
+        <div className="flex items-center gap-2 min-w-[220px]">
+          <Select
             value={selectedTerminal}
-            onChange={(e) => setSelectedTerminal(e.target.value)}
-            className="text-xs font-medium bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            onValueChange={(val) => {
+              if (typeof val === 'string') setSelectedTerminal(val);
+            }}
           >
-            {SEED_TERMINALS.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger startIcon={MapPin} className="text-xs font-medium min-h-[38px]">
+              <SelectValue placeholder="Terminal Bay" />
+            </SelectTrigger>
+            <SelectPopup>
+              {SEED_TERMINALS.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.name}
+                </SelectItem>
+              ))}
+            </SelectPopup>
+          </Select>
         </div>
       </div>
 

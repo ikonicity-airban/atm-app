@@ -22,8 +22,8 @@ export interface PageShellProps {
 }
 
 const WIDTH_CLASSES: Record<PageShellWidth, string> = {
-  prose: 'max-w-3xl',
-  compact: 'max-w-5xl',
+  prose: 'max-w-4xl',
+  compact: 'max-w-6xl',
   standard: 'max-w-7xl',
 };
 

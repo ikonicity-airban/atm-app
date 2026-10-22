@@ -75,12 +75,12 @@ export class DriverRepository implements IDriverRepository {
     },
     {
       id: 'drv-lagos-01',
-      driverBadgeId: 'DRV-LOS-01',
+      driverBadgeId: 'DRV-LAG-01',
       fullName: 'Babatunde Adeleke',
       phone: '+2349070000884',
       email: 'babatunde.adeleke@atmnigeria.com',
       pinHash: '1234',
-      licenseNumber: 'FRSC-LOS-77319C',
+      licenseNumber: 'FRSC-LAG-77319C',
       licenseExpiry: '2027-11-30',
       assignedTerminalId: 'term-lagos-jibowu',
       assignedVehicleId: 'veh-sienna-03',
@@ -88,7 +88,7 @@ export class DriverRepository implements IDriverRepository {
     },
     {
       id: 'drv-owerri-01',
-      driverBadgeId: 'DRV-QOW-01',
+      driverBadgeId: 'DRV-IMO-01',
       fullName: 'Chidi Okonkwo',
       phone: '+2349070000867',
       email: 'chidi.okonkwo@atmnigeria.com',

@@ -6,6 +6,7 @@ import {
   formatNaira,
   formatWatDateTime,
 } from '@atm/shared';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
 import { bookingRepository, type HeldBooking } from '@/server/repositories/bookings.ts';
 import {
   Search,
@@ -143,35 +144,45 @@ export default function AdminBookingsPage() {
           </div>
 
           {/* Terminal Filter */}
-          <div className="md:col-span-3 relative">
-            <MapPin className="w-4 h-4 text-brand-600 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <select
+          <div className="md:col-span-3">
+            <Select
               value={selectedTerminal}
-              onChange={(e) => setSelectedTerminal(e.target.value)}
-              className="w-full pl-10 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer min-h-[44px]"
+              onValueChange={(val) => {
+                if (typeof val === 'string') setSelectedTerminal(val);
+              }}
             >
-              <option value="all">All Terminal Hubs</option>
-              {SEED_TERMINALS.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.city} ({t.code})
-                </option>
-              ))}
-            </select>
+              <SelectTrigger startIcon={MapPin} className="min-h-[44px]">
+                <SelectValue placeholder="All Terminal Hubs" />
+              </SelectTrigger>
+              <SelectPopup>
+                <SelectItem value="all">All Terminal Hubs</SelectItem>
+                {SEED_TERMINALS.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
+                    {t.city} ({t.code})
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
           </div>
 
           {/* Status Filter */}
-          <div className="md:col-span-3 relative">
-            <Filter className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <select
+          <div className="md:col-span-3">
+            <Select
               value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full pl-10 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer min-h-[44px]"
+              onValueChange={(val) => {
+                if (typeof val === 'string') setSelectedStatus(val);
+              }}
             >
-              <option value="all">All Statuses</option>
-              <option value="confirmed">Confirmed / Paid</option>
-              <option value="held">15m Hold Lock</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
+              <SelectTrigger startIcon={Filter} className="min-h-[44px]">
+                <SelectValue placeholder="All Statuses" />
+              </SelectTrigger>
+              <SelectPopup>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="confirmed">Confirmed / Paid</SelectItem>
+                <SelectItem value="held">15m Hold Lock</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+              </SelectPopup>
+            </Select>
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ArrowRight, Clock, MapPin, Users, Sparkles } from 'lucide-react';
 import { formatNaira } from '@atm/shared';
 import { Icon } from '@/components/ui/Icon';
+import { WobbleCard } from '@/components/ui/wobble-card';
 
 interface BentoCorridor {
   id: string;
@@ -162,11 +163,10 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               key={tab.id}
               type="button"
               onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
-              className={`px-3.5 py-1.5 text-xs font-normal rounded-full transition-all duration-150 cursor-pointer min-h-[36px] active:scale-95 motion-reduce:transform-none ${
-                activeFilter === tab.id
-                  ? 'bg-card text-foreground shadow-xs border border-border font-medium'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`px-3.5 py-1.5 text-xs font-normal rounded-full transition-all duration-150 cursor-pointer min-h-9 active:scale-95 motion-reduce:transform-none ${activeFilter === tab.id
+                ? 'bg-card text-foreground shadow-xs border border-border font-medium'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
               {tab.label}
             </button>
@@ -178,15 +178,18 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
       <div className="grid grid-cols-1 @md/section:grid-cols-2 @lg/section:grid-cols-3 gap-6">
         {/* Large Featured Card (Spans 2 columns on large container) */}
         {featured && (
-          <div className="@lg/section:col-span-2 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[380px] sm:min-h-[440px] flex flex-col justify-between p-6 sm:p-8 shadow-xl border border-slate-800 group hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 motion-reduce:transform-none">
+          <WobbleCard
+            containerClassName="@lg/section:col-span-2 bg-slate-950 text-white min-h-[380px] sm:min-h-[440px] border border-slate-800 shadow-xl"
+            className="flex flex-col justify-between p-6 sm:p-8 h-full"
+          >
             {/* Background Image with Gradient */}
             <div className="absolute inset-0 z-0">
               <img
                 src={featured.image}
                 alt={`${featured.from} to ${featured.to}`}
-                className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover opacity-60"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/30" />
+              <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/60 to-slate-950/30" />
             </div>
 
             {/* Top Badges */}
@@ -241,30 +244,31 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                 <button
                   type="button"
                   onClick={() => handleBook(featured.from, featured.to)}
-                  className="px-6 py-3 bg-primary hover:opacity-90 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer min-h-[44px] motion-reduce:transform-none"
+                  className="px-6 py-3 bg-primary hover:opacity-90 text-primary-foreground font-normal text-xs sm:text-sm rounded-xl shadow-lg hover:shadow-xl active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer min-h-11 motion-reduce:transform-none"
                 >
                   <span>Book Seat Now</span>
                   <Icon icon={ArrowRight} size="default" className="text-primary-foreground" />
                 </button>
               </div>
             </div>
-          </div>
+          </WobbleCard>
         )}
 
         {/* Regular / Compact Bento Cards */}
         {rest.map((corridor) => (
-          <div
+          <WobbleCard
             key={corridor.id}
-            className="relative rounded-3xl overflow-hidden bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-md hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] flex flex-col justify-between p-5 group motion-reduce:transform-none"
+            containerClassName="bg-card text-card-foreground border border-border shadow-md hover:border-primary/40 h-full"
+            className="flex flex-col justify-between p-5 h-full"
           >
-            <div>
-              <div className="relative h-40 w-full rounded-2xl overflow-hidden mb-4">
+            <>
+              <div className="relative h-full w-full rounded-2xl overflow-hidden mb-4">
                 <img
                   src={corridor.image}
                   alt={`${corridor.from} to ${corridor.to}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent" />
                 <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[10px] font-normal">
                   {corridor.dailyDepartures} Departures
                 </div>
@@ -282,7 +286,7 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
                   {corridor.from} to {corridor.to}
                 </h4>
               </div>
-            </div>
+            </>
 
             <div className="pt-4 mt-3 border-t border-border flex items-center justify-between">
               <div>
@@ -297,13 +301,13 @@ export function TrendingBentoGallery({ onNavigate }: { onNavigate?: (path: strin
               <button
                 type="button"
                 onClick={() => handleBook(corridor.from, corridor.to)}
-                className="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-xs font-normal rounded-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 cursor-pointer min-h-[44px] motion-reduce:transform-none"
+                className="px-4 py-2 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-xs font-normal rounded-xl active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 cursor-pointer min-h-11 motion-reduce:transform-none"
               >
                 <span>Select</span>
                 <Icon icon={ArrowRight} size="sm" />
               </button>
             </div>
-          </div>
+          </WobbleCard>
         ))}
       </div>
     </section>

@@ -11,7 +11,7 @@ import {
 import { ArrowLeftRight, Users, Calendar, MapPin, Search, ChevronDown } from 'lucide-react';
 import { DateField } from '../ui/DateField.tsx';
 import { Button } from '../ui/Button.tsx';
-import { NativeSelect } from '../ui/Select.tsx';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../ui/Select.tsx';
 import { Icon } from '../ui/Icon.tsx';
 import { cn } from '../../lib/utils.ts';
 
@@ -232,19 +232,23 @@ export function SearchForm({
             Travelling From
           </label>
           <div className="relative">
-            <NativeSelect
-              id="from-select"
-              name="from"
+            <Select
               value={fromCity}
-              onChange={(e) => handleFromChange(e.target.value)}
-              startIcon={MapPin}
+              onValueChange={(val) => {
+                if (typeof val === 'string') handleFromChange(val);
+              }}
             >
-              {SERVED_CITIES.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </NativeSelect>
+              <SelectTrigger startIcon={MapPin}>
+                <SelectValue placeholder="Travelling From" />
+              </SelectTrigger>
+              <SelectPopup>
+                {SERVED_CITIES.map((city) => (
+                  <SelectItem key={city} value={city}>
+                    {city}
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
 
             {/* Inline floating swap button on desktop when compact */}
             {compact && (
@@ -297,19 +301,23 @@ export function SearchForm({
             Travelling To
           </label>
           <div className="relative">
-            <NativeSelect
-              id="to-select"
-              name="to"
+            <Select
               value={toCity}
-              onChange={(e) => handleToChange(e.target.value)}
-              startIcon={MapPin}
+              onValueChange={(val) => {
+                if (typeof val === 'string') handleToChange(val);
+              }}
             >
-              {servedDestinations.map((dest) => (
-                <option key={dest} value={dest}>
-                  {dest}
-                </option>
-              ))}
-            </NativeSelect>
+              <SelectTrigger startIcon={MapPin}>
+                <SelectValue placeholder="Travelling To" />
+              </SelectTrigger>
+              <SelectPopup>
+                {servedDestinations.map((dest) => (
+                  <SelectItem key={dest} value={dest}>
+                    {dest}
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
           </div>
           {errors.to && <p className="text-xs text-destructive mt-1">{errors.to}</p>}
         </div>

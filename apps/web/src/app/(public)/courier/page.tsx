@@ -12,8 +12,9 @@ import {
 import { PageShell } from '@/components/layout/Templates.tsx';
 import { StaticParcelRepository } from '@/server/repositories/parcels.ts';
 import { Input } from '@/components/ui/Input';
-import { NativeSelect } from '@/components/ui/Select';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
 import { Icon } from '@/components/ui/Icon';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 import {
   Package,
   FileText,
@@ -199,6 +200,7 @@ export default function CourierPage(props?: any) {
         { label: 'Home', href: '/' },
         { label: 'Courier & Freight' },
       ]}
+      width='compact'
       density="comfortable"
     >
       {/* Hero Intro Header */}
@@ -225,11 +227,11 @@ export default function CourierPage(props?: any) {
         {/* Left Column: Booking Form */}
         <div className="@lg/page:col-span-8 relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 sm:p-8 shadow-sm">
           {/* Top specular highlight */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-transparent via-primary/30 to-transparent" />
 
           {errorMsg && (
             <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-700 dark:text-rose-400 flex items-start gap-3">
-              <Icon icon={AlertTriangle} size="sm" className="flex-shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+              <Icon icon={AlertTriangle} size="sm" className="shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
               <div className="text-sm font-medium text-pretty">{errorMsg}</div>
             </div>
           )}
@@ -249,18 +251,23 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="origin-terminal" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Origin Terminal (Drop-off)
                   </label>
-                  <NativeSelect
-                    id="origin-terminal"
+                  <Select
                     value={originTerminalId}
-                    onChange={(e) => setOriginTerminalId(e.target.value)}
-                    startIcon={MapPin}
+                    onValueChange={(val) => {
+                      if (typeof val === 'string') setOriginTerminalId(val);
+                    }}
                   >
-                    {SEED_TERMINALS.map((term) => (
-                      <option key={term.id} value={term.id}>
-                        {term.city}: {term.name}
-                      </option>
-                    ))}
-                  </NativeSelect>
+                    <SelectTrigger startIcon={MapPin}>
+                      <SelectValue placeholder="Origin Terminal" />
+                    </SelectTrigger>
+                    <SelectPopup>
+                      {SEED_TERMINALS.map((term) => (
+                        <SelectItem key={term.id} value={term.id}>
+                          {term.city}: {term.name}
+                        </SelectItem>
+                      ))}
+                    </SelectPopup>
+                  </Select>
                   {originTerminal && (
                     <p className="mt-1.5 text-xs text-muted-foreground truncate">
                       {originTerminal.address}
@@ -272,18 +279,25 @@ export default function CourierPage(props?: any) {
                   <label htmlFor="dest-terminal" className="block text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2">
                     Destination Terminal (Pickup)
                   </label>
-                  <NativeSelect
-                    id="dest-terminal"
+                  <Select
                     value={destinationTerminalId}
-                    onChange={(e) => setDestinationTerminalId(e.target.value)}
-                    startIcon={MapPin}
+                    onValueChange={(val) => {
+                      if (typeof val === 'string') {
+                        setDestinationTerminalId(val)
+                      };
+                    }}
                   >
-                    {SEED_TERMINALS.filter((t) => t.id !== originTerminalId).map((term) => (
-                      <option key={term.id} value={term.id}>
-                        {term.city}: {term.name}
-                      </option>
-                    ))}
-                  </NativeSelect>
+                    <SelectTrigger startIcon={MapPin}>
+                      <SelectValue placeholder="Destination Terminal" />
+                    </SelectTrigger>
+                    <SelectPopup>
+                      {SEED_TERMINALS.filter((t) => t.id !== originTerminalId).map((term) => (
+                        <SelectItem key={term.id} value={term.id}>
+                          {term.city}: {term.name}
+                        </SelectItem>
+                      ))}
+                    </SelectPopup>
+                  </Select>
                   {destinationTerminal && (
                     <p className="mt-1.5 text-xs text-muted-foreground truncate">
                       {destinationTerminal.address}
@@ -303,7 +317,10 @@ export default function CourierPage(props?: any) {
               </div>
 
               {/* Category Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
+              <CardHoverGroup
+                layoutId="courier-categories"
+                className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-5"
+              >
                 {CATEGORIES.map((cat) => {
                   const CategoryIcon = cat.icon;
                   const isSelected = category === cat.id;
@@ -312,7 +329,7 @@ export default function CourierPage(props?: any) {
                       type="button"
                       key={cat.id}
                       onClick={() => setCategory(cat.id)}
-                      className={`text-left p-3.5 rounded-xl border transition-all ${isSelected
+                      className={`text-left p-3.5 rounded-xl border transition-all h-full w-full ${isSelected
                         ? 'bg-primary/10 border-primary text-foreground ring-1 ring-primary shadow-xs'
                         : 'bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
                         }`}
@@ -323,7 +340,7 @@ export default function CourierPage(props?: any) {
                     </button>
                   );
                 })}
-              </div>
+              </CardHoverGroup>
 
               {/* Weight & Description */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
@@ -536,7 +553,7 @@ export default function CourierPage(props?: any) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full min-h-[48px] py-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full min-h-12 py-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <span>Generating Waybill...</span>
@@ -554,7 +571,7 @@ export default function CourierPage(props?: any) {
         <div className="@lg/page:col-span-4 space-y-6 @lg/page:sticky @lg/page:top-24">
           {/* Live Pricing Breakdown Card */}
           <div className="relative overflow-hidden rounded-2xl border border-border bg-card/75 backdrop-blur-xl text-card-foreground p-6 shadow-sm">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-transparent via-primary/30 to-transparent" />
 
             <h3 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-4">
               Estimated Freight Summary
@@ -562,9 +579,9 @@ export default function CourierPage(props?: any) {
 
             {/* Route pill */}
             <div className="p-3 rounded-xl bg-muted/50 border border-border mb-4 flex items-center justify-between text-xs font-semibold text-foreground">
-              <span className="truncate max-w-[110px]">{originTerminal?.city || 'Origin'}</span>
-              <Icon icon={ArrowRight} size="xs" className="text-primary flex-shrink-0" />
-              <span className="truncate max-w-[110px]">{destinationTerminal?.city || 'Destination'}</span>
+              <span className="truncate max-w-27.5">{originTerminal?.city || 'Origin'}</span>
+              <Icon icon={ArrowRight} size="xs" className="text-primary shrink-0" />
+              <span className="truncate max-w-27.5">{destinationTerminal?.city || 'Destination'}</span>
             </div>
 
             <div className="space-y-2.5 text-xs text-muted-foreground border-b border-border pb-4 mb-4">
@@ -615,7 +632,7 @@ export default function CourierPage(props?: any) {
             <button
               type="button"
               onClick={() => navigate('/track')}
-              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+              className="w-full min-h-11 py-2.5 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
             >
               <span>Go to Tracking Portal</span>
               <Icon icon={ExternalLink} size="xs" />
@@ -628,10 +645,10 @@ export default function CourierPage(props?: any) {
       {successResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative overflow-hidden bg-card text-card-foreground border border-border rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl text-left">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-transparent via-primary/30 to-transparent" />
 
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                 <Icon icon={CheckCircle2} size="md" className="text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
@@ -697,7 +714,7 @@ export default function CourierPage(props?: any) {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+                className="flex-1 min-h-11 py-3 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground border border-border font-semibold text-sm transition-colors flex items-center justify-center gap-2"
               >
                 <Icon icon={Printer} size="xs" />
                 <span>Print Waybill Pass</span>
@@ -706,7 +723,7 @@ export default function CourierPage(props?: any) {
               <button
                 type="button"
                 onClick={() => navigate(`/track?q=${successResult.trackingCode}`)}
-                className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-md"
+                className="flex-1 min-h-11 py-3 px-4 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-md"
               >
                 <span>Track This Parcel</span>
                 <Icon icon={ArrowRight} size="xs" className="text-primary-foreground" />

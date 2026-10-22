@@ -155,7 +155,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
     highwayName: 'A121 / A232 Sagamu - Benin - Asaba Expressway',
     waypoints: [
       {
-        id: 'wp-los-enu-1',
+        id: 'wp-lag-enu-1',
         name: 'Jibowu Terminal',
         landmark: 'ATM Lagos Mainland Terminal',
         latitude: 6.5218,
@@ -163,7 +163,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 0,
       },
       {
-        id: 'wp-los-enu-2',
+        id: 'wp-lag-enu-2',
         name: 'Sagamu Interchange',
         landmark: 'Lagos - Ibadan Expressway Divergence',
         latitude: 6.8400,
@@ -171,7 +171,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 65,
       },
       {
-        id: 'wp-los-enu-3',
+        id: 'wp-lag-enu-3',
         name: 'Ore Bypass',
         landmark: 'Ore Commercial Rest Stop & Fuel Depot',
         latitude: 6.7450,
@@ -179,7 +179,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 210,
       },
       {
-        id: 'wp-los-enu-4',
+        id: 'wp-lag-enu-4',
         name: 'Okada Town Junction',
         landmark: 'Edo State Expressway Corridor',
         latitude: 6.7320,
@@ -187,7 +187,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 290,
       },
       {
-        id: 'wp-los-enu-5',
+        id: 'wp-lag-enu-5',
         name: 'Benin Central Bypass',
         landmark: 'Benin City Ring Road Junction',
         latitude: 6.3350,
@@ -195,7 +195,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 325,
       },
       {
-        id: 'wp-los-enu-6',
+        id: 'wp-lag-enu-6',
         name: 'Asaba Bridgehead',
         landmark: 'River Niger Delta Approach',
         latitude: 6.1980,
@@ -203,7 +203,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 445,
       },
       {
-        id: 'wp-los-enu-7',
+        id: 'wp-lag-enu-7',
         name: 'Ogui Road Terminal',
         landmark: 'ATM Enugu Central Terminal',
         latitude: 6.4474,
@@ -220,7 +220,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
     highwayName: 'A232 / A121 Asaba - Benin - Sagamu Expressway',
     waypoints: [
       {
-        id: 'wp-enu-los-1',
+        id: 'wp-enu-lag-1',
         name: 'Ogui Road Terminal',
         landmark: 'ATM Enugu Central Terminal',
         latitude: 6.4474,
@@ -228,7 +228,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 0,
       },
       {
-        id: 'wp-enu-los-2',
+        id: 'wp-enu-lag-2',
         name: 'Asaba Bridgehead',
         landmark: 'Delta River Niger Crossing',
         latitude: 6.1980,
@@ -236,7 +236,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 85,
       },
       {
-        id: 'wp-enu-los-3',
+        id: 'wp-enu-lag-3',
         name: 'Benin Central Bypass',
         landmark: 'Benin City Western Exit',
         latitude: 6.3350,
@@ -244,7 +244,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 205,
       },
       {
-        id: 'wp-enu-los-4',
+        id: 'wp-enu-lag-4',
         name: 'Okada Town Junction',
         landmark: 'Okada Highway Stretch',
         latitude: 6.7320,
@@ -252,7 +252,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 240,
       },
       {
-        id: 'wp-enu-los-5',
+        id: 'wp-enu-lag-5',
         name: 'Ore Bypass',
         landmark: 'Ore Expressway Rest Stop',
         latitude: 6.7450,
@@ -260,7 +260,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 320,
       },
       {
-        id: 'wp-enu-los-6',
+        id: 'wp-enu-lag-6',
         name: 'Sagamu Interchange',
         landmark: 'Ogun State Motorway Junction',
         latitude: 6.8400,
@@ -268,7 +268,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 465,
       },
       {
-        id: 'wp-enu-los-7',
+        id: 'wp-enu-lag-7',
         name: 'Jibowu Terminal',
         landmark: 'ATM Lagos Mainland Terminal',
         latitude: 6.5218,
@@ -285,7 +285,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
     highwayName: 'A121 / A232 Sagamu - Benin - Onitsha - Owerri Expressway',
     waypoints: [
       {
-        id: 'wp-los-qow-1',
+        id: 'wp-lag-imo-1',
         name: 'Jibowu Terminal',
         landmark: 'ATM Lagos Mainland Terminal',
         latitude: 6.5218,
@@ -293,7 +293,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 0,
       },
       {
-        id: 'wp-los-qow-2',
+        id: 'wp-lag-imo-2',
         name: 'Sagamu Interchange',
         landmark: 'Sagamu Highway Divergence',
         latitude: 6.8400,
@@ -301,7 +301,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 65,
       },
       {
-        id: 'wp-los-qow-3',
+        id: 'wp-lag-imo-3',
         name: 'Ore Bypass',
         landmark: 'Ore Highway Rest Stop',
         latitude: 6.7450,
@@ -309,7 +309,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 210,
       },
       {
-        id: 'wp-los-qow-4',
+        id: 'wp-lag-imo-4',
         name: 'Benin Bypass',
         landmark: 'Benin Ring Road Expressway',
         latitude: 6.3350,
@@ -317,7 +317,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 325,
       },
       {
-        id: 'wp-los-qow-5',
+        id: 'wp-lag-imo-5',
         name: 'Onitsha Bridge',
         landmark: 'River Niger Crossing at Onitsha',
         latitude: 6.1520,
@@ -325,7 +325,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 435,
       },
       {
-        id: 'wp-los-qow-6',
+        id: 'wp-lag-imo-6',
         name: 'Ihiala Expressway',
         landmark: 'Imo Border Approach',
         latitude: 5.8540,
@@ -333,7 +333,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 475,
       },
       {
-        id: 'wp-los-qow-7',
+        id: 'wp-lag-imo-7',
         name: 'Egbo Road Terminal',
         landmark: 'ATM Owerri Terminal',
         latitude: 5.4836,
@@ -350,7 +350,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
     highwayName: 'A232 / A121 Owerri - Onitsha - Benin - Sagamu Expressway',
     waypoints: [
       {
-        id: 'wp-qow-los-1',
+        id: 'wp-imo-lag-1',
         name: 'Egbo Road Terminal',
         landmark: 'ATM Owerri Terminal',
         latitude: 5.4836,
@@ -358,7 +358,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 0,
       },
       {
-        id: 'wp-qow-los-2',
+        id: 'wp-imo-lag-2',
         name: 'Ihiala Expressway',
         landmark: 'Anambra Border Corridor',
         latitude: 5.8540,
@@ -366,7 +366,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 45,
       },
       {
-        id: 'wp-qow-los-3',
+        id: 'wp-imo-lag-3',
         name: 'Onitsha Bridge',
         landmark: 'River Niger Bridgehead',
         latitude: 6.1520,
@@ -374,7 +374,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 85,
       },
       {
-        id: 'wp-qow-los-4',
+        id: 'wp-imo-lag-4',
         name: 'Benin Bypass',
         landmark: 'Benin Bypass Western Link',
         latitude: 6.3350,
@@ -382,7 +382,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 195,
       },
       {
-        id: 'wp-qow-los-5',
+        id: 'wp-imo-lag-5',
         name: 'Ore Bypass',
         landmark: 'Ore Rest Stop',
         latitude: 6.7450,
@@ -390,7 +390,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 310,
       },
       {
-        id: 'wp-qow-los-6',
+        id: 'wp-imo-lag-6',
         name: 'Sagamu Interchange',
         landmark: 'Ogun Motorway Interchange',
         latitude: 6.8400,
@@ -398,7 +398,7 @@ export const CORRIDOR_WAYPOINTS_MAP: Record<string, CorridorWaypointsConfig> = {
         distanceFromOriginKm: 455,
       },
       {
-        id: 'wp-qow-los-7',
+        id: 'wp-imo-lag-7',
         name: 'Jibowu Terminal',
         landmark: 'ATM Lagos Mainland Terminal',
         latitude: 6.5218,

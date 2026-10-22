@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { PageShell } from '@/components/layout/Templates.tsx';
 import { formatNaira, calculateCancellationFee, DEFAULT_CANCELLATION_POLICY } from '@atm/shared';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 import {
   Clock,
   ShieldCheck,
@@ -175,8 +176,8 @@ export default function CancelBookingPage(props?: any) {
         </div>
 
         {/* Disbursement Options Overview */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-3">
+        <CardHoverGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-3 h-full">
             <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
               <Wallet className="h-5 w-5 text-accent-600" />
               Instant ATM Store Credit
@@ -189,7 +190,7 @@ export default function CancelBookingPage(props?: any) {
             </span>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-3">
+          <div className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm space-y-3 h-full">
             <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
               <CreditCard className="h-5 w-5 text-slate-700" />
               Paystack Card Reversal
@@ -201,7 +202,7 @@ export default function CancelBookingPage(props?: any) {
               Original payment source
             </span>
           </div>
-        </div>
+        </CardHoverGroup>
       </div>
     </PageShell>
   );

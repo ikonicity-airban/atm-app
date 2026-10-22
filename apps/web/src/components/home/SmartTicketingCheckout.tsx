@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { QrCode, ShieldCheck, ArrowRight, Plus, Minus, Check, Sparkles, Calendar } from 'lucide-react';
 import { formatNaira } from '@atm/shared';
-import { NativeSelect } from '@/components/ui/Select';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
 import { Input } from '@/components/ui/Input';
+import { DatePicker } from '@/components/ui/DatePicker';
 import { Icon } from '@/components/ui/Icon';
+import { QrCodeView } from '@/components/ui/QrCodeView';
 
 interface CheckoutRoute {
   label: string;
@@ -22,14 +24,14 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     from: 'Enugu',
     to: 'Abuja',
     fromCode: 'ENU',
-    toCode: 'ABV',
+    toCode: 'ABJ',
     baseFareKobo: 3200000,
   },
   {
     label: 'Lagos (Jibowu) → Enugu (Ogui)',
     from: 'Lagos',
     to: 'Enugu',
-    fromCode: 'LOS',
+    fromCode: 'LAG',
     toCode: 'ENU',
     baseFareKobo: 3800000,
   },
@@ -37,7 +39,7 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     label: 'Abuja (Utako) → Enugu (Ogui)',
     from: 'Abuja',
     to: 'Enugu',
-    fromCode: 'ABV',
+    fromCode: 'ABJ',
     toCode: 'ENU',
     baseFareKobo: 3200000,
   },
@@ -45,16 +47,16 @@ const CHECKOUT_ROUTES: CheckoutRoute[] = [
     label: 'Lagos (Ajah) → Owerri (Control Post)',
     from: 'Lagos',
     to: 'Owerri',
-    fromCode: 'LOS',
-    toCode: 'QOW',
+    fromCode: 'LAG',
+    toCode: 'IMO',
     baseFareKobo: 3600000,
   },
   {
     label: 'Owerri (Control Post) → Abuja (Utako)',
     from: 'Owerri',
     to: 'Abuja',
-    fromCode: 'QOW',
-    toCode: 'ABV',
+    fromCode: 'IMO',
+    toCode: 'ABJ',
     baseFareKobo: 3400000,
   },
 ];
@@ -89,7 +91,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 @container/section">
+    <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 @container/section">
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-primary">
           Digital Ticketing &amp; Direct Reservation
@@ -102,12 +104,12 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
         </p>
       </div>
 
-      <div className="grid grid-cols-1 @lg/section:grid-cols-12 gap-8 items-center">
+      <div className="grid grid-cols-1 @lg/section:grid-cols-12 gap-8 items-center justify-between">
         {/* Left Side: Authentic Digital Boarding Pass Graphic */}
-        <div className="@lg/section:col-span-6 flex justify-center">
+        <div className="@lg/section:col-span-5 flex justify-center">
           <div className="w-full max-w-md bg-card/75 backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-border overflow-hidden relative motion-reduce:transform-none">
             {/* Top Pass Header */}
-            <div className="bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] p-6 text-white">
+            <div className="bg-linear-to-r from-[#2a0e5b] to-[#ca2484] p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-extrabold tracking-widest uppercase">
                   Ascent Boarding Pass
@@ -138,9 +140,9 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
 
             {/* Perforated Divider */}
             <div className="relative py-2 bg-slate-50 dark:bg-slate-950 flex items-center justify-between">
-              <div className="w-4 h-8 bg-slate-100 dark:bg-slate-950 rounded-r-full -ml-2 border-r border-slate-200 dark:border-slate-800" />
+              <div className="w-5 h-8 bg-slate-100 dark:bg-slate-950 rounded-r-full -ml-2 border-r border-slate-200 dark:border-slate-800" />
               <div className="flex-1 border-b-2 border-dashed border-slate-300 dark:border-slate-700 mx-2" />
-              <div className="w-4 h-8 bg-slate-100 dark:bg-slate-950 rounded-l-full -mr-2 border-l border-slate-200 dark:border-slate-800" />
+              <div className="w-5 h-8 bg-slate-100 dark:bg-slate-950 rounded-l-full -mr-2 border-l border-slate-200 dark:border-slate-800" />
             </div>
 
             {/* Pass Passenger Details */}
@@ -195,8 +197,11 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                   </div>
                 </div>
 
-                <div className="w-20 h-20 bg-muted/40 rounded-xl p-2 border border-border flex items-center justify-center flex-shrink-0">
-                  <Icon icon={QrCode} className="w-16 h-16 text-foreground" />
+                <div className="shrink-0">
+                  <QrCodeView
+                    value={`https://atmnigeria.com/pass/ATM-${currentRoute.fromCode}-${currentRoute.toCode}-8492`}
+                    size={120}
+                  />
                 </div>
               </div>
             </div>
@@ -214,7 +219,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                 Calculate total kobo fare and reserve your seat instantly
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-normal">
+            <span className="px-2.5 py-1 rounded-full min-w-fit bg-primary/10 text-primary text-xs font-normal">
               Instant Hold
             </span>
           </div>
@@ -226,16 +231,25 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
               <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                 Select Corridor
               </label>
-              <NativeSelect
-                value={selectedRouteIndex}
-                onChange={(e) => setSelectedRouteIndex(Number(e.target.value))}
+              <Select
+                value={String(CHECKOUT_ROUTES[selectedRouteIndex]?.label)}
+                onValueChange={(val) => {
+                  if (typeof val === 'string') {
+                    setSelectedRouteIndex(Number(val));
+                  }
+                }}
               >
-                {CHECKOUT_ROUTES.map((route, idx) => (
-                  <option key={route.label} value={idx}>
-                    {route.label}
-                  </option>
-                ))}
-              </NativeSelect>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Corridor" />
+                </SelectTrigger>
+                <SelectPopup>
+                  {CHECKOUT_ROUTES.map((route, idx) => (
+                    <SelectItem key={route.label} value={String(idx)}>
+                      {route.label}
+                    </SelectItem>
+                  ))}
+                </SelectPopup>
+              </Select>
             </div>
 
             {/* Travel Date & Passengers Count Row */}
@@ -244,12 +258,11 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                 <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                   Departure Date
                 </label>
-                <Input
-                  type="date"
+                <DatePicker
                   value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
+                  onChange={(val) => setSelectedDate(typeof val === 'string' ? val : val?.target?.value)}
                   startIcon={Calendar}
-                  className="min-h-[44px]"
+                  className="min-h-11"
                 />
               </div>
 
@@ -257,7 +270,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
                 <label className="text-xs font-medium font-heading text-foreground block mb-1.5">
                   Passengers (Max 5)
                 </label>
-                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-background border border-input min-h-[44px]">
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-background border border-input min-h-11">
                   <button
                     type="button"
                     onClick={() => setPassengerCount(Math.max(1, passengerCount - 1))}
@@ -311,7 +324,7 @@ export function SmartTicketingCheckout({ onNavigate }: { onNavigate?: (path: str
           <button
             type="button"
             onClick={handleProceed}
-            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-normal text-xs sm:text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer min-h-[48px] motion-reduce:transform-none"
+            className="w-full py-3.5 px-6 rounded-xl bg-linear-to-r from-[#2a0e5b] to-[#ca2484] hover:opacity-95 text-white font-normal text-xs sm:text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer min-h-12 motion-reduce:transform-none"
           >
             <span>Hold Seat &amp; Proceed to Trips</span>
             <Icon icon={ArrowRight} size="default" className="text-white" />

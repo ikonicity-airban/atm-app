@@ -245,13 +245,14 @@ test('Routing Spec 0008 (AC-2): Pathname and search query parameter isolation', 
     return { pathname, search: search ? `?${search}` : '', params };
   }
 
-  const sampleUrl = '/trips?from=Enugu&to=Abuja&date=2026-10-20&passengers=2';
+  const today = getLagosDate();
+  const sampleUrl = `/trips?from=Enugu&to=Abuja&date=${today}&passengers=2`;
   const parsed = parseRouteUrl(sampleUrl);
 
   assert.equal(parsed.pathname, '/trips', 'Pathname must cleanly isolate from query string');
   assert.equal(parsed.params.from, 'Enugu');
   assert.equal(parsed.params.to, 'Abuja');
-  assert.equal(parsed.params.date, '2026-10-20');
+  assert.equal(parsed.params.date, today);
   assert.equal(parsed.params.passengers, '2');
 
   // Verify searchParamsSchema validates this payload

@@ -24,6 +24,7 @@ import { Logo } from '../ui/Logo.tsx';
 import { ThemeToggle } from '../theme/ThemeToggle.tsx';
 import { Button } from '../ui/Button.tsx';
 import { Icon } from '../ui/Icon.tsx';
+import { GooeyInput } from '../ui/gooey-input.tsx';
 
 interface PublicHeaderProps {
   currentPath: string;
@@ -184,6 +185,30 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     setActiveDropdown(null);
   };
 
+  const handleHeaderSearch = (query: string) => {
+    const q = query.trim();
+    if (!q) return;
+
+    if (/^ATM-EXP/i.test(q) || /^EXP-/i.test(q)) {
+      handleNav(`/track?q=${encodeURIComponent(q)}`);
+      return;
+    }
+
+    if (/^ATM-/i.test(q)) {
+      handleNav(`/manage?ref=${encodeURIComponent(q)}`);
+      return;
+    }
+
+    const lower = q.toLowerCase();
+    const matchedCity = ['Lagos', 'Abuja', 'Enugu', 'Owerri'].find((c) => c.toLowerCase() === lower);
+    if (matchedCity) {
+      handleNav(`/trips?to=${encodeURIComponent(matchedCity)}`);
+      return;
+    }
+
+    handleNav(`/trips?search=${encodeURIComponent(q)}`);
+  };
+
   const handleMouseEnter = (type: 'travel' | 'courier' | 'charter' | 'support', index: number) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     setActiveDropdown(type);
@@ -200,14 +225,14 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out flex justify-center ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out flex justify-center [--muted-foreground:#231923] dark:[--muted-foreground:#a9a] ${isScrolled
         ? 'pt-3 sm:pt-4 px-2 sm:px-4 pointer-events-none'
         : 'pt-0 px-4 sm:px-6 lg:px-8 bg-transparent'
         }`}
     >
       <div
         className={`w-full transition-all duration-300 ease-out flex items-center justify-between pointer-events-auto ${isScrolled
-          ? 'max-w-5xl lg:max-w-6xl bg-card/75 backdrop-blur-xl rounded-full px-4 sm:px-6 py-2.5 shadow-lg'
+          ? 'max-w-5xl lg:max-w-6xl bg-card/50 backdrop-blur-lg rounded-full px-4 sm:px-6 py-2.5 shadow-lg'
           : 'max-w-7xl mx-auto py-4 sm:py-6 bg-transparent border-0'
           }`}
       >
@@ -218,7 +243,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           className="flex items-center text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-lg p-1 cursor-pointer transition-transform hover:scale-[1.01]"
           aria-label="Ascent Transport Management Home"
         >
-          <Logo variant="full" size="md" />
+          <Logo variant="full" size="lg" className={!isScrolled ? "mix-blend-lighten" : ""} />
         </button>
 
         {/* Desktop Navigation Links with Magnetic Tracking Pill */}
@@ -239,18 +264,18 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => handleNav('/trips')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-bold rounded-full min-h-[44px] flex items-center gap-1.5 cursor-pointer transition-colors ${currentPath === '/trips' || currentPath.startsWith('/book')
+              className={`relative z-10 px-3.5 py-2 text-sm font-bold rounded-full min-h-11 flex items-center gap-1.5 cursor-pointer transition-colors ${currentPath === '/trips' || currentPath.startsWith('/book')
                 ? 'text-primary'
                 : 'text-foreground/90 hover:text-foreground'
                 }`}
             >
-              <Icon icon={Bus} size="default" className="text-primary" />
+              <Icon icon={Bus} size="default" className="text-primary/90" />
               <span>Find Trips</span>
             </button>
             {highlightedIndex === 0 && (
               <motion.span
                 layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs -z-0"
+                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs z-0"
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
@@ -264,7 +289,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => setActiveDropdown(activeDropdown === 'travel' ? null : 'travel')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${travelLinks.some((l) => currentPath.startsWith(l.path))
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-11 flex items-center gap-1 cursor-pointer transition-colors ${travelLinks.some((l) => currentPath.startsWith(l.path))
                 ? 'text-primary'
                 : 'text-foreground/80 hover:text-foreground'
                 }`}
@@ -280,7 +305,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             {highlightedIndex === 1 && (
               <motion.span
                 layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs -z-0"
+                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs z-0"
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
@@ -340,7 +365,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => setActiveDropdown(activeDropdown === 'courier' ? null : 'courier')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${courierLinks.some((l) => currentPath.startsWith(l.path))
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-11 flex items-center gap-1 cursor-pointer transition-colors ${courierLinks.some((l) => currentPath.startsWith(l.path))
                 ? 'text-primary'
                 : 'text-foreground/80 hover:text-foreground'
                 }`}
@@ -356,7 +381,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             {highlightedIndex === 2 && (
               <motion.span
                 layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs -z-0"
+                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs z-0"
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
@@ -416,7 +441,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => setActiveDropdown(activeDropdown === 'charter' ? null : 'charter')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${charterLinks.some((l) => currentPath.startsWith(l.path))
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-11 flex items-center gap-1 cursor-pointer transition-colors ${charterLinks.some((l) => currentPath.startsWith(l.path))
                 ? 'text-primary'
                 : 'text-foreground/80 hover:text-foreground'
                 }`}
@@ -432,7 +457,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             {highlightedIndex === 3 && (
               <motion.span
                 layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs -z-0"
+                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs z-0"
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
@@ -492,7 +517,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             <button
               type="button"
               onClick={() => setActiveDropdown(activeDropdown === 'support' ? null : 'support')}
-              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-[44px] flex items-center gap-1 cursor-pointer transition-colors ${supportLinks.some((l) => currentPath.startsWith(l.path))
+              className={`relative z-10 px-3.5 py-2 text-sm font-semibold rounded-full min-h-11 flex items-center gap-1 cursor-pointer transition-colors ${supportLinks.some((l) => currentPath.startsWith(l.path))
                 ? 'text-primary'
                 : 'text-foreground/80 hover:text-foreground'
                 }`}
@@ -508,7 +533,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             {highlightedIndex === 4 && (
               <motion.span
                 layoutId="navHoverPill"
-                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs -z-0"
+                className="absolute inset-0 rounded-full bg-primary/10 shadow-2xs z-0"
                 transition={{ type: 'spring', stiffness: 450, damping: 32 }}
               />
             )}
@@ -561,19 +586,30 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
           </div>
         </nav>
 
-        {/* Action CTAs: Track Parcel + Manage Booking */}
+        {/* Action CTAs: Search + Theme + Manage Booking */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Gooey Interactive Search */}
+          <div className="hidden lg:flex items-center">
+            <GooeyInput
+              placeholder="Search trips, waybills..."
+              collapsedWidth={100}
+              expandedWidth={220}
+              expandedOffset={46}
+              onSubmit={handleHeaderSearch}
+            />
+          </div>
+
           {/* Theme Switcher Toggle */}
           <ThemeToggle />
 
           {/* Track Parcel / Search Utility Button */}
           <Button
-            variant="ghost"
+            variant="glass"
             size="icon"
             onClick={() => handleNav('/track')}
             aria-label="Track parcel"
             title="Track parcel"
-            className="rounded-full w-10 h-10 min-h-[40px] min-w-[40px]"
+            className="lg:hidden rounded-full w-10 h-10 min-h-10 min-w-10 text-primary"
           >
             <Icon icon={Search} size="default" />
           </Button>
@@ -583,7 +619,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             variant={isScrolled ? 'default' : 'outline'}
             size="sm"
             onClick={() => handleNav('/manage')}
-            className="rounded-full font-bold px-4 sm:px-5 min-h-[40px]"
+            className={`hidden md:flex rounded-full font-bold px-4 sm:px-5 min-h-10 transition-all ${isScrolled ? "hover:bg-primary/80" : "hover:bg-primary focus:bg-primary hover:text-primary-foreground"}`}
           >
             Manage Booking
           </Button>
@@ -615,7 +651,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             variant="ghost"
             size="icon"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden rounded-full min-h-[44px] min-w-[44px]"
+            className="md:hidden rounded-full min-h-11 min-w-11"
             aria-label="Toggle mobile navigation menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -635,11 +671,25 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             className="md:hidden fixed top-20 left-4 right-4 bg-card/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-border p-5 z-50 max-h-[85vh] overflow-y-auto"
           >
             <div className="space-y-6">
+              {/* Mobile Gooey Search */}
+              <div className="flex justify-center w-full py-1">
+                <GooeyInput
+                  classNames={{
+                    root: "bg-white"
+                  }}
+                  placeholder="Search trips, waybills..."
+                  collapsedWidth={120}
+                  expandedWidth={230}
+                  expandedOffset={40}
+                  onSubmit={handleHeaderSearch}
+                />
+              </div>
+
               {/* High Visibility "Find Trips" Button */}
               <button
                 type="button"
                 onClick={() => handleNav('/trips')}
-                className="w-full min-h-[48px] px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer"
+                className="w-full min-h-12 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   <Bus className="w-4 h-4 text-primary-foreground" />
@@ -663,7 +713,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                         key={item.path}
                         type="button"
                         onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
+                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
                           ? 'bg-primary/10 text-primary font-bold'
                           : 'text-foreground hover:bg-muted'
                           }`}
@@ -692,7 +742,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                         key={item.path}
                         type="button"
                         onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
+                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
                           ? 'bg-primary/10 text-primary font-bold'
                           : 'text-foreground hover:bg-muted'
                           }`}
@@ -721,7 +771,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                         key={item.path}
                         type="button"
                         onClick={() => handleNav(item.path)}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-[44px] cursor-pointer ${currentPath.startsWith(item.path)
+                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
                           ? 'bg-primary/10 text-primary font-bold'
                           : 'text-foreground hover:bg-muted'
                           }`}
@@ -748,7 +798,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                       key={item.path}
                       type="button"
                       onClick={() => handleNav(item.path)}
-                      className={`text-left px-3 py-2 rounded-lg min-h-[44px] flex items-center cursor-pointer ${currentPath.startsWith(item.path)
+                      className={`text-left px-3 py-2 rounded-lg min-h-11 flex items-center cursor-pointer ${currentPath.startsWith(item.path)
                         ? 'text-primary font-bold bg-primary/10'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                         }`}
@@ -768,7 +818,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 <Button
                   variant="outline"
                   onClick={() => handleNav('/track')}
-                  className="w-full rounded-xl text-xs font-bold gap-2 min-h-[44px]"
+                  className="w-full rounded-xl text-xs font-bold gap-2 min-h-11"
                 >
                   <Icon icon={Search} size="xs" />
                   <span>Track Waybill Parcel</span>
@@ -776,7 +826,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 <Button
                   variant="default"
                   onClick={() => handleNav('/manage')}
-                  className="w-full rounded-xl text-xs font-bold gap-2 min-h-[44px]"
+                  className="w-full rounded-xl text-xs font-bold gap-2 min-h-11"
                 >
                   Manage Booking
                 </Button>

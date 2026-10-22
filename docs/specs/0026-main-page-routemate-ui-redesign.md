@@ -28,7 +28,7 @@ The redesign must preserve all core business rules of the platform:
 - **AC-1**: Exact Section Structure. The main page at `apps/web/src/app/(public)/page.tsx` must faithfully implement the nine sequential sections from the reference template: Top Navigation, Hero Search Showcase, Trust Partner Strip, Four Pillar Services Grid, How It Works Three Step Guide, Trending Destinations Bento Gallery, Smart Ticketing and Live Checkout Split, Mobile Experience Banner, Loved by Travelers Reviews Grid, and Multi Column Footer.
 - **AC-2**: Theme System with Light Mode Default. The page styles must use semantic design tokens (`bg-background`, `text-foreground`, `border-border`, `surface-card`, `accent-brand`) configured so that light mode is the clean default presentation, while fully supporting the dark obsidian palette with neon purple and magenta glows.
 - **AC-3**: Floating Hero Search Island. The hero search card must support trip mode selection (One Way, Round Trip, Private Charter), city selects with an inline swap control, date picker, passenger counter, and a primary search button wired directly to the trips query engine.
-- **AC-4**: Real Operational Data. All corridor cards, airport and terminal codes (ENU, ABV, LOS, QOW), departure frequencies, and starting prices must reflect real integer kobo amounts (e.g. 3,200,000 kobo for ₦32,000 Enugu to Abuja).
+- **AC-4**: Real Operational Data. All corridor cards, airport and terminal codes (ENU, ABJ, LAG, IMO), departure frequencies, and starting prices must reflect real integer kobo amounts (e.g. 3,200,000 kobo for ₦32,000 Enugu to Abuja).
 - **AC-5**: Interactive Smart Ticketing and Quick Checkout. The split section must feature an authentic digital boarding pass graphic on the left (showing passenger name, seat assignment, route, date, and verifiable QR code) and an interactive live fare calculator on the right that computes total kobo fares and launches seat hold checkout for the chosen corridor.
 - **AC-6**: Asymmetrical Bento Route Grid. The trending destinations section must display seven real corridors in an asymmetrical bento layout (one large featured corridor card, two medium corridor cards, and four compact corridor cards), each with photography, route badges, distance or duration, and a direct booking link.
 - **AC-7**: Accessibility and Interaction Standards. All interactive buttons and inputs must meet the minimum forty four pixel touch target size. All section headings must apply `text-balance` and body copy must apply `text-pretty`. Pulsing animations are strictly prohibited.
@@ -114,7 +114,7 @@ The user explicitly requested that the structure of the RouteMate template be co
 
 7. **Section 6: Smart Ticketing & Live Checkout Split**:
    - Left side: Digital Boarding Pass Graphic
-     - Origin code (ENU) to Destination code (ABV), departure time in WAT, seat number (e.g. 2A Window), passenger name, and QR code graphic
+     - Origin code (ENU) to Destination code (ABJ), departure time in WAT, seat number (e.g. 2A Window), passenger name, and QR code graphic
    - Right side: Quick Checkout Calculator Widget
      - Corridor selector, travel date, seat count stepper, live kobo calculation breakdown (fare kobo, service fee, total kobo), and "Hold Seat & Proceed" button launching direct booking
 

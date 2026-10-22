@@ -1,9 +1,22 @@
 'use client';
 
 import React from 'react';
-import { Smartphone, CheckCircle2, MessageSquare, Download, Sparkles } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Smartphone, CheckCircle2, MessageSquare } from 'lucide-react';
 import { BRAND } from '@atm/shared';
 import { Icon } from '@/components/ui/Icon';
+
+const SamsungPhoneCanvas = dynamic(
+  () => import('./SamsungPhoneCanvas').then((mod) => mod.SamsungPhoneCanvas),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[460px] sm:h-[540px] lg:h-[600px] flex justify-center items-center">
+        <div className="w-10 h-10 rounded-full border-2 border-pink-400 border-t-transparent animate-spin" />
+      </div>
+    ),
+  }
+);
 
 export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) => void }) {
   return (
@@ -66,46 +79,14 @@ export function MobileAppBanner({ onNavigate }: { onNavigate?: (path: string) =>
             </div>
           </div>
 
-          {/* Right Smartphone Showcase Visual */}
-          <div className="@lg/section:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-[280px] sm:max-w-[320px] bg-slate-950 rounded-[2.5rem] p-3 border-4 border-white/20 shadow-2xl">
-              {/* Phone Camera Notch */}
-              <div className="w-28 h-4 bg-slate-900 rounded-full mx-auto mb-3" />
+          {/* Right 3D Smartphone Showcase Visual */}
+          <div className="@lg/section:col-span-5 flex justify-center items-center relative min-h-[440px] sm:min-h-[520px]">
+            {/* Ambient Radial Glow behind the 3D phone */}
+            <div className="absolute inset-0 bg-radial from-pink-500/25 via-purple-600/10 to-transparent blur-2xl pointer-events-none -z-10" />
 
-              {/* Screen Mockup */}
-              <div className="bg-white rounded-2xl p-4 text-slate-900 space-y-4 shadow-inner">
-                <div className="flex items-center justify-between text-[11px] font-bold">
-                  <span className="text-[#ca2484]">ASCENT MOBILE</span>
-                  <span className="text-emerald-600">● LIVE</span>
-                </div>
-
-                <div className="p-3 bg-purple-50 rounded-xl space-y-1.5 border border-purple-100">
-                  <div className="text-[10px] text-purple-700 font-bold uppercase">Next Departure</div>
-                  <div className="text-sm font-extrabold text-slate-900">Enugu → Abuja Express</div>
-                  <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1">
-                    <span>Seat 2A (Window)</span>
-                    <span className="font-bold text-[#ca2484]">06:30 AM</span>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center space-y-2">
-                  <div className="text-[10px] font-bold text-slate-500 uppercase">Digital Gate Pass</div>
-                  <div className="w-20 h-20 mx-auto bg-white rounded-lg p-1.5 border border-slate-200 flex items-center justify-center">
-                    <Smartphone className="w-12 h-12 text-[#ca2484]" />
-                  </div>
-                  <div className="text-[10px] font-mono text-slate-400">Scan at terminal gate</div>
-                </div>
-
-                <button
-                  type="button"
-                  className="w-full py-2 bg-slate-900 text-white rounded-xl text-xs font-bold"
-                >
-                  View Trip Details
-                </button>
-              </div>
-
-              {/* Phone Home Bar */}
-              <div className="w-24 h-1 bg-white/40 rounded-full mx-auto mt-3" />
+            <div className="relative w-full flex justify-center items-center">
+              {/* 3D Samsung S26 Ultra Canvas with scroll docking animation */}
+              <SamsungPhoneCanvas />
             </div>
           </div>
         </div>

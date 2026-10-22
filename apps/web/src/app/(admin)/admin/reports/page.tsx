@@ -5,6 +5,7 @@ import {
   SEED_TERMINALS,
   formatNaira,
 } from '@atm/shared';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
 import { reportingService, type OperationsMetrics } from '@/server/repositories/reports.ts';
 import {
   BarChart3,
@@ -82,20 +83,25 @@ export default function AdminReportsPage() {
 
         <div className="flex flex-wrap items-center gap-3">
           {/* Terminal Selector */}
-          <div className="flex items-center gap-2 bg-white border border-slate-200/80 p-1.5 rounded-xl shadow-xs">
-            <MapPin className="w-4 h-4 text-brand-600 ml-2 flex-shrink-0" />
-            <select
+          <div className="w-56">
+            <Select
               value={selectedTerminalId}
-              onChange={(e) => setSelectedTerminalId(e.target.value)}
-              className="bg-transparent border-none text-xs font-bold text-slate-800 pr-8 py-1 focus:ring-0 focus:outline-none cursor-pointer"
+              onValueChange={(val) => {
+                if (typeof val === 'string') setSelectedTerminalId(val);
+              }}
             >
-              <option value="all">All Corridors &amp; Hubs</option>
-              {SEED_TERMINALS.map((term) => (
-                <option key={term.id} value={term.id}>
-                  {term.city} ({term.code})
-                </option>
-              ))}
-            </select>
+              <SelectTrigger startIcon={MapPin} className="min-h-[38px] text-xs font-bold">
+                <SelectValue placeholder="All Corridors & Hubs" />
+              </SelectTrigger>
+              <SelectPopup>
+                <SelectItem value="all">All Corridors & Hubs</SelectItem>
+                {SEED_TERMINALS.map((term) => (
+                  <SelectItem key={term.id} value={term.id}>
+                    {term.city} ({term.code})
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
           </div>
 
           {/* Export CSV Button */}

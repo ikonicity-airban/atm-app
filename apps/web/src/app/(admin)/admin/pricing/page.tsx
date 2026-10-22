@@ -21,6 +21,8 @@ import {
   type CorridorPricingRule,
   type CorridorPricingSummary,
 } from '@atm/shared';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
+import { DatePicker } from '@/components/ui/DatePicker';
 import { pricingRepository } from '@/server/repositories/pricing.ts';
 
 export default function AdminPricingPage() {
@@ -459,18 +461,24 @@ export default function AdminPricingPage() {
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                   Target Corridor Route
                 </label>
-                <select
+                <Select
                   value={selectedRouteId}
-                  onChange={(e) => setSelectedRouteId(e.target.value)}
-                  className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 bg-white text-slate-800"
+                  onValueChange={(val) => {
+                    if (typeof val === 'string') setSelectedRouteId(val);
+                  }}
                 >
-                  <option value="route-enugu-abuja">Enugu (Ogui Road) → Abuja (Utako)</option>
-                  <option value="route-abuja-enugu">Abuja (Utako) → Enugu (Ogui Road)</option>
-                  <option value="route-enugu-lagos">Enugu (Ogui Road) → Lagos (Jibowu/Ajah)</option>
-                  <option value="route-lagos-enugu">Lagos (Jibowu/Ajah) → Enugu (Ogui Road)</option>
-                  <option value="route-lagos-owerri">Lagos (Jibowu) → Owerri (Egbu Road)</option>
-                  <option value="route-owerri-lagos">Owerri (Egbu Road) → Lagos (Jibowu)</option>
-                </select>
+                  <SelectTrigger className="w-full text-sm">
+                    <SelectValue placeholder="Target Corridor Route" />
+                  </SelectTrigger>
+                  <SelectPopup>
+                    <SelectItem value="route-enugu-abuja">Enugu (Ogui Road) → Abuja (Utako)</SelectItem>
+                    <SelectItem value="route-abuja-enugu">Abuja (Utako) → Enugu (Ogui Road)</SelectItem>
+                    <SelectItem value="route-enugu-lagos">Enugu (Ogui Road) → Lagos (Jibowu/Ajah)</SelectItem>
+                    <SelectItem value="route-lagos-enugu">Lagos (Jibowu/Ajah) → Enugu (Ogui Road)</SelectItem>
+                    <SelectItem value="route-lagos-owerri">Lagos (Jibowu) → Owerri (Egbu Road)</SelectItem>
+                    <SelectItem value="route-owerri-lagos">Owerri (Egbu Road) → Lagos (Jibowu)</SelectItem>
+                  </SelectPopup>
+                </Select>
               </div>
 
               <div>
@@ -549,12 +557,11 @@ export default function AdminPricingPage() {
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Start Date
                   </label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={(e) => setStartDate(typeof e === 'string' ? e : e?.target?.value)}
                     required
-                    className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 font-mono text-slate-800"
+                    className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 font-mono text-slate-800 min-h-[42px]"
                   />
                 </div>
 
@@ -562,12 +569,11 @@ export default function AdminPricingPage() {
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     End Date
                   </label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={(e) => setEndDate(typeof e === 'string' ? e : e?.target?.value)}
                     required
-                    className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 font-mono text-slate-800"
+                    className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 font-mono text-slate-800 min-h-[42px]"
                   />
                 </div>
               </div>

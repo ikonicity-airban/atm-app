@@ -6,7 +6,7 @@ export interface SheetProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  side?: 'left' | 'right';
+  side?: 'left' | 'right' | 'bottom';
   children: React.ReactNode;
   className?: string;
 }
@@ -79,11 +79,13 @@ export function Sheet({
 
   if (!isOpen) return null;
 
+  const isBottom = side === 'bottom';
+
   return (
     <div className="fixed inset-0 z-50 flex">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs transition-opacity duration-300"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -95,24 +97,32 @@ export function Sheet({
         aria-modal="true"
         tabIndex={-1}
         className={cn(
-          'fixed inset-y-0 z-10 w-full max-w-sm bg-white shadow-2xl flex flex-col focus:outline-none',
-          side === 'right' ? 'right-0 border-l border-slate-200' : 'left-0 border-r border-slate-200',
+          'fixed z-50 bg-card text-card-foreground shadow-2xl flex flex-col focus:outline-none transition-transform duration-300',
+          isBottom
+            ? 'inset-x-0 bottom-0 max-h-[90vh] rounded-t-3xl border-t border-border animate-in slide-in-from-bottom'
+            : side === 'right'
+            ? 'inset-y-0 right-0 w-full max-w-md border-l border-border animate-in slide-in-from-right'
+            : 'inset-y-0 left-0 w-full max-w-md border-r border-border animate-in slide-in-from-left',
           className
         )}
       >
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900 tracking-tight">{title}</h2>
+        {isBottom && (
+          <div className="w-12 h-1.5 bg-muted-foreground/30 rounded-full mx-auto mt-3 mb-1 shrink-0" />
+        )}
+
+        <div className="p-4 sm:p-5 border-b border-border flex items-center justify-between shrink-0">
+          <h2 className="text-base font-bold text-foreground tracking-tight">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 rounded min-h-[44px] min-w-[44px] flex items-center justify-center focus:ring-2 focus:ring-[#ca2484]"
+            className="p-2 text-muted-foreground hover:text-foreground rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center focus:ring-2 focus:ring-primary cursor-pointer active:scale-95 transition-all"
             aria-label="Close drawer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4">{children}</div>
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</div>
       </div>
     </div>
   );

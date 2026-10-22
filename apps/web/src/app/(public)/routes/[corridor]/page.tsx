@@ -13,6 +13,7 @@ import {
 import { Accordion } from '../../../../components/ui/Accordion.tsx';
 import { PageShell } from '../../../../components/layout/Templates.tsx';
 import { SearchForm } from '../../../../components/booking/SearchForm.tsx';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 import {
   getBusTripJsonLd,
   getBreadcrumbListJsonLd,
@@ -206,11 +207,14 @@ export default async function RouteDetailPage({ params }: RouteDetailPageProps) 
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <CardHoverGroup
+                layoutId={`schedule-${route.slug}`}
+                className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+              >
                 {route.departureSchedules.map((schedule, i) => (
                   <div
                     key={i}
-                    className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-xs"
+                    className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-xs h-full"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-lg bg-pink-50 text-[#ca2484] flex items-center justify-center font-bold">
@@ -230,7 +234,7 @@ export default async function RouteDetailPage({ params }: RouteDetailPageProps) 
                     </span>
                   </div>
                 ))}
-              </div>
+              </CardHoverGroup>
             </section>
           )}
 
@@ -254,7 +258,10 @@ export default async function RouteDetailPage({ params }: RouteDetailPageProps) 
             <h2 className="text-xl font-bold text-slate-900 tracking-tight">
               Terminal Directions &amp; Boarding Locations
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <CardHoverGroup
+              layoutId={`terminals-${route.slug}`}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"
+            >
               <div>
                 <span className="text-xs uppercase font-bold text-slate-500 block mb-2">
                   Origin (Boarding Terminal)
@@ -267,7 +274,7 @@ export default async function RouteDetailPage({ params }: RouteDetailPageProps) 
                 </span>
                 <TerminalCard terminal={route.destination} />
               </div>
-            </div>
+            </CardHoverGroup>
           </section>
 
           {/* Fleet Specifications & Inclusions */}

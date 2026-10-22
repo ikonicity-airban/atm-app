@@ -13,10 +13,10 @@ interface Station {
 
 const STATIONS: Station[] = [
   { city: 'Enugu', hub: 'Ogui Road Terminal', code: 'ENU', status: '18 Daily Departures' },
-  { city: 'Abuja', hub: 'Utako District Terminal', code: 'ABV', status: '24 Daily Departures' },
-  { city: 'Lagos', hub: 'Jibowu Central Hub', code: 'LOS', status: '20 Daily Departures' },
-  { city: 'Lagos', hub: 'Ajah Expressway Hub', code: 'LOS', status: '12 Daily Departures' },
-  { city: 'Owerri', hub: 'Control Post Terminal', code: 'QOW', status: '14 Daily Departures' },
+  { city: 'Abuja', hub: 'Utako District Terminal', code: 'ABJ', status: '24 Daily Departures' },
+  { city: 'Lagos', hub: 'Jibowu Central Hub', code: 'LAG', status: '20 Daily Departures' },
+  { city: 'Lagos', hub: 'Ajah Expressway Hub', code: 'LAG', status: '12 Daily Departures' },
+  { city: 'Owerri', hub: 'Control Post Terminal', code: 'IMO', status: '14 Daily Departures' },
 ];
 
 export function StationStrip({ onSelectStation }: { onSelectStation?: (city: string) => void }) {

@@ -10,7 +10,7 @@ import {
 } from '../../../components/atm/AtmBlocks.tsx';
 import { Input } from '../../../components/ui/Input.tsx';
 import { Textarea } from '../../../components/ui/Textarea.tsx';
-import { Select } from '../../../components/ui/Select.tsx';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../../../components/ui/Select.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
 import { FormField } from '../../../components/ui/FormField.tsx';
 import { Alert } from '../../../components/ui/Alert.tsx';
@@ -190,14 +190,21 @@ export default function ContactPage() {
               <FormField label="Inquiry Category" isRequired>
                 <Select
                   value={category}
-                  onChange={(e: any) => setCategory(e.target.value)}
+                  onValueChange={(val) => {
+                    if (val) setCategory(val as typeof category);
+                  }}
                 >
-                  <option value="other">General Question</option>
-                  <option value="trip_delay">Schedule & Departure Inquiries</option>
-                  <option value="lost_parcel">Courier & Parcel Tracking</option>
-                  <option value="vehicle_condition">Private Charter Request</option>
-                  <option value="refund_issue">Ticket Refund / Cancellation</option>
-                  <option value="driver_conduct">Customer Service Feedback</option>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                  <SelectPopup>
+                    <SelectItem value="other">General Question</SelectItem>
+                    <SelectItem value="trip_delay">Schedule & Departure Inquiries</SelectItem>
+                    <SelectItem value="lost_parcel">Courier & Parcel Tracking</SelectItem>
+                    <SelectItem value="vehicle_condition">Private Charter Request</SelectItem>
+                    <SelectItem value="refund_issue">Ticket Refund / Cancellation</SelectItem>
+                    <SelectItem value="driver_conduct">Customer Service Feedback</SelectItem>
+                  </SelectPopup>
                 </Select>
               </FormField>
 

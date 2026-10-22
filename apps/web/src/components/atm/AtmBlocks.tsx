@@ -22,6 +22,7 @@ import { cn } from '../../lib/utils.ts';
 import type { Terminal } from '../../server/repositories/terminals.ts';
 import type { RouteDetail } from '../../server/repositories/routes.ts';
 import { Badge, type BadgeProps } from '../ui/Badge.tsx';
+import { WobbleCard } from '../ui/wobble-card.tsx';
 
 /**
  * 1. PhoneInput: Nigeria (+234) formatted phone input
@@ -317,7 +318,7 @@ export function TerminalCard({
   return (
     <div
       className={cn(
-        'p-5 border border-border rounded-2xl bg-card/75 backdrop-blur-xl text-card-foreground shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 motion-reduce:transform-none',
+        'p-5 border border-border rounded-2xl bg-card text-card-foreground shadow-xs hover:border-primary/40 transition-all duration-300 flex flex-col justify-between space-y-4 motion-reduce:transform-none',
         className
       )}
     >
@@ -340,7 +341,7 @@ export function TerminalCard({
             <a
               key={phone}
               href={`tel:${phone}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border font-medium min-h-[44px] hover:-translate-y-0.5 active:scale-95 transition-all motion-reduce:transform-none"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border font-medium min-h-[44px] transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-primary" />
               <span>{phone}</span>
@@ -353,7 +354,7 @@ export function TerminalCard({
             href={terminal.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold min-h-[36px] hover:translate-x-0.5 transition-transform motion-reduce:transform-none"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold min-h-[36px] transition-colors"
           >
             <span>Get Directions (Google Maps)</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -431,7 +432,10 @@ export function RouteCard({
  */
 export function VehicleCard({ className }: { className?: string }) {
   return (
-    <div className={cn('p-5 border border-border rounded-xl bg-card text-card-foreground shadow-xs space-y-4', className)}>
+    <WobbleCard
+      containerClassName={cn('border border-border rounded-xl bg-card text-card-foreground shadow-xs', className)}
+      className="p-5 space-y-4"
+    >
       <div className="w-full h-36 bg-muted rounded-lg flex items-center justify-center overflow-hidden border border-border">
         <img
           src="/placeholder-vehicle.svg"
@@ -465,7 +469,7 @@ export function VehicleCard({ className }: { className?: string }) {
           <span>Refreshments</span>
         </div>
       </div>
-    </div>
+    </WobbleCard>
   );
 }
 

@@ -361,9 +361,78 @@
 }
 
 @utility glass-card-spatial {
-  background-color: color-mix(in srgb, var(--card) 80%, transparent);
-  backdrop-filter: blur(24px);
+  background-color: color-mix(in srgb, var(--card) 40%, transparent);
+  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
   box-shadow: 0 12px 36px color-mix(in srgb, black 8%, transparent);
+}
+
+
+/* -----------------------------------------------------------------------------
+   Cinematic Striped Loading Screen Animations (Spec 0031)
+   Trajectory: 30 degree diagonal, 60 FPS GPU transform compositing
+   ----------------------------------------------------------------------------- */
+@keyframes stripeSlideIn {
+  from {
+    transform: translate3d(0, -180vh, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes stripeSlideOut {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 180vh, 0);
+  }
+}
+
+@keyframes logoSlideIn {
+  from {
+    opacity: 0;
+    transform: translate3d(60vw, 0, 0) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes logoSlideOut {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(-60vw, 0, 0) scale(1.96);
+  }
+}
+
+@keyframes cinematicFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cinematicFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }

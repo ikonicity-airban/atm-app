@@ -87,7 +87,7 @@ export const SEED_TERMINALS = [
   },
   {
     id: 'term-lagos-jibowu',
-    code: 'LOS-JIB',
+    code: 'LAG-JIB',
     name: 'Lagos (Jibowu)',
     city: 'Lagos' as const,
     state: 'Lagos State',
@@ -98,7 +98,7 @@ export const SEED_TERMINALS = [
   },
   {
     id: 'term-lagos-ajah',
-    code: 'LOS-AJH',
+    code: 'LAG-AJH',
     name: 'Lagos (Ajah)',
     city: 'Lagos' as const,
     state: 'Lagos State',
@@ -109,7 +109,7 @@ export const SEED_TERMINALS = [
   },
   {
     id: 'term-lagos-festac',
-    code: 'LOS-FST',
+    code: 'LAG-FST',
     name: 'Lagos (Festac)',
     city: 'Lagos' as const,
     state: 'Lagos State',
@@ -120,7 +120,7 @@ export const SEED_TERMINALS = [
   },
   {
     id: 'term-owerri-egbo',
-    code: 'QOW',
+    code: 'IMO',
     name: 'Owerri (Egbo Road)',
     city: 'Owerri' as const,
     state: 'Imo State',

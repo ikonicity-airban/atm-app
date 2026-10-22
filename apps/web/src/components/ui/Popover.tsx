@@ -7,7 +7,7 @@ import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export const popoverPopupVariants = cva(
-  'z-50 min-w-[8rem] rounded-xl border p-4 shadow-lg outline-none transition-all duration-150 data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+  'z-[100] min-w-[8rem] rounded-xl border p-4 shadow-lg outline-none transition-all duration-150 data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
   {
     variants: {
       variant: {
@@ -42,7 +42,7 @@ export function Popover({
       <PopoverPrimitive.Root {...props}>
         <PopoverPrimitive.Trigger render={React.isValidElement(trigger) ? trigger : <button type="button">{trigger}</button>} />
         <PopoverPrimitive.Portal>
-          <PopoverPrimitive.Positioner sideOffset={8}>
+          <PopoverPrimitive.Positioner sideOffset={8} className="z-[100] outline-none">
             <PopoverPrimitive.Popup className={cn(popoverPopupVariants({ variant: 'default' }), className)}>
               {title && (
                 <PopoverPrimitive.Title className="text-xs font-semibold text-foreground mb-1">
@@ -69,18 +69,25 @@ export interface PopoverPopupProps
   extends React.ComponentProps<typeof PopoverPrimitive.Popup>,
     VariantProps<typeof popoverPopupVariants> {
   sideOffset?: number;
+  portalProps?: React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Portal>;
+  positionerClassName?: string;
 }
 
 export function PopoverPopup({
   className,
   variant,
   sideOffset = 8,
+  portalProps,
+  positionerClassName,
   children,
   ...props
 }: PopoverPopupProps) {
   return (
-    <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Positioner sideOffset={sideOffset}>
+    <PopoverPrimitive.Portal {...portalProps}>
+      <PopoverPrimitive.Positioner
+        sideOffset={sideOffset}
+        className={cn('z-[100] outline-none', positionerClassName)}
+      >
         <PopoverPrimitive.Popup
           className={cn(popoverPopupVariants({ variant }), className)}
           {...props}

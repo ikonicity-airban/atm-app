@@ -26,6 +26,7 @@ import {
 } from '@atm/shared';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { DateField } from '@/components/ui/DateField';
 import { Icon } from '@/components/ui/Icon';
 import { Popover, PopoverTrigger, PopoverPopup, PopoverClose, PopoverTitle } from '@/components/ui/Popover';
 import {
@@ -44,9 +45,9 @@ interface HeroShowcaseProps {
 
 const CITY_DETAILS: Record<string, { code: string; terminal: string }> = {
   Enugu: { code: 'ENU', terminal: 'Ogui Road Terminal' },
-  Abuja: { code: 'ABV', terminal: 'Utako District Terminal' },
-  Lagos: { code: 'LOS', terminal: 'Jibowu & Ajah Hubs' },
-  Owerri: { code: 'QOW', terminal: 'Control Post Terminal' },
+  Abuja: { code: 'ABJ', terminal: 'Utako District Terminal' },
+  Lagos: { code: 'LAG', terminal: 'Jibowu & Ajah Hubs' },
+  Owerri: { code: 'IMO', terminal: 'Control Post Terminal' },
 };
 
 export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
@@ -127,14 +128,14 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const availableDestinations = getServedDestinations(fromCity);
 
   return (
-    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40 @container/hero">
+    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40 @container/hero [--muted-foreground:#2a161f] dark:[--muted-foreground:#a9a] rounded-b-[5%]">
       {/* Ambient background glows and theme responsive video backdrop */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         {/* Subtle radial ambient light */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-purple-500/10 via-[#ca2484]/15 to-indigo-500/10 dark:from-purple-900/30 dark:via-[#ca2484]/20 dark:to-indigo-900/30 rounded-full blur-[100px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-87.5 bg-linear-to-r from-purple-500/10 via-[#ca2484]/15 to-indigo-500/10 dark:from-purple-900/30 dark:via-[#ca2484]/20 dark:to-indigo-900/30 rounded-full blur-[100px]" />
 
         {/* Hero Video Backdrop: Light Mode */}
-        <div className="block dark:hidden absolute inset-0 overflow-hidden opacity-30 motion-reduce:hidden">
+        <div className="block dark:hidden absolute inset-0 overflow-hidden motion-reduce:hidden">
           <video
             ref={lightVideoRef}
             src="/videos/hero/Minivan_driving_on_highway_20261020011710.mp4"
@@ -146,7 +147,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             aria-hidden="true"
             className="w-full h-full object-cover object-center filter brightness-105 contrast-105"
           />
-          <div className="absolute inset-0 bg-linear-to-b from-background/40 via-background/10 to-background/60" />
+          <div className="absolute inset-0 bg-linear-to-b from-foreground/70 via-background/30 to-purple-900/60" />
         </div>
 
         {/* Hero Video Backdrop: Dark Mode */}
@@ -162,29 +163,30 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             aria-hidden="true"
             className="w-full h-full object-cover object-center filter contrast-125 brightness-75"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#07030f] via-transparent to-[#07030f]" />
+          <div className="absolute inset-0 bg-linear-to-b from-[#07030f] via-transparent to-[#07030f]" />
         </div>
       </div>
 
-      <div className="relative max-w-5xl mx-auto z-10 space-y-6 sm:space-y-8">
+      <div className="relative max-w-4xl mx-auto z-10 space-y-6 sm:space-y-8">
         {/* 1. Centered Top Pill Badge */}
         <div className="flex justify-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-muted/60 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
-            <Icon icon={Star} size="xs" variant="primary" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/20 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
+
+            <Icon icon={Star} size="xs" className="text-amber-400 fill-amber-400" />
             <span>Nigeria Executive Interstate Fleet 2026</span>
           </div>
         </div>
 
         {/* 2. Main Typographic Headline */}
-        <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight leading-[1.1] text-balance">
+        <div className="md:text-center space-y-3 max-w-3xl mx-auto">
+          <h1 className="text-6xl sm:text-5xl lg:text-7xl font-heading font-black tracking-tight leading-none md:leading-[1.1] text-balance">
             <span className="block text-foreground">Your Journey Begins in</span>
-            <span className="block bg-linear-to-br from-purple-300 via-pink-700 to-[#9a2484] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#ca2484] bg-clip-text text-transparent">
+            <span className="block bg-linear-to-b from-purple-900/70 via-pink-800/30 to-[#450539] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#941861] bg-clip-text text-transparent text-ellipsis">
               One Click
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-normal">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-medium dark:font-normal text-shadow-2xl">
             Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
           </p>
         </div>
@@ -192,26 +194,26 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         {/* 3. Floating Glassmorphism Search Island */}
         <div
           ref={containerRef}
-          className="w-full max-w-4xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative @container/search shadow-xl"
+          className="w-full max-w-5xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative @container/search shadow-xl"
         >
           {/* Top Bar: Mode Tabs (Left) + Utility Options (Right) */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
+          <div className="flex sm:items-center justify-between gap-3 pb-4 border-b border-border">
             {/* Trip Mode Segmented Pills */}
             <div className="inline-flex items-center p-1 rounded-full bg-muted/50 dark:bg-white/10 border border-border">
               <button
                 type="button"
                 onClick={() => setTripMode('one-way')}
-                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-[36px] active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'one-way'
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-9 active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'one-way'
                   ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
-                One Way
+                Once <span className="max-sm:hidden">Way</span>
               </button>
               <button
                 type="button"
                 onClick={() => setTripMode('round-trip')}
-                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-[36px] active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'round-trip'
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-9 active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'round-trip'
                   ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
@@ -221,12 +223,12 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => setTripMode('charter')}
-                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-[36px] active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'charter'
+                className={`px-3.5 py-1 rounded-full text-xs font-normal transition-all duration-200 cursor-pointer min-h-9 active:scale-[0.98] motion-reduce:transform-none ${tripMode === 'charter'
                   ? 'bg-background dark:bg-[#2b1c47] text-foreground dark:text-white shadow-xs border border-border'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
-                Private Charter
+                <span className="max-sm:hidden">Private</span> Charter
               </button>
             </div>
 
@@ -234,10 +236,10 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             <div className="flex items-center gap-2">
               <Popover open={isPromoOpen} onOpenChange={setIsPromoOpen}>
                 <PopoverTrigger
-                  className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-all duration-200 cursor-pointer min-h-[36px] hover:-translate-y-0.5 active:scale-[0.98] motion-reduce:transform-none"
+                  className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-all duration-200 cursor-pointer min-h-9 hover:-translate-y-0.5 active:scale-[0.98] motion-reduce:transform-none"
                 >
                   <Icon icon={Tag} size="sm" />
-                  <span>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
+                  <span className='max-sm:hidden'>{appliedPromo ? `Promo: ${appliedPromo}` : 'Add Promo Code'}</span>
                 </PopoverTrigger>
                 <PopoverPopup className="w-72 p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -250,7 +252,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                       placeholder="e.g. ASCENT2026"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      className="uppercase"
+                      className="uppercase glass-card-spatial"
                     />
                     <Button
                       size="sm"
@@ -271,24 +273,24 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <button
                 type="button"
                 onClick={() => onNavigate ? onNavigate('/terminals') : (window.location.href = '/terminals')}
-                className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-all duration-200 cursor-pointer min-h-[36px] hover:-translate-y-0.5 active:scale-[0.98] motion-reduce:transform-none"
+                className="px-3 py-1 rounded-full bg-muted/40 hover:bg-muted/70 border border-border text-xs font-normal text-muted-foreground hover:text-foreground flex items-center gap-1.5 transition-all duration-200 cursor-pointer min-h-9 hover:-translate-y-0.5 active:scale-[0.98] motion-reduce:transform-none"
               >
                 <Icon icon={SlidersHorizontal} size="sm" />
-                <span>Terminals</span>
+                <span className='max-sm:hidden'>Terminals</span>
               </button>
             </div>
           </div>
 
           {/* Search Inputs Row with Container Queries */}
-          <div className="grid grid-cols-1 @sm/search:grid-cols-2 @lg/search:grid-cols-12 gap-3 pt-4 items-end">
+          <div className="flex max-w-5xl w-full max-sm:grid max-sm:overflow-x-auto @sm/search:grid-cols-2 @lg/search:grid-cols-12 gap-2 grid-flow-col-dense pt-4 items-end">
             {/* 1. FROM City */}
-            <div className="@lg/search:col-span-3 space-y-1 relative">
+            <div className="@lg/search:col-span-2 min-w-fit space-y-1 relative">
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 From
               </label>
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="w-full bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between text-left"
+                  className="w-full bg-background/30 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-14 flex items-center justify-between text-left"
                   aria-label="Select departure hub"
                 >
                   <div className="flex items-center gap-2 overflow-hidden">
@@ -328,13 +330,13 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
             </div>
 
             {/* Swap Button (Cleanly integrated between FROM and TO) */}
-            <div className="hidden @lg/search:flex @lg/search:col-span-1 justify-center pb-2">
+            <div className="@lg/search:flex @lg/search:col-span-1 justify-center pb-2">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handleSwap}
                 aria-label="Swap origin and destination"
-                className="w-9 h-9 rounded-full transition-transform active:scale-95 duration-150 motion-reduce:transform-none"
+                className="size-6 rounded-full transition-all active:rotate-180 active:scale-95 duration-150 motion-reduce:transform-none"
               >
                 <Icon icon={ArrowRightLeft} size="sm" />
               </Button>
@@ -347,7 +349,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               </label>
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="w-full bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between text-left"
+                  className="w-full bg-background/30 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-14 flex items-center justify-between text-left"
                   aria-label="Select destination hub"
                 >
                   <div className="flex items-center gap-2 overflow-hidden">
@@ -391,12 +393,11 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               <label className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block px-1">
                 Date
               </label>
-              <Input
-                type="date"
+              <DateField
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 startIcon={Calendar}
-                className="min-h-[58px] bg-background/80 dark:bg-black/30 rounded-2xl text-xs cursor-pointer"
+                className="min-h-14 bg-background/30 dark:bg-black/30 rounded-2xl text-xs cursor-pointer"
               />
             </div>
 
@@ -407,13 +408,13 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
               </label>
               <Popover>
                 <PopoverTrigger
-                  className="w-full bg-background/80 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-[58px] flex items-center justify-between text-left"
+                  className="w-full bg-background/30 dark:bg-black/30 rounded-2xl p-3 border border-border hover:border-primary/40 transition-colors cursor-pointer min-h-14 flex items-center justify-between text-left"
                   aria-label="Select passengers"
                 >
-                  <div className="flex items-center gap-2 overflow-hidden">
+                  <div className="flex text-xs truncate items-center gap-2 overflow-hidden">
                     <Icon icon={Users} className="shrink-0" />
-                    <span className="text-xs font-normal text-foreground truncate">
-                      {passengers} {passengers === 1 ? 'Passenger' : 'Passengers'}, 5 Seat
+                    <span className="font-normal text-foreground">
+                      {passengers} {passengers === 1 ? 'Passenger' : 'Passengers'}
                     </span>
                   </div>
                   <Icon icon={ChevronDown} size="sm" />
@@ -448,24 +449,33 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 </PopoverPopup>
               </Popover>
             </div>
+            {/* Search Button */}
+            <div className="h-full @lg/search:col-span-1">
+              <Button
+                variant="default"
+                size="default"
+                onClick={handleSearch}
+                className="w-full max-sm:hidden px-4 font-normal text-xs sm:text-sm min-h-14 h-full shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 motion-reduce:transform-none"
+                leftIcon={<Search className="size-4" />}
+              >Search Trip
+              </Button>
+            </div>
           </div>
-
-          {/* Search Button */}
-          <div className="pt-4 flex justify-end">
+          <div className="pt-4">
             <Button
               variant="default"
               size="default"
               onClick={handleSearch}
-              className="w-full sm:w-auto px-8 font-normal text-xs sm:text-sm min-h-[48px] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 motion-reduce:transform-none"
               leftIcon={<Search className="w-4 h-4" />}
-            >
-              Search Now
+              className="sm:hidden w-full px-8 font-normal text-sm min-h-12 h-full shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 motion-reduce:transform-none"
+            >Search Trip
             </Button>
           </div>
         </div>
 
+
         {/* 4. Trust Indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 text-xs text-card/70">
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-amber-500">
               {[...Array(5)].map((_, i) => (

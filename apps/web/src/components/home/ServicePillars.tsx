@@ -3,6 +3,7 @@
 import React from 'react';
 import { Users, Package, Calendar, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 
 interface Pillar {
   title: string;
@@ -72,13 +73,13 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
         </p>
       </div>
 
-      <div className="grid grid-cols-1 @sm/section:grid-cols-2 @xl/section:grid-cols-4 gap-6">
+      <CardHoverGroup className="grid grid-cols-1 @sm/section:grid-cols-2 @xl/section:grid-cols-4 gap-4 sm:gap-6">
         {PILLARS.map((pillar) => {
           const PillarIcon = pillar.icon;
           return (
             <div
               key={pillar.title}
-              className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-lg hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] motion-reduce:transform-none"
+              className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card text-card-foreground border border-border shadow-lg hover:border-primary/40 transition-all duration-300 h-full"
             >
               <div>
                 <div className="flex items-center justify-between mb-5">
@@ -108,13 +109,13 @@ export function ServicePillars({ onNavigate }: { onNavigate?: (path: string) => 
                   className="w-full flex items-center justify-between text-xs font-normal text-foreground group-hover:text-primary transition-colors cursor-pointer min-h-[44px]"
                 >
                   <span>Explore service</span>
-                  <Icon icon={ArrowRight} size="xs" className="transform group-hover:translate-x-1 transition-transform motion-reduce:transform-none" />
+                  <Icon icon={ArrowRight} size="xs" />
                 </button>
               </div>
             </div>
           );
         })}
-      </div>
+      </CardHoverGroup>
     </section>
   );
 }

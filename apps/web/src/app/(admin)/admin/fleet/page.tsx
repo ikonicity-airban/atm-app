@@ -24,6 +24,7 @@ import {
   type VehicleMaintenanceStatus,
   type MaintenanceLog,
 } from '@atm/shared';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '@/components/ui/Select';
 import { fleetRepository } from '@/server/repositories/fleet.ts';
 
 export default function AdminFleetPage() {
@@ -488,18 +489,24 @@ export default function AdminFleetPage() {
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                   Service Category
                 </label>
-                <select
+                <Select
                   value={serviceType}
-                  onChange={(e) => setServiceType(e.target.value)}
-                  className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 bg-white text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-brand-500"
+                  onValueChange={(val) => {
+                    if (typeof val === 'string') setServiceType(val);
+                  }}
                 >
-                  <option value="routine_oil_filter">Routine Engine Oil &amp; Filter Service</option>
-                  <option value="brake_pads">Front &amp; Rear Brake Pads Replacement</option>
-                  <option value="tire_replacement">Tire Balancing &amp; Highway Replacement</option>
-                  <option value="ac_servicing">Air Conditioning Refrigerant Service</option>
-                  <option value="suspension_overhaul">Suspension Bushings &amp; Shocks Overhaul</option>
-                  <option value="emergency_repair">Emergency Mechanical Highway Repair</option>
-                </select>
+                  <SelectTrigger className="w-full text-sm">
+                    <SelectValue placeholder="Service Category" />
+                  </SelectTrigger>
+                  <SelectPopup>
+                    <SelectItem value="routine_oil_filter">Routine Engine Oil &amp; Filter Service</SelectItem>
+                    <SelectItem value="brake_pads">Front &amp; Rear Brake Pads Replacement</SelectItem>
+                    <SelectItem value="tire_replacement">Tire Balancing &amp; Highway Replacement</SelectItem>
+                    <SelectItem value="ac_servicing">Air Conditioning Refrigerant Service</SelectItem>
+                    <SelectItem value="suspension_overhaul">Suspension Bushings &amp; Shocks Overhaul</SelectItem>
+                    <SelectItem value="emergency_repair">Emergency Mechanical Highway Repair</SelectItem>
+                  </SelectPopup>
+                </Select>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -621,16 +628,22 @@ export default function AdminFleetPage() {
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                   Target Status
                 </label>
-                <select
+                <Select
                   value={targetStatus}
-                  onChange={(e) => setTargetStatus(e.target.value as VehicleMaintenanceStatus)}
-                  className="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 bg-white text-slate-800"
+                  onValueChange={(val) => {
+                    if (val) setTargetStatus(val as VehicleMaintenanceStatus);
+                  }}
                 >
-                  <option value="active">Active (Road Ready for Dispatch)</option>
-                  <option value="service_due">Service Due (Inspection Threshold Reached)</option>
-                  <option value="in_maintenance">In Maintenance (Undergoing Repair in Bay)</option>
-                  <option value="grounded">Grounded (Withdrawn from Fleet)</option>
-                </select>
+                  <SelectTrigger className="w-full text-sm">
+                    <SelectValue placeholder="Target Status" />
+                  </SelectTrigger>
+                  <SelectPopup>
+                    <SelectItem value="active">Active (Road Ready for Dispatch)</SelectItem>
+                    <SelectItem value="service_due">Service Due (Inspection Threshold Reached)</SelectItem>
+                    <SelectItem value="in_maintenance">In Maintenance (Undergoing Repair in Bay)</SelectItem>
+                    <SelectItem value="grounded">Grounded (Withdrawn from Fleet)</SelectItem>
+                  </SelectPopup>
+                </Select>
               </div>
 
               <div>

@@ -9,7 +9,7 @@ export const iconVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-muted-foreground',
+        default: 'text-muted-foreground text-inherit',
         muted: 'text-muted-foreground',
         primary: 'text-primary',
         secondary: 'text-secondary-foreground',
@@ -36,7 +36,7 @@ export const iconVariants = cva(
 
 export interface IconProps
   extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof iconVariants> {
+  VariantProps<typeof iconVariants> {
   icon?: React.ComponentType<{ className?: string }>;
 }
 

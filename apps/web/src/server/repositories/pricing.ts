@@ -109,7 +109,7 @@ export class PricingRepository {
 
     // Seed 2: Upcoming Christmas Fixed Fare on Lagos-Enugu
     const rule2: CorridorPricingRule = {
-      id: 'rule-los-enu-xmas-02',
+      id: 'rule-lag-enu-xmas-02',
       routeId: 'route-lagos-enugu',
       originCity: 'Lagos',
       destinationCity: 'Enugu',

@@ -74,7 +74,7 @@ class TripMutex {
       await TripMutex.locks.get(tripId);
     }
 
-    let release: () => void = () => {};
+    let release: () => void = () => { };
     const lockPromise = new Promise<void>((resolve) => {
       release = resolve;
     });
@@ -525,7 +525,7 @@ export class StaticBookingRepository implements IBookingRepository {
           },
           destinationTerminal: {
             id: 'term-owerri-egbo',
-            code: 'QOW',
+            code: 'IMO',
             name: 'Owerri Egbo Terminal',
             city: 'Owerri',
             address: 'Egbo Layout, Owerri',

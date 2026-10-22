@@ -11,8 +11,10 @@ import {
 import { PageShell } from '../../../components/layout/Templates.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
 import { Input } from '../../../components/ui/Input.tsx';
-import { NativeSelect } from '../../../components/ui/Select.tsx';
+import { DatePicker } from '../../../components/ui/DatePicker.tsx';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../../../components/ui/Select.tsx';
 import { Icon } from '../../../components/ui/Icon.tsx';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 import {
   Car,
   MapPin,
@@ -253,7 +255,10 @@ export default function CharterPage() {
                     <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
                       Trip Type
                     </label>
-                    <div className="grid grid-cols-3 gap-3">
+                    <CardHoverGroup
+                      layoutId="charter-triptypes"
+                      className="grid grid-cols-3 gap-2 sm:gap-3"
+                    >
                       {[
                         { id: 'one_way', label: 'One Way', desc: 'Direct drop-off' },
                         { id: 'round_trip', label: 'Round Trip', desc: 'Return journey' },
@@ -263,7 +268,7 @@ export default function CharterPage() {
                           key={t.id}
                           type="button"
                           onClick={() => setTripType(t.id as any)}
-                          className={`p-3 rounded-xl border text-left transition-colors min-h-[44px] ${
+                          className={`p-3 rounded-xl border text-left transition-colors min-h-[44px] h-full w-full ${
                             tripType === t.id
                               ? 'border-primary bg-primary/10 text-foreground font-bold shadow-xs'
                               : 'border-border hover:border-primary/40 text-muted-foreground hover:text-foreground bg-card'
@@ -273,7 +278,7 @@ export default function CharterPage() {
                           <div className="text-[11px] text-muted-foreground mt-0.5">{t.desc}</div>
                         </button>
                       ))}
-                    </div>
+                    </CardHoverGroup>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -281,34 +286,46 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Origin City
                       </label>
-                      <NativeSelect
+                      <Select
                         value={originCity}
-                        onChange={(e) => setOriginCity(e.target.value)}
-                        startIcon={MapPin}
+                        onValueChange={(val) => {
+                          if (typeof val === 'string') setOriginCity(val);
+                        }}
                       >
-                        {MAJOR_CITIES.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </NativeSelect>
+                        <SelectTrigger startIcon={MapPin}>
+                          <SelectValue placeholder="Origin City" />
+                        </SelectTrigger>
+                        <SelectPopup>
+                          {MAJOR_CITIES.map((c) => (
+                            <SelectItem key={c} value={c}>
+                              {c}
+                            </SelectItem>
+                          ))}
+                        </SelectPopup>
+                      </Select>
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Destination City
                       </label>
-                      <NativeSelect
+                      <Select
                         value={destinationCity}
-                        onChange={(e) => setDestinationCity(e.target.value)}
-                        startIcon={MapPin}
+                        onValueChange={(val) => {
+                          if (typeof val === 'string') setDestinationCity(val);
+                        }}
                       >
-                        {MAJOR_CITIES.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </NativeSelect>
+                        <SelectTrigger startIcon={MapPin}>
+                          <SelectValue placeholder="Destination City" />
+                        </SelectTrigger>
+                        <SelectPopup>
+                          {MAJOR_CITIES.map((c) => (
+                            <SelectItem key={c} value={c}>
+                              {c}
+                            </SelectItem>
+                          ))}
+                        </SelectPopup>
+                      </Select>
                     </div>
                   </div>
 
@@ -343,10 +360,9 @@ export default function CharterPage() {
                       <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Departure Date
                       </label>
-                      <Input
-                        type="date"
+                      <DatePicker
                         value={departureDate}
-                        onChange={(e) => setDepartureDate(e.target.value)}
+                        onChange={(e) => setDepartureDate(typeof e === 'string' ? e : e?.target?.value)}
                         startIcon={Calendar}
                       />
                     </div>
@@ -356,10 +372,9 @@ export default function CharterPage() {
                         <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                           Return Date
                         </label>
-                        <Input
-                          type="date"
+                        <DatePicker
                           value={returnDate}
-                          onChange={(e) => setReturnDate(e.target.value)}
+                          onChange={(e) => setReturnDate(typeof e === 'string' ? e : e?.target?.value)}
                           startIcon={Calendar}
                         />
                       </div>

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Overpass, Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '../components/theme/ThemeProvider.tsx';
+import { LoadingProvider } from '../components/ui/LoadingProvider.tsx';
 
 const overpass = Overpass({
   subsets: ['latin'],
@@ -55,7 +57,11 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen bg-background text-foreground font-sans transition-colors duration-200">
         <ThemeProvider>
-          {children}
+          <Suspense fallback={null}>
+            <LoadingProvider>
+              {children}
+            </LoadingProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

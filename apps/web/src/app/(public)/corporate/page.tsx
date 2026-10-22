@@ -9,6 +9,9 @@ import {
 } from '@atm/shared';
 import { PageShell } from '../../../components/layout/Templates.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
+import { DatePicker } from '../../../components/ui/DatePicker.tsx';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../../../components/ui/Select.tsx';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 import {
   Building2,
   Briefcase,
@@ -204,7 +207,10 @@ export default function CorporatePage() {
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
                   Service Category
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <CardHoverGroup
+                  layoutId="corporate-categories"
+                  className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3"
+                >
                   {[
                     { id: 'corporate_transit', label: 'Executive Transit', icon: Users, desc: 'VIP and board delegation transit' },
                     { id: 'custom_cargo', label: 'Dedicated Cargo', icon: Truck, desc: 'Express whole-vehicle cargo runs' },
@@ -216,7 +222,7 @@ export default function CorporatePage() {
                         key={s.id}
                         type="button"
                         onClick={() => setServiceType(s.id as any)}
-                        className={`p-3.5 rounded-lg border text-left transition-colors min-h-[44px] ${
+                        className={`p-3.5 rounded-lg border text-left transition-colors min-h-[44px] h-full w-full ${
                           serviceType === s.id
                             ? 'border-[#ca2484] bg-pink-50/40 text-slate-900 font-bold'
                             : 'border-slate-200 text-slate-600 hover:border-slate-300'
@@ -228,7 +234,7 @@ export default function CorporatePage() {
                       </button>
                     );
                   })}
-                </div>
+                </CardHoverGroup>
               </div>
 
               {/* Company Info */}
@@ -309,15 +315,21 @@ export default function CorporatePage() {
                     Origin Corridor &amp; Pickup Address
                   </label>
                   <div className="space-y-2">
-                    <select
+                    <Select
                       value={originCity}
-                      onChange={(e) => setOriginCity(e.target.value)}
-                      className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg bg-white min-h-[44px]"
+                      onValueChange={(val) => {
+                        if (typeof val === 'string') setOriginCity(val);
+                      }}
                     >
-                      {['Enugu', 'Abuja', 'Lagos', 'Owerri', 'Port Harcourt', 'Onitsha'].map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                      ))}
-                    </select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Origin City" />
+                      </SelectTrigger>
+                      <SelectPopup>
+                        {['Enugu', 'Abuja', 'Lagos', 'Owerri', 'Port Harcourt', 'Onitsha'].map((c) => (
+                          <SelectItem key={c} value={c}>{c}</SelectItem>
+                        ))}
+                      </SelectPopup>
+                    </Select>
                     <input
                       type="text"
                       value={originAddress}
@@ -333,15 +345,21 @@ export default function CorporatePage() {
                     Destination City &amp; Drop-off Address
                   </label>
                   <div className="space-y-2">
-                    <select
+                    <Select
                       value={destinationCity}
-                      onChange={(e) => setDestinationCity(e.target.value)}
-                      className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg bg-white min-h-[44px]"
+                      onValueChange={(val) => {
+                        if (typeof val === 'string') setDestinationCity(val);
+                      }}
                     >
-                      {['Lagos', 'Abuja', 'Enugu', 'Owerri', 'Port Harcourt'].map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                      ))}
-                    </select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Destination City" />
+                      </SelectTrigger>
+                      <SelectPopup>
+                        {['Lagos', 'Abuja', 'Enugu', 'Owerri', 'Port Harcourt'].map((c) => (
+                          <SelectItem key={c} value={c}>{c}</SelectItem>
+                        ))}
+                      </SelectPopup>
+                    </Select>
                     <input
                       type="text"
                       value={destinationAddress}
@@ -372,11 +390,10 @@ export default function CorporatePage() {
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                     Departure Date
                   </label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={departureDate}
-                    onChange={(e) => setDepartureDate(e.target.value)}
-                    className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg min-h-[44px]"
+                    onChange={(e) => setDepartureDate(typeof e === 'string' ? e : e?.target?.value)}
+                    className="w-full text-xs min-h-[44px]"
                   />
                 </div>
               </div>

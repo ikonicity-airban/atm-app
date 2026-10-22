@@ -8,7 +8,8 @@ import React from 'react';
 import type { DbTicket } from '@atm/db';
 import type { HeldBooking } from '../../server/repositories/bookings.ts';
 import { formatNaira, formatWatDateTime } from '@atm/shared';
-import { CheckCircle2, ShieldCheck, MapPin, Calendar, Clock, User, Armchair, QrCode } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, MapPin, Calendar, Clock, User, Armchair } from 'lucide-react';
+import { QrCodeView } from '../ui/QrCodeView.tsx';
 
 export interface TicketPassCardProps {
   ticket: DbTicket;
@@ -214,7 +215,7 @@ export function TicketPassCard({ ticket, booking, index }: TicketPassCardProps) 
 
         {/* Right QR Code Section */}
         <div className="md:col-span-4 flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-lg text-center space-y-2">
-          <DeterministicQrSvg payload={ticket.qrPayload} size={130} />
+          <QrCodeView value={ticket.qrPayload} size={130} />
           <div className="space-y-0.5">
             <span className="font-mono text-[10px] font-bold text-slate-800 tracking-wider block">
               {ticket.id.toUpperCase()}

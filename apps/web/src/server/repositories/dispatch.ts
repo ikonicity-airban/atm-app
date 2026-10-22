@@ -75,7 +75,7 @@ export class DispatchRepository {
     },
     {
       id: 'veh-sienna-03',
-      registrationNumber: 'LOS-721-BD',
+      registrationNumber: 'LAG-721-BD',
       make: 'Toyota',
       model: 'Sienna Platinum',
       year: 2023,
@@ -86,7 +86,7 @@ export class DispatchRepository {
     },
     {
       id: 'veh-sienna-04',
-      registrationNumber: 'LOS-339-AA',
+      registrationNumber: 'LAG-339-AA',
       make: 'Toyota',
       model: 'Sienna XSE',
       year: 2022,
@@ -97,7 +97,7 @@ export class DispatchRepository {
     },
     {
       id: 'veh-sienna-05',
-      registrationNumber: 'QOW-554-EN',
+      registrationNumber: 'IMO-554-EN',
       make: 'Toyota',
       model: 'Sienna Limited',
       year: 2022,
@@ -167,7 +167,7 @@ export class DispatchRepository {
       id: 'drv-lagos-01',
       fullName: 'Babatunde Adeleke',
       phone: '+2349070000884',
-      licenseNumber: 'FRSC-LOS-77319C',
+      licenseNumber: 'FRSC-LAG-77319C',
       licenseExpiry: '2027-11-30',
       homeTerminalId: 'term-lagos-jibowu',
       isActive: true,
@@ -597,21 +597,21 @@ export class DispatchRepository {
           standbyReleasedSeats,
           vehicle: vehicle
             ? {
-                id: vehicle.id,
-                registrationNumber: vehicle.registrationNumber,
-                make: vehicle.make,
-                model: vehicle.model,
-                year: vehicle.year,
-                hasAirConditioning: vehicle.hasAirConditioning,
-              }
+              id: vehicle.id,
+              registrationNumber: vehicle.registrationNumber,
+              make: vehicle.make,
+              model: vehicle.model,
+              year: vehicle.year,
+              hasAirConditioning: vehicle.hasAirConditioning,
+            }
             : null,
           driver: driver
             ? {
-                id: driver.id,
-                fullName: driver.fullName,
-                phone: driver.phone,
-                licenseNumber: driver.licenseNumber,
-              }
+              id: driver.id,
+              fullName: driver.fullName,
+              phone: driver.phone,
+              licenseNumber: driver.licenseNumber,
+            }
             : null,
           manifestReady: Boolean(vehicle && driver && checkedInSeats > 0),
         };

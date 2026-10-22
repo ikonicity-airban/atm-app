@@ -5,7 +5,7 @@ import { PageShell } from '../../../components/layout/Templates.tsx';
 import { Button } from '../../../components/ui/Button.tsx';
 import { Input } from '../../../components/ui/Input.tsx';
 import { Textarea } from '../../../components/ui/Textarea.tsx';
-import { Select } from '../../../components/ui/Select.tsx';
+import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../../../components/ui/Select.tsx';
 import { Checkbox } from '../../../components/ui/Checkbox.tsx';
 import { FormField } from '../../../components/ui/FormField.tsx';
 import { Dialog } from '../../../components/ui/Dialog.tsx';
@@ -28,6 +28,8 @@ import {
   WhatsAppButton,
   CallButton,
 } from '../../../components/atm/AtmBlocks.tsx';
+import { HoverEffect } from '@/components/ui/card-hover-effect';
+import WobbleCardDemo from '@/components/wobble-card-demo';
 import { SEED_TERMINALS } from '@atm/shared';
 
 export default function DesignSystemPage() {
@@ -161,9 +163,14 @@ export default function DesignSystemPage() {
 
               <FormField label="Standard Dropdown Select">
                 <Select defaultValue="enugu">
-                  <option value="enugu">Enugu Central (Ogui Road)</option>
-                  <option value="abuja">Abuja (Utako)</option>
-                  <option value="lagos-jibowu">Lagos (Jibowu)</option>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select terminal" />
+                  </SelectTrigger>
+                  <SelectPopup>
+                    <SelectItem value="enugu">Enugu Central (Ogui Road)</SelectItem>
+                    <SelectItem value="abuja">Abuja (Utako)</SelectItem>
+                    <SelectItem value="lagos-jibowu">Lagos (Jibowu)</SelectItem>
+                  </SelectPopup>
                 </Select>
               </FormField>
 
@@ -268,6 +275,44 @@ export default function DesignSystemPage() {
                   googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Ascent+Transport+Enugu',
                 }}
               />
+            </div>
+
+            {/* Aceternity Card Hover Effect Showcase */}
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900 text-sm">Card Hover Effect (Aceternity UI Gliding Animation)</h3>
+              <p className="text-xs text-slate-500">
+                Smooth gliding background indicator for groups of cards without images across public pages.
+              </p>
+              <HoverEffect
+                items={[
+                  {
+                    title: '5 Passenger Cabin',
+                    description: 'Zero overcrowding with dual zone climate control and individual captain seats.',
+                    link: '/trips',
+                  },
+                  {
+                    title: 'Express Waybill Courier',
+                    description: 'Send documents and critical merchandise across Nigerian states with same day departure.',
+                    link: '/courier',
+                  },
+                  {
+                    title: 'Private Fleet Charter',
+                    description: 'Reserve an entire vehicle for your team, family, or corporate delegation.',
+                    link: '/charter',
+                  },
+                ]}
+              />
+            </div>
+
+            {/* Aceternity Wobble Card Showcase */}
+            <div className="space-y-2">
+              <h3 className="font-bold text-slate-900 text-sm">Wobble Card (Aceternity UI Parallax Hover Effect)</h3>
+              <p className="text-xs text-slate-500">
+                Dynamic 2.5D tilt and parallax hover interaction applied to cards with images across the application.
+              </p>
+              <div className="py-4">
+                <WobbleCardDemo />
+              </div>
             </div>
 
             {/* Section Banner */}

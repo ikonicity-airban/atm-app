@@ -39,7 +39,7 @@ const STATUS_TABS: Array<{ id: string; label: string }> = [
 const SEED_VEHICLES = [
   { id: 'veh-sienna-01', plate: 'ENU-421-AA', model: 'Toyota Sienna XSE 2022' },
   { id: 'veh-sienna-02', plate: 'ABJ-893-KM', model: 'Toyota Sienna XLE 2021' },
-  { id: 'veh-sienna-03', plate: 'LOS-102-XY', model: 'Toyota Sienna Limited 2023' },
+  { id: 'veh-sienna-03', plate: 'LAG-102-XY', model: 'Toyota Sienna Limited 2023' },
 ];
 
 const SEED_DRIVERS = [
@@ -180,11 +180,10 @@ export default function AdminRequestsPage() {
             <button
               key={tab.id}
               onClick={() => setSelectedStatus(tab.id)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${
-                selectedStatus === tab.id
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap min-h-[36px] ${selectedStatus === tab.id
                   ? 'bg-slate-900 text-white'
                   : 'text-slate-600 hover:bg-slate-100'
-              }`}
+                }`}
             >
               {tab.label}
             </button>

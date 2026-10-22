@@ -11,6 +11,7 @@ import {
 import { ArrowLeftRight, Users, Calendar, MapPin, Search, ChevronDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Icon } from '../ui/Icon.tsx';
+import { DatePicker } from '../ui/DatePicker.tsx';
 import { cn } from '../../lib/utils.ts';
 
 export interface SegmentedSearchFormProps {
@@ -415,15 +416,13 @@ export function SegmentedSearchForm({
               <span>Departure Date</span>
             </div>
             <div className="relative">
-              <input
-                type="date"
+              <DatePicker
                 id="date-segmented"
                 name="date"
                 value={date}
                 min={todayLagos}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full text-sm sm:text-base font-bold text-foreground bg-transparent focus:outline-hidden cursor-pointer font-heading"
-                aria-label="Departure Date"
+                className="w-full text-sm sm:text-base font-bold text-foreground bg-transparent border-0 p-0 min-h-auto shadow-none hover:border-transparent font-heading"
               />
               <div className="text-[10px] font-medium text-muted-foreground truncate pointer-events-none">
                 {getWeekdayLabel(date)}

@@ -117,7 +117,7 @@ export default function HomePage(props?: any) {
           <button
             type="button"
             onClick={() => onNavigate ? onNavigate('/faq') : (window.location.href = '/faq')}
-            className="text-xs font-normal text-primary hover:text-primary/80 flex items-center gap-1.5 min-h-[44px] cursor-pointer hover:-translate-y-0.5 active:scale-95 transition-all motion-reduce:transform-none"
+            className="text-xs font-normal text-primary hover:text-primary/80 flex items-center gap-1.5 min-h-11 cursor-pointer hover:-translate-y-0.5 active:scale-95 transition-all motion-reduce:transform-none"
           >
             <span>View all FAQs</span>
             <Icon icon={ArrowRight} size="xs" />

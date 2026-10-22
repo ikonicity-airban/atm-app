@@ -34,7 +34,7 @@ export const DropdownMenuContent = React.forwardRef<
         <MenuPrimitive.Popup
           ref={ref}
           className={cn(
-            'relative min-w-[8rem] overflow-hidden rounded-2xl border border-border bg-popover/95 p-1 text-popover-foreground shadow-xl backdrop-blur-xl animate-fluid-fade data-[state=closed]:opacity-0',
+            'relative min-w-32 overflow-hidden rounded-2xl border border-border bg-popover/95 p-1 text-popover-foreground shadow-xl backdrop-blur-xl animate-fluid-fade data-[state=closed]:opacity-0',
             className
           )}
           {...props}
@@ -70,7 +70,7 @@ export const DropdownMenuItem = React.forwardRef<
     <MenuPrimitive.Item
       ref={ref}
       className={cn(
-        'relative flex cursor-pointer select-none items-center rounded-xl px-3 py-2 text-xs sm:text-sm outline-none transition-colors hover:bg-muted focus:bg-muted text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted',
+        'relative flex cursor-pointer select-none items-center rounded-xl px-3 py-2 text-xs sm:text-sm outline-none transition-colors hover:bg-primary/80 focus:bg-primary/80 hover:text-primary text-foreground data-disabled:pointer-events-noneadata-disabled:opacity-50adata-highlighted:bg-muted',
         inset && 'pl-8',
         className
       )}
@@ -84,7 +84,7 @@ export const DropdownMenuItem = React.forwardRef<
 DropdownMenuItem.displayName = 'DropdownMenuItem';
 
 export interface DropdownMenuCheckboxItemProps
-  extends React.ComponentPropsWithoutRef<typeof MenuPrimitive.CheckboxItem> {}
+  extends React.ComponentPropsWithoutRef<typeof MenuPrimitive.CheckboxItem> { }
 
 export const DropdownMenuCheckboxItem = React.forwardRef<
   HTMLDivElement,
@@ -94,7 +94,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
     <MenuPrimitive.CheckboxItem
       ref={ref}
       className={cn(
-        'relative flex cursor-pointer select-none items-center rounded-xl py-2 pl-8 pr-3 text-xs sm:text-sm outline-none transition-colors hover:bg-muted focus:bg-muted text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted',
+        'relative flex cursor-pointer select-none items-center rounded-xl py-2 pl-8 pr-3 text-xs sm:text-sm outline-none transition-colors hover:bg-muted focus:bg-muted text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted',
         className
       )}
       checked={checked}
@@ -110,7 +110,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
 DropdownMenuCheckboxItem.displayName = 'DropdownMenuCheckboxItem';
 
 export interface DropdownMenuRadioItemProps
-  extends React.ComponentPropsWithoutRef<typeof MenuPrimitive.RadioItem> {}
+  extends React.ComponentPropsWithoutRef<typeof MenuPrimitive.RadioItem> { }
 
 export const DropdownMenuRadioItem = React.forwardRef<
   HTMLDivElement,
@@ -120,7 +120,7 @@ export const DropdownMenuRadioItem = React.forwardRef<
     <MenuPrimitive.RadioItem
       ref={ref}
       className={cn(
-        'relative flex cursor-pointer select-none items-center rounded-xl py-2 pl-8 pr-3 text-xs sm:text-sm outline-none transition-colors hover:bg-muted focus:bg-muted text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-muted',
+        'relative flex cursor-pointer select-none items-center rounded-xl py-2 pl-8 pr-3 text-xs sm:text-sm outline-none transition-colors hover:bg-muted focus:bg-muted text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted',
         className
       )}
       {...props}
@@ -135,7 +135,7 @@ export const DropdownMenuRadioItem = React.forwardRef<
 DropdownMenuRadioItem.displayName = 'DropdownMenuRadioItem';
 
 export interface DropdownMenuLabelProps
-  extends React.ComponentPropsWithoutRef<typeof MenuPrimitive.GroupLabel> {
+  extends React.HTMLAttributes<HTMLDivElement> {
   inset?: boolean;
 }
 
@@ -144,10 +144,11 @@ export const DropdownMenuLabel = React.forwardRef<
   DropdownMenuLabelProps
 >(({ className, inset, ...props }, ref) => {
   return (
-    <MenuPrimitive.GroupLabel
+    <div
       ref={ref}
+      role="presentation"
       className={cn(
-        'px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground',
+        'px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground select-none',
         inset && 'pl-8',
         className
       )}

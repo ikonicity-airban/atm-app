@@ -3,6 +3,7 @@
 import React from 'react';
 import { Star, ShieldCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { CardHoverGroup } from '@/components/ui/card-hover-effect';
 
 interface Review {
   name: string;
@@ -62,11 +63,11 @@ export function CustomerReviews() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 @md/section:grid-cols-3 gap-6 sm:gap-8">
+      <CardHoverGroup className="grid grid-cols-1 @md/section:grid-cols-3 gap-4 sm:gap-6">
         {REVIEWS.map((rev) => (
           <div
             key={rev.name}
-            className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card/75 backdrop-blur-xl text-card-foreground border border-border shadow-md hover:shadow-xl hover:border-primary/40 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 relative group motion-reduce:transform-none"
+            className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-card text-card-foreground border border-border shadow-md hover:border-primary/40 transition-all duration-300 h-full"
           >
             <div>
               {/* Rating Stars & Route Tag */}
@@ -111,7 +112,7 @@ export function CustomerReviews() {
             </div>
           </div>
         ))}
-      </div>
+      </CardHoverGroup>
     </section>
   );
 }

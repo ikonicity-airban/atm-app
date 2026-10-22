@@ -106,7 +106,7 @@ export class FleetRepository {
 
     const v3: FleetVehicleRecord = {
       id: 'veh-sienna-03',
-      registrationNumber: 'LOS-721-BD',
+      registrationNumber: 'LAG-721-BD',
       make: 'Toyota',
       model: 'Sienna Platinum',
       year: 2023,
@@ -131,7 +131,7 @@ export class FleetRepository {
 
     const v4: FleetVehicleRecord = {
       id: 'veh-sienna-04',
-      registrationNumber: 'LOS-339-AA',
+      registrationNumber: 'LAG-339-AA',
       make: 'Toyota',
       model: 'Sienna XSE',
       year: 2022,
@@ -171,7 +171,7 @@ export class FleetRepository {
 
     const v5: FleetVehicleRecord = {
       id: 'veh-sienna-05',
-      registrationNumber: 'QOW-554-EN',
+      registrationNumber: 'IMO-554-EN',
       make: 'Toyota',
       model: 'Sienna Limited',
       year: 2021,
