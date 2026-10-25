@@ -45,6 +45,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<'travel' | 'courier' | 'charter' | 'support' | null>(null);
   const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -200,6 +201,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   const handleHeaderSearch = (query: string) => {
     const q = query.trim();
     if (!q) return;
+    setIsSearchExpanded(false);
 
     if (/^ATM-EXP/i.test(q) || /^EXP-/i.test(q)) {
       handleNav(`/track?q=${encodeURIComponent(q)}`);
@@ -260,7 +262,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
 
         {/* Desktop Navigation Links with Magnetic Tracking Pill */}
         <nav
-          className="hidden md:flex items-center relative gap-0.5 lg:gap-1"
+          className={`hidden md:flex items-center relative gap-0.5 lg:gap-1 transition-all duration-300 ease-out ${
+            isSearchExpanded
+              ? 'opacity-0 pointer-events-none scale-95 w-0 max-w-0 overflow-hidden m-0 p-0'
+              : 'opacity-100 scale-100 max-w-3xl'
+          }`}
           aria-label="Main navigation"
           onMouseLeave={handleMouseLeave}
         >
@@ -599,14 +605,19 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
         </nav>
 
         {/* Action CTAs: Search + Theme + Manage Booking */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-300 ${
+          isSearchExpanded ? 'flex-1 justify-end' : ''
+        }`}>
           {/* Gooey Interactive Search */}
-          <div className="hidden lg:flex items-center">
+          <div className={`hidden md:flex items-center transition-all duration-300 ${
+            isSearchExpanded ? 'flex-1 max-w-lg justify-end' : ''
+          }`}>
             <GooeyInput
-              placeholder="Search trips, waybills..."
+              placeholder="Search destinations, bookings, or waybills..."
               collapsedWidth={100}
-              expandedWidth={220}
-              expandedOffset={46}
+              expandedWidth={380}
+              expandedOffset={48}
+              onOpenChange={setIsSearchExpanded}
               onSubmit={handleHeaderSearch}
             />
           </div>
@@ -626,7 +637,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             onClick={() => handleNav('/track')}
             aria-label="Track parcel"
             title="Track parcel"
-            className="lg:hidden rounded-full w-10 h-10 min-h-10 min-w-10 text-primary"
+            className="md:hidden rounded-full w-10 h-10 min-h-10 min-w-10 text-primary"
           >
             <Icon icon={Search} size="default" />
           </Button>
@@ -636,7 +647,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
             variant={isScrolled ? 'default' : 'outline'}
             size="sm"
             onClick={() => handleNav('/manage')}
-            className={`hidden md:flex rounded-full font-bold px-4 sm:px-5 min-h-10 transition-all ${isScrolled ? "hover:bg-primary/80" : "hover:bg-primary focus:bg-primary hover:text-primary-foreground"}`}
+            className={`${isSearchExpanded ? 'hidden xl:flex' : 'hidden md:flex'} rounded-full font-bold px-4 sm:px-5 min-h-10 transition-all ${isScrolled ? "hover:bg-primary/80" : "hover:bg-primary focus:bg-primary hover:text-primary-foreground"}`}
           >
             Manage Booking
           </Button>
@@ -734,6 +745,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                     expandedWidth={230}
                     expandedOffset={40}
                     onSubmit={handleHeaderSearch}
+                    onOpenChange={() => setIsMobileMenuOpen(false)}
                   />
                 </div>
 
@@ -765,11 +777,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                           key={item.path}
                           type="button"
                           onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${
-                            currentPath.startsWith(item.path)
-                              ? 'bg-primary/10 text-primary font-bold'
-                              : 'text-foreground hover:bg-muted'
-                          }`}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
+                            ? 'bg-primary/10 text-primary font-bold'
+                            : 'text-foreground hover:bg-muted'
+                            }`}
                         >
                           <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
                           <div>
@@ -795,11 +806,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                           key={item.path}
                           type="button"
                           onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${
-                            currentPath.startsWith(item.path)
-                              ? 'bg-primary/10 text-primary font-bold'
-                              : 'text-foreground hover:bg-muted'
-                          }`}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
+                            ? 'bg-primary/10 text-primary font-bold'
+                            : 'text-foreground hover:bg-muted'
+                            }`}
                         >
                           <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
                           <div>
@@ -825,11 +835,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                           key={item.path}
                           type="button"
                           onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${
-                            currentPath.startsWith(item.path)
-                              ? 'bg-primary/10 text-primary font-bold'
-                              : 'text-foreground hover:bg-muted'
-                          }`}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
+                            ? 'bg-primary/10 text-primary font-bold'
+                            : 'text-foreground hover:bg-muted'
+                            }`}
                         >
                           <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
                           <div>
@@ -853,11 +862,10 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                         key={item.path}
                         type="button"
                         onClick={() => handleNav(item.path)}
-                        className={`text-left px-3 py-2 rounded-lg min-h-11 flex items-center cursor-pointer ${
-                          currentPath.startsWith(item.path)
-                            ? 'text-primary font-bold bg-primary/10'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                        }`}
+                        className={`text-left px-3 py-2 rounded-lg min-h-11 flex items-center cursor-pointer ${currentPath.startsWith(item.path)
+                          ? 'text-primary font-bold bg-primary/10'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                          }`}
                       >
                         {item.label}
                       </button>

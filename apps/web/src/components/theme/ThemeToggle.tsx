@@ -35,7 +35,7 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
       variant="ghost"
       size={showLabel ? 'sm' : 'icon'}
       onClick={toggleTheme}
-      className={`rounded-full min-h-10 min-w-10 gap-2 border border-border/90 hover:bg-muted ${className}`}
+      className={`rounded-full min-h-8 min-w-8 gap-2 border border-border/90 p-2 hover:bg-muted ${className}`}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >

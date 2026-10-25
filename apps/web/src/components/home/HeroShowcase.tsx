@@ -455,7 +455,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
                 variant="default"
                 size="default"
                 onClick={handleSearch}
-                className="w-full max-sm:hidden px-4 font-normal text-xs sm:text-sm min-h-14 h-full shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 motion-reduce:transform-none"
+                className="w-full max-sm:hidden px-3 font-normal text-xs min-h-14 h-full shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 motion-reduce:transform-none"
                 leftIcon={<Search className="size-4" />}
               >Search Trip
               </Button>
@@ -475,14 +475,14 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
 
 
         {/* 4. Trust Indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 text-xs text-card/70">
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 text-xs text-card-foreground/70 ">
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-amber-500">
               {[...Array(5)].map((_, i) => (
                 <Icon key={i} icon={Star} size="xs" className="fill-amber-500 text-amber-500" />
               ))}
             </div>
-            <span className="font-medium text-foreground">4.9/5</span>
+            <span className="font-medium">4.9/5</span>
             <span>on Trustpilot</span>
           </div>
 

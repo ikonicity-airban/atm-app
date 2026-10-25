@@ -48,7 +48,7 @@ function SearchIcon({ layoutId }: { layoutId: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
-      className="size-4 shrink-0"
+      className="size-4 shrink-0 text-primary"
     >
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />
@@ -123,6 +123,7 @@ export function GooeyInput({
     ? { duration: 0.01 }
     : defaultTransition;
 
+  const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const prevExpandedRef = useRef(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -158,6 +159,20 @@ export function GooeyInput({
     prevExpandedRef.current = isExpanded;
   }, [isExpanded, setSearchText]);
 
+  // Collapse search when clicking anywhere outside
+  useEffect(() => {
+    if (!isExpanded) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+        setExpanded(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isExpanded, setExpanded]);
+
   const buttonVariants = useMemo(
     () => ({
       collapsed: { width: collapsedWidth, marginLeft: 0 },
@@ -189,16 +204,19 @@ export function GooeyInput({
       }
       if (e.key === "Escape") {
         setExpanded(false);
+        setSearchText("");
+        inputRef.current?.blur();
       }
     },
-    [onSubmit, searchText, setExpanded]
+    [onSubmit, searchText, setExpanded, setSearchText]
   );
 
   const surfaceClass =
-    "bg-foreground text-background shadow-xs ring-1 ring-border/60";
+    "bg-card text-foreground shadow-xs ring-1 ring-border";
 
   return (
     <div
+      ref={rootRef}
       className={cn(
         "relative flex items-center justify-center",
         className,
@@ -226,7 +244,7 @@ export function GooeyInput({
             disabled={disabled}
             onClick={handleExpand}
             className={cn(
-              "flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 text-sm font-medium outline-none transition-[color,box-shadow] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+              "flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 text-sm font-medium outline-none transition-[color,box-shadow] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
               surfaceClass,
               classNames?.trigger,
             )}
@@ -247,10 +265,10 @@ export function GooeyInput({
               disabled={disabled || !isExpanded}
               placeholder={placeholder}
               className={cn(
-                "h-full min-w-0 flex-1 bg-transparent text-sm text-background outline-none",
+                "h-full min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none",
                 isExpanded
-                  ? "placeholder:text-background/50 dark:placeholder:text-background/45"
-                  : "pointer-events-none placeholder:text-background/80 dark:placeholder:text-background/70",
+                  ? "placeholder:text-muted-foreground"
+                  : "pointer-events-none placeholder:text-muted-foreground/80 cursor-pointer",
                 classNames?.input,
               )}
             />
@@ -259,20 +277,31 @@ export function GooeyInput({
 
         <motion.div
           className={cn(
-            "absolute top-1/2 left-0 flex size-10 -translate-y-1/2 items-center justify-center",
+            "absolute top-1/2 left-0 flex size-10 -translate-y-1/2 items-center justify-center cursor-pointer",
             classNames?.bubble,
           )}
           variants={iconBubbleVariants}
           initial="collapsed"
           animate={isExpanded ? "expanded" : "collapsed"}
           transition={activeTransition}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (isExpanded) {
+              if (searchText && onSubmit) {
+                onSubmit(searchText);
+              } else {
+                setExpanded(false);
+              }
+            }
+          }}
         >
           <div
             className={cn(
-              "flex size-10 items-center justify-center rounded-full",
+              "flex size-10 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95",
               surfaceClass,
               classNames?.bubbleSurface,
             )}
+            title={searchText ? "Search" : "Close"}
           >
             <SearchIcon layoutId={iconLayoutId} />
           </div>
