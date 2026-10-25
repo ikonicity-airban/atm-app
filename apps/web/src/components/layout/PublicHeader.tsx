@@ -48,6 +48,16 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [openMobileAccordion, setOpenMobileAccordion] = useState<string | null>(null);
+  const [windowWidth, setWindowWidth] = useState<number>(1024);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => setWindowWidth(window.innerWidth);
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   const toggleMobileAccordion = (section: string) => {
     setOpenMobileAccordion((prev) => (prev === section ? null : section));
@@ -92,14 +102,18 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Prevent background page scrolling while mobile navigation drawer is open
+  // Prevent background page scrolling while mobile navigation drawer is open and trigger 3D page push
   useEffect(() => {
     if (isMobileMenuOpen) {
+      document.body.classList.add('mobile-drawer-open');
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       return () => {
+        document.body.classList.remove('mobile-drawer-open');
         document.body.style.overflow = originalOverflow || '';
       };
+    } else {
+      document.body.classList.remove('mobile-drawer-open');
     }
   }, [isMobileMenuOpen]);
 
@@ -631,39 +645,27 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
         <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-300 ${
           isSearchExpanded ? 'flex-1 justify-end' : ''
         }`}>
-          {/* Gooey Interactive Search */}
-          <div className={`hidden md:flex items-center transition-all duration-300 ${
+          {/* Gooey Interactive Search for Mobile and Desktop */}
+          <div className={`flex items-center transition-all duration-300 ${
             isSearchExpanded ? 'flex-1 max-w-lg justify-end' : ''
           }`}>
             <GooeyInput
               placeholder="Search destinations, bookings, or waybills..."
-              collapsedWidth={100}
-              expandedWidth={380}
-              expandedOffset={48}
+              collapsedWidth={windowWidth < 640 ? 40 : 100}
+              expandedWidth={windowWidth < 640 ? Math.min(240, windowWidth - 110) : 380}
+              expandedOffset={windowWidth < 640 ? 42 : 48}
               onOpenChange={setIsSearchExpanded}
               onSubmit={handleHeaderSearch}
             />
           </div>
 
-          {/* Theme Switcher Toggle */}
-          <ThemeToggle />
+          {/* Theme Switcher Toggle (Desktop Dropdown) */}
+          <ThemeToggle variant="dropdown" />
 
           {/* Sound Toggle */}
           <div className="hidden sm:flex items-center">
             <SoundToggle />
           </div>
-
-          {/* Track Parcel / Search Utility Button */}
-          <Button
-            variant="glass"
-            size="icon"
-            onClick={() => handleNav('/track')}
-            aria-label="Track parcel"
-            title="Track parcel"
-            className="md:hidden rounded-full w-10 h-10 min-h-10 min-w-10 text-primary"
-          >
-            <Icon icon={Search} size="default" />
-          </Button>
 
           {/* Primary Manage Booking Button */}
           <Button
@@ -760,15 +762,17 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
 
               {/* Scrollable Drawer Body */}
               <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-6 scroll-smooth touch-pan-y">
-                {/* Mobile Gooey Search */}
+                {/* Mobile Drawer Gooey Search */}
                 <div className="flex justify-center w-full py-1">
                   <GooeyInput
                     placeholder="Search trips, waybills..."
                     collapsedWidth={120}
-                    expandedWidth={230}
-                    expandedOffset={40}
-                    onSubmit={handleHeaderSearch}
-                    onOpenChange={() => setIsMobileMenuOpen(false)}
+                    expandedWidth={Math.min(260, windowWidth - 90)}
+                    expandedOffset={42}
+                    onSubmit={(q) => {
+                      handleHeaderSearch(q);
+                      setIsMobileMenuOpen(false);
+                    }}
                   />
                 </div>
 
@@ -1033,13 +1037,13 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 </div>
 
                 {/* Self-Service Action Bar at Bottom of Mobile Menu */}
-                <div className="pt-3 border-t border-border flex flex-col gap-2">
-                  <div className="flex items-center justify-between px-2 py-1">
-                    <span className="text-xs font-medium text-muted-foreground">Theme</span>
-                    <ThemeToggle showLabel />
+                <div className="pt-3 border-t border-border flex flex-col gap-3">
+                  <div className="flex flex-col gap-1.5 px-1 py-1">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Color Theme</span>
+                    <ThemeToggle variant="segmented" className="w-full" />
                   </div>
                   <div className="flex items-center justify-between px-2 py-1">
-                    <span className="text-xs font-medium text-muted-foreground">Turn On Sound</span>
+                    <span className="text-xs font-medium text-muted-foreground">Sound Effects</span>
                     <SoundToggle showLabel />
                   </div>
                   <Button

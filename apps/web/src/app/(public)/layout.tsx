@@ -21,12 +21,14 @@ export default function PublicLayout({
           router.push(path);
         }}
       />
-      <main className="flex-1">{children}</main>
-      <PublicFooter
-        onNavigate={(path) => {
-          router.push(path);
-        }}
-      />
+      <div id="app-page-container" className="flex-1 flex flex-col origin-right transition-all duration-300 ease-out">
+        <main className="flex-1">{children}</main>
+        <PublicFooter
+          onNavigate={(path) => {
+            router.push(path);
+          }}
+        />
+      </div>
     </div>
   );
 }

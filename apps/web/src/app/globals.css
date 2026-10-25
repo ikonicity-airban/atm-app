@@ -436,3 +436,28 @@
     opacity: 0;
   }
 }
+
+
+/* ---------------------------------------------------------------------------
+   Mobile Navigation Drawer: 3D Depth Page Push & Blur Scale
+   --------------------------------------------------------------------------- */
+body.mobile-drawer-open #app-page-container {
+  transform: scale(0.9) translateX(-24px);
+  filter: blur(1.5px);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: -15px 0 35px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  user-select: none;
+}
+
+#app-page-container {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease, border-radius 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.mobile-drawer-open #app-page-container {
+    transform: none !important;
+    filter: none !important;
+  }
+}
