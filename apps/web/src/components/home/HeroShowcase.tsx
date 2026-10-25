@@ -129,7 +129,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
   const availableDestinations = getServedDestinations(fromCity);
 
   return (
-    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40 @container/hero [--muted-foreground:#2a161f] dark:[--muted-foreground:#a9a] rounded-b-[5%]">
+    <div className="relative w-full overflow-hidden bg-background text-foreground transition-colors h-[100dvh] min-h-[100dvh] md:h-auto md:min-h-0 pt-16 md:pt-32 pb-4 md:pb-24 px-4 sm:px-6 lg:px-8 border-b border-border/40 @container/hero [--muted-foreground:#2a161f] dark:[--muted-foreground:#a9a] md:rounded-b-[5%] flex flex-col justify-between md:block">
       {/* Ambient background glows and theme responsive video backdrop */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         {/* Subtle radial ambient light */}
@@ -168,49 +168,51 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         </div>
       </div>
 
-      <div className="relative max-w-4xl mx-auto z-10 space-y-6 sm:space-y-8">
-        {/* 1. Centered Top Pill Badge */}
-        <div className="flex justify-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/20 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
+      <div className="relative max-w-4xl mx-auto z-10 w-full h-full flex flex-col justify-between md:block md:space-y-8">
+        {/* 1. Mobile Upper Section (Hero text centered in the middle of 60vh canvas) */}
+        <div className="h-[58dvh] flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 md:h-auto md:block">
+          {/* Centered Top Pill Badge */}
+          <div className="flex justify-center mb-1 md:mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/20 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
+              <Icon icon={Star} size="xs" className="text-amber-400 fill-amber-400" />
+              <span>Nigeria Executive Interstate Fleet 2026</span>
+            </div>
+          </div>
 
-            <Icon icon={Star} size="xs" className="text-amber-400 fill-amber-400" />
-            <span>Nigeria Executive Interstate Fleet 2026</span>
+          {/* Main Typographic Headline */}
+          <div className="md:text-center space-y-2.5 sm:space-y-3 max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-heading font-black tracking-tight leading-tight md:leading-[1.1] text-balance">
+              <span className="block text-foreground">Your Journey Begins in</span>
+              <span className="block bg-linear-to-b from-purple-900/70 via-pink-800/30 to-[#450539] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#941861] bg-clip-text text-transparent text-ellipsis">
+                One Click
+              </span>
+            </h1>
+
+            <p className="text-xs sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-medium dark:font-normal text-shadow-2xl px-2">
+              Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
+            </p>
           </div>
         </div>
 
-        {/* 2. Main Typographic Headline */}
-        <div className="md:text-center space-y-3 max-w-3xl mx-auto">
-          <h1 className="text-6xl sm:text-5xl lg:text-7xl font-heading font-black tracking-tight leading-none md:leading-[1.1] text-balance">
-            <span className="block text-foreground">Your Journey Begins in</span>
-            <span className="block bg-linear-to-b from-purple-900/70 via-pink-800/30 to-[#450539] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#941861] bg-clip-text text-transparent text-ellipsis">
-              One Click
-            </span>
-          </h1>
+        {/* 2. Mobile Only Dual CTAs (Positioned just below the 60vh line) */}
+        <div className="md:hidden flex items-center justify-center gap-2.5 pt-1 pb-2 max-w-sm mx-auto w-full">
+          <Button
+            size="lg"
+            onClick={() => onNavigate ? onNavigate('/trips') : (window.location.href = '/trips')}
+            className="flex-1 font-bold text-xs sm:text-sm rounded-2xl min-h-12 shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span>Find Trips</span>
+            <ArrowRight className="w-4 h-4 shrink-0" />
+          </Button>
 
-          <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-medium dark:font-normal text-shadow-2xl">
-            Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
-          </p>
-
-          {/* Mobile Only Dual CTAs on One Line */}
-          <div className="md:hidden flex items-center justify-center gap-2.5 pt-3 max-w-sm mx-auto w-full">
-            <Button
-              size="lg"
-              onClick={() => onNavigate ? onNavigate('/trips') : (window.location.href = '/trips')}
-              className="flex-1 font-bold text-xs sm:text-sm rounded-2xl min-h-12 shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <span>Find Trips</span>
-              <ArrowRight className="w-4 h-4 shrink-0" />
-            </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => onNavigate ? onNavigate('/manage') : (window.location.href = '/manage')}
-              className="flex-1 font-semibold text-xs sm:text-sm rounded-2xl min-h-12 border-border/80 bg-background/50 dark:bg-black/30 backdrop-blur-md hover:bg-background flex items-center justify-center cursor-pointer"
-            >
-              Manage Bookings
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => onNavigate ? onNavigate('/manage') : (window.location.href = '/manage')}
+            className="flex-1 font-semibold text-xs sm:text-sm rounded-2xl min-h-12 border-border/80 bg-background/50 dark:bg-black/30 backdrop-blur-md hover:bg-background flex items-center justify-center cursor-pointer"
+          >
+            Manage Bookings
+          </Button>
         </div>
 
         {/* 3. Floating Glassmorphism Search Island (Desktop Only) */}
@@ -497,7 +499,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
 
 
         {/* 4. Trust Indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-2 text-xs text-card-foreground/70 ">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-10 pt-2 pb-2 md:pt-2 md:pb-0 text-[11px] sm:text-xs text-card-foreground/70">
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-amber-500">
               {[...Array(5)].map((_, i) => (
