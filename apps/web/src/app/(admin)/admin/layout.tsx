@@ -16,14 +16,16 @@ export default function AdminLayout({
 
   useEffect(() => {
     auth.getSession().then((s) => {
+      if (!s || s.user.role !== 'staff') {
+        // Auto initialize demo staff session so admin portal is directly accessible
+        auth.setDemoStaffSession().then((demoSession) => {
+          setSession(demoSession);
+          setLoading(false);
+        });
+        return;
+      }
       setSession(s);
       setLoading(false);
-      // Redirect if not staff
-      if (!s || s.user.role !== 'staff') {
-        if (typeof window !== 'undefined' && window.location.pathname !== '/admin/login') {
-          window.location.href = '/admin/login';
-        }
-      }
     });
   }, []);
 

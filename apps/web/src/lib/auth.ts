@@ -29,6 +29,55 @@ export interface BetterAuthConfig {
   baseURL: string;
 }
 
+export interface DemoStaffAccount {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  title: string;
+  terminal: string;
+  description: string;
+}
+
+export const DEMO_STAFF_ACCOUNTS: DemoStaffAccount[] = [
+  {
+    id: 'staff-lead-01',
+    name: 'Chinedu Okafor',
+    email: 'admin@atmnigeria.com',
+    role: 'staff',
+    title: 'Operations & Dispatch Lead',
+    terminal: 'Ascent Central HQ (Enugu)',
+    description: 'Full supervisory authority across all corridors, live telematics, pricing overrides, and revenue auditing.',
+  },
+  {
+    id: 'staff-terminal-enugu',
+    name: 'Amaka Eze',
+    email: 'enugu.terminal@atmnigeria.com',
+    role: 'staff',
+    title: 'Terminal Ticketing Officer',
+    terminal: 'Enugu Ogui Road Terminal',
+    description: 'Passenger check-in verification, standby passenger assignment, and physical highway manifest printing.',
+  },
+  {
+    id: 'staff-terminal-abuja',
+    name: 'Ibrahim Musa',
+    email: 'abuja.terminal@atmnigeria.com',
+    role: 'staff',
+    title: 'Terminal Operations Desk',
+    terminal: 'Abuja Utako Terminal',
+    description: 'Northern corridor boarding operations, luggage and waybill parcel intake, and departure dispatch.',
+  },
+  {
+    id: 'staff-fleet-01',
+    name: 'Babajide Adeleke',
+    email: 'fleet.ops@atmnigeria.com',
+    role: 'staff',
+    title: 'Fleet & Safety Supervisor',
+    terminal: 'Central Fleet Depot',
+    description: 'Toyota Sienna vehicle telematics, maintenance cycle tracking, driver licensing, and speed limiter monitoring.',
+  },
+];
+
 // In-memory / session store
 let currentSession: AuthSession | null = null;
 
@@ -75,16 +124,40 @@ export const auth = {
         // Ignore
       }
     }
+    if (typeof document !== 'undefined') {
+      try {
+        const encoded = encodeURIComponent(JSON.stringify(user));
+        if (user.role === 'staff') {
+          document.cookie = `atm_staff_session=${encoded}; path=/; max-age=604800; SameSite=Lax`;
+        }
+        document.cookie = `atm_session=${encoded}; path=/; max-age=604800; SameSite=Lax`;
+      } catch {
+        // Ignore cookie write errors
+      }
+    }
     return session;
   },
 
-  async setDevStaffSession() {
+  async setDemoStaffSession(accountId?: string) {
+    const account = (accountId ? DEMO_STAFF_ACCOUNTS.find((a) => a.id === accountId) : null) ?? DEMO_STAFF_ACCOUNTS[0];
+    if (!account) {
+      return this.setSession({
+        id: 'staff-lead-01',
+        email: 'admin@atmnigeria.com',
+        name: 'Chinedu Okafor',
+        role: 'staff',
+      });
+    }
     return this.setSession({
-      id: 'user-staff-dev-01',
-      email: 'admin@atmnigeria.com',
-      name: 'Ascent Operations Lead',
-      role: 'staff',
+      id: account.id,
+      email: account.email,
+      name: account.name,
+      role: account.role,
     });
+  },
+
+  async setDevStaffSession() {
+    return this.setDemoStaffSession('staff-lead-01');
   },
 
   async setDevCustomerSession() {
@@ -101,6 +174,14 @@ export const auth = {
     if (typeof window !== 'undefined') {
       try {
         window.localStorage.removeItem('atm_auth_session');
+      } catch {
+        // Ignore
+      }
+    }
+    if (typeof document !== 'undefined') {
+      try {
+        document.cookie = 'atm_staff_session=; path=/; max-age=0; SameSite=Lax';
+        document.cookie = 'atm_session=; path=/; max-age=0; SameSite=Lax';
       } catch {
         // Ignore
       }
