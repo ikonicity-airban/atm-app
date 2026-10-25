@@ -22,6 +22,8 @@ import {
   type UpdateCustomerProfileInput,
   type CustomerProfile,
   type CompanionPassenger,
+  type CustomerPreferences,
+  type CustomerPreferencesInput,
 } from '@atm/shared';
 import { AppError } from '../../lib/errors.ts';
 import { bookingRepository, type HeldBooking } from './bookings.ts';
@@ -74,6 +76,11 @@ export interface ICustomerRepository {
     holdToken: string,
     requestedCreditKobo: number
   ): Promise<ApplyCreditResult>;
+
+  // Customer Preferences & Data Storage
+  getPreferences(customerId: string): Promise<CustomerPreferences>;
+  updatePreferences(customerId: string, input: Partial<CustomerPreferencesInput>): Promise<CustomerPreferences>;
+  exportCustomerData(customerId: string): Promise<Record<string, unknown>>;
 }
 
 export class CustomerRepository implements ICustomerRepository {
@@ -104,6 +111,10 @@ export class CustomerRepository implements ICustomerRepository {
   private static get heldEscrow(): Map<string, { customerId: string; amountKobo: number }> {
     if (!(globalThis as any).__atm_cust_escrow__) (globalThis as any).__atm_cust_escrow__ = new Map<string, { customerId: string; amountKobo: number }>();
     return (globalThis as any).__atm_cust_escrow__;
+  }
+  private static get preferences(): Map<string, CustomerPreferences> {
+    if (!(globalThis as any).__atm_cust_preferences__) (globalThis as any).__atm_cust_preferences__ = new Map<string, CustomerPreferences>();
+    return (globalThis as any).__atm_cust_preferences__;
   }
 
   constructor() {
@@ -723,6 +734,54 @@ export class CustomerRepository implements ICustomerRepository {
       remainingFareKobo,
       isFullyPaid,
       creditBalanceAfterKobo: newBalance,
+    };
+  }
+
+  async getPreferences(customerId: string): Promise<CustomerPreferences> {
+    const existing = CustomerRepository.preferences.get(customerId);
+    if (existing) {
+      return { ...existing };
+    }
+    return {
+      smsAlerts: true,
+      whatsappAlerts: true,
+      emailReceipts: true,
+      preferredSeatPosition: 'any',
+      autoFillEmergencyContact: true,
+      localDataConsent: true,
+    };
+  }
+
+  async updatePreferences(customerId: string, input: Partial<CustomerPreferencesInput>): Promise<CustomerPreferences> {
+    const current = await this.getPreferences(customerId);
+    const updated: CustomerPreferences = {
+      ...current,
+      ...input,
+    };
+    CustomerRepository.preferences.set(customerId, updated);
+    return updated;
+  }
+
+  async exportCustomerData(customerId: string): Promise<Record<string, unknown>> {
+    const customer = await this.getCustomerById(customerId);
+    const profile = await this.getCustomerProfile(customerId);
+    const companions = await this.getCompanions(customerId);
+    const ledger = await this.getCreditLedger(customerId);
+    const preferences = await this.getPreferences(customerId);
+    const allBookings = await bookingRepository.getAllBookings();
+    const customerPhone = profile?.phone || customer?.phone;
+    const bookings = customerPhone
+      ? allBookings.filter((b) => b.contact?.phone === customerPhone)
+      : allBookings.slice(0, 5);
+
+    return {
+      exportedAtUtc: new Date().toISOString(),
+      compliance: 'Nigeria Data Protection Act (NDPA) Compliant Traveler Archive',
+      customerProfile: profile || customer,
+      preferences,
+      companionPassengers: companions,
+      creditLedger: ledger,
+      bookingRecords: bookings,
     };
   }
 }

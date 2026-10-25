@@ -135,7 +135,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-87.5 bg-linear-to-r from-purple-500/10 via-[#ca2484]/15 to-indigo-500/10 dark:from-purple-900/30 dark:via-[#ca2484]/20 dark:to-indigo-900/30 rounded-full blur-[100px]" />
 
         {/* Hero Video Backdrop: Light Mode */}
-        <div className="block dark:hidden absolute inset-0 overflow-hidden motion-reduce:hidden">
+        <div className="block dark:hidden absolute inset-0 opacity-50 overflow-hidden motion-reduce:hidden">
           <video
             ref={lightVideoRef}
             src="/videos/hero/Minivan_driving_on_highway_20261020011710.mp4"
@@ -151,7 +151,7 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         </div>
 
         {/* Hero Video Backdrop: Dark Mode */}
-        <div className="hidden dark:block absolute inset-0 overflow-hidden opacity-30 mix-blend-screen motion-reduce:hidden">
+        <div className="hidden dark:block absolute inset-0 overflow-hidden opacity-50 mix-blend-screen motion-reduce:hidden">
           <video
             ref={darkVideoRef}
             src="/videos/hero/Vehicles_driving_on_highway_20261020060547.mp4"

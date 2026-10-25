@@ -41,3 +41,14 @@ export interface TwoFactorStatus {
   qrCodeUrl?: string;
   backupCodesRemaining: number;
 }
+
+export type PreferredSeatPosition = 'front_window' | 'middle_row' | 'rear_row' | 'any';
+
+export interface CustomerPreferences {
+  smsAlerts: boolean;
+  whatsappAlerts: boolean;
+  emailReceipts: boolean;
+  preferredSeatPosition: PreferredSeatPosition;
+  autoFillEmergencyContact: boolean;
+  localDataConsent: boolean;
+}

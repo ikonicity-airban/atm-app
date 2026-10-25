@@ -5,6 +5,7 @@ import './globals.css';
 import { ThemeProvider } from '../components/theme/ThemeProvider.tsx';
 import { SoundProvider } from '../components/theme/SoundProvider.tsx';
 import { LoadingProvider } from '../components/ui/LoadingProvider.tsx';
+import { QueryProvider } from '../components/providers/QueryProvider.tsx';
 
 const overpass = Overpass({
   subsets: ['latin'],
@@ -57,15 +58,17 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased min-h-screen bg-background text-foreground font-sans transition-colors duration-200">
-        <ThemeProvider>
-          <SoundProvider>
-            <Suspense fallback={null}>
-              <LoadingProvider>
-                {children}
-              </LoadingProvider>
-            </Suspense>
-          </SoundProvider>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider>
+            <SoundProvider>
+              <Suspense fallback={null}>
+                <LoadingProvider>
+                  {children}
+                </LoadingProvider>
+              </Suspense>
+            </SoundProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

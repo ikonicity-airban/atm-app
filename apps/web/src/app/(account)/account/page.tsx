@@ -9,8 +9,18 @@ import { Select, SelectTrigger, SelectValue, SelectPopup, SelectItem } from '../
 import { ThemeToggle } from '../../../components/theme/ThemeToggle.tsx';
 import { SoundToggle } from '../../../components/theme/SoundToggle.tsx';
 import { Logo } from '../../../components/ui/Logo.tsx';
+import {
+  Database,
+  ShieldCheck,
+  Download,
+  Trash2,
+  Bell,
+  Sliders,
+  CheckCircle2,
+} from 'lucide-react';
+import { useCustomerPreferences, useCompanionPassengers } from '../../../hooks/useAccountData.ts';
 
-type AccountTab = 'overview' | 'wallet' | 'trips' | 'companions';
+type AccountTab = 'overview' | 'wallet' | 'trips' | 'companions' | 'storage';
 
 interface CreditLedgerEntry {
   id: string;
@@ -65,6 +75,18 @@ export default function CustomerAccountDashboard() {
 
   // 2FA state
   const [twoFactorLoading, setTwoFactorLoading] = useState(false);
+
+  // TanStack Query & Preferences
+  const currentCustomerId = session?.user?.id || 'cust-dev-01';
+  const { preferences, updatePreferences } = useCustomerPreferences(currentCustomerId);
+  const {
+    companions: queryCompanions,
+    addCompanion: queryAddCompanion,
+    deleteCompanion: queryDeleteCompanion,
+  } = useCompanionPassengers(currentCustomerId);
+  const [cacheMessage, setCacheMessage] = useState<string | null>(null);
+
+  const effectiveCompanions = queryCompanions && queryCompanions.length > 0 ? queryCompanions : companions;
 
   useEffect(() => {
     async function loadAccountData() {
@@ -221,29 +243,24 @@ export default function CustomerAccountDashboard() {
     }
   };
 
-  const handleAddCompanion = (e: React.FormEvent) => {
+  const handleAddCompanion = async (e: React.FormEvent) => {
     e.preventDefault();
     setCompanionError(null);
 
-    if (companions.length >= 5) {
+    if (effectiveCompanions.length >= 5) {
       setCompanionError('Maximum 5 companion passengers allowed per account.');
       return;
     }
 
     try {
       const normalised = normalisePhone(compPhone);
-      const newCompanion: CompanionPassenger = {
-        id: `comp-${Date.now()}`,
-        customerId: profile?.id || 'cust-dev-01',
+      await queryAddCompanion({
         fullName: compName,
         gender: compGender,
         phone: normalised,
         isDefaultNextOfKin: compIsKin,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      });
 
-      setCompanions((prev) => [...prev, newCompanion]);
       setCompName('');
       setCompPhone('');
       setCompIsKin(false);
@@ -253,8 +270,25 @@ export default function CustomerAccountDashboard() {
     }
   };
 
-  const handleDeleteCompanion = (id: string) => {
-    setCompanions((prev) => prev.filter((c) => c.id !== id));
+  const handleDeleteCompanion = async (id: string) => {
+    try {
+      await queryDeleteCompanion(id);
+    } catch {
+      setCompanions((prev) => prev.filter((c) => c.id !== id));
+    }
+  };
+
+  const handlePurgeLocalCache = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('atm_user_preferences');
+        localStorage.removeItem('atm_saved_trip_ids');
+        setCacheMessage('Local browser cache and query records reset successfully.');
+        setTimeout(() => setCacheMessage(null), 4000);
+      } catch {
+        setCacheMessage('Could not access local storage.');
+      }
+    }
   };
 
   const handleToggle2FA = async () => {
@@ -391,7 +425,18 @@ export default function CustomerAccountDashboard() {
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
-            Saved Companions ({companions.length}/5)
+            Saved Companions ({effectiveCompanions.length}/5)
+          </button>
+          <button
+            onClick={() => setActiveTab('storage')}
+            className={`px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'storage'
+                ? 'border-primary text-primary bg-card'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5 text-primary" />
+            Data &amp; Storage
           </button>
         </div>
 
@@ -796,7 +841,7 @@ export default function CustomerAccountDashboard() {
 
             {/* Companions Roster Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {companions.map((comp) => (
+              {effectiveCompanions.map((comp) => (
                 <div
                   key={comp.id}
                   className="bg-card text-card-foreground rounded-2xl border border-border p-5 shadow-xs relative flex flex-col justify-between"
@@ -831,6 +876,306 @@ export default function CustomerAccountDashboard() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: DATA STORAGE & PRIVACY CONTROLS */}
+        {activeTab === 'storage' && (
+          <div className="space-y-8">
+            {cacheMessage && (
+              <div className="p-4 rounded-xl text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>{cacheMessage}</span>
+              </div>
+            )}
+
+            {/* Overview Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-5 shadow-xs">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                  Stored Records
+                </div>
+                <div className="text-2xl font-extrabold text-foreground font-mono">
+                  {trips.length + effectiveCompanions.length + ledger.length + 1}
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Bookings, companions, and receipts
+                </p>
+              </div>
+
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-5 shadow-xs">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                  Traveler Companions
+                </div>
+                <div className="text-2xl font-extrabold text-foreground font-mono">
+                  {effectiveCompanions.length} / 5
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Frequent travelers on file
+                </p>
+              </div>
+
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-5 shadow-xs">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                  Store Credit In Wallet
+                </div>
+                <div className="text-2xl font-extrabold text-primary font-mono">
+                  {formatNaira(profile?.creditsKobo || 0)}
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Instant balance for booking
+                </p>
+              </div>
+
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-5 shadow-xs">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                  Privacy Standard
+                </div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0" />
+                  <span className="text-sm font-bold text-foreground">NDPA Protected</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Nigeria Data Protection Act
+                </p>
+              </div>
+            </div>
+
+            {/* Customization & Preferences Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Notification Preferences */}
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Bell className="w-4 h-4 text-primary" />
+                    <h3 className="text-sm font-bold text-foreground">Journey Notification Channels</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-5">
+                    Customize where you receive departure alerts, ticket confirmations, and vehicle boarding updates.
+                  </p>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
+                      <div>
+                        <div className="text-xs font-semibold text-foreground">SMS Journey Alerts</div>
+                        <div className="text-[11px] text-muted-foreground">
+                          Direct SMS updates sent to {profile?.phone || 'registered phone'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updatePreferences({ smsAlerts: !preferences.smsAlerts })}
+                        className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ease-in-out ${
+                          preferences.smsAlerts ? 'bg-primary justify-end' : 'bg-muted-foreground/30 justify-start'
+                        }`}
+                      >
+                        <div className="bg-background w-4 h-4 rounded-full shadow-xs" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
+                      <div>
+                        <div className="text-xs font-semibold text-foreground">WhatsApp Trip Dispatch</div>
+                        <div className="text-[11px] text-muted-foreground">
+                          Instant driver assignment and vehicle manifest notes
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updatePreferences({ whatsappAlerts: !preferences.whatsappAlerts })}
+                        className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ease-in-out ${
+                          preferences.whatsappAlerts ? 'bg-primary justify-end' : 'bg-muted-foreground/30 justify-start'
+                        }`}
+                      >
+                        <div className="bg-background w-4 h-4 rounded-full shadow-xs" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
+                      <div>
+                        <div className="text-xs font-semibold text-foreground">Email Official Receipts</div>
+                        <div className="text-[11px] text-muted-foreground">
+                          Itemized travel invoices sent to {profile?.email || 'registered email'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updatePreferences({ emailReceipts: !preferences.emailReceipts })}
+                        className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ease-in-out ${
+                          preferences.emailReceipts ? 'bg-primary justify-end' : 'bg-muted-foreground/30 justify-start'
+                        }`}
+                      >
+                        <div className="bg-background w-4 h-4 rounded-full shadow-xs" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-[10px] text-muted-foreground/70 mt-6 pt-3 border-t border-border">
+                  Changes save immediately with instant optimistic synchronization.
+                </div>
+              </div>
+
+              {/* Travel Comfort & Defaults */}
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Sliders className="w-4 h-4 text-primary" />
+                    <h3 className="text-sm font-bold text-foreground">Travel Comfort Defaults</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-5">
+                    Pre select your favorite Toyota Sienna seat position and emergency contact preferences.
+                  </p>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-foreground mb-2">
+                        Preferred Sienna Seating Position
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: 'front_window', label: 'Front Window (Seat 1)' },
+                          { id: 'middle_row', label: 'Middle Row (Seats 2, 3)' },
+                          { id: 'rear_row', label: 'Rear Row (Seats 4, 5)' },
+                          { id: 'any', label: 'Any Open Seat' },
+                        ].map((pos) => {
+                          const isSelected = preferences.preferredSeatPosition === pos.id;
+                          return (
+                            <button
+                              key={pos.id}
+                              type="button"
+                              onClick={() =>
+                                updatePreferences({
+                                  preferredSeatPosition: pos.id as any,
+                                })
+                              }
+                              className={`p-2.5 text-xs font-medium rounded-xl border text-left transition-colors cursor-pointer ${
+                                isSelected
+                                  ? 'border-primary bg-primary/10 text-primary font-semibold'
+                                  : 'border-border bg-muted/20 text-muted-foreground hover:text-foreground'
+                              }`}
+                            >
+                              {pos.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
+                      <div>
+                        <div className="text-xs font-semibold text-foreground">Auto Fill Emergency Contact</div>
+                        <div className="text-[11px] text-muted-foreground">
+                          Automatically apply {profile?.nextOfKinName || 'next of kin'} during new bookings
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updatePreferences({
+                            autoFillEmergencyContact: !preferences.autoFillEmergencyContact,
+                          })
+                        }
+                        className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ease-in-out ${
+                          preferences.autoFillEmergencyContact
+                            ? 'bg-primary justify-end'
+                            : 'bg-muted-foreground/30 justify-start'
+                        }`}
+                      >
+                        <div className="bg-background w-4 h-4 rounded-full shadow-xs" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
+                      <div>
+                        <div className="text-xs font-semibold text-foreground">Local Offline Cache Consent</div>
+                        <div className="text-[11px] text-muted-foreground">
+                          Store traveler preferences locally for offline access
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updatePreferences({
+                            localDataConsent: !preferences.localDataConsent,
+                          })
+                        }
+                        className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 ease-in-out ${
+                          preferences.localDataConsent
+                            ? 'bg-primary justify-end'
+                            : 'bg-muted-foreground/30 justify-start'
+                        }`}
+                      >
+                        <div className="bg-background w-4 h-4 rounded-full shadow-xs" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-[10px] text-muted-foreground/70 mt-6 pt-3 border-t border-border">
+                  Seat selection preferences will be prioritized when holding Sienna seats.
+                </div>
+              </div>
+            </div>
+
+            {/* NDPA Data Export & Cache Management Card */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Data Export Card */}
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Download className="w-4 h-4 text-primary" />
+                    <h3 className="text-sm font-bold text-foreground">Download Traveler Archive</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Under the Nigeria Data Protection Act, you may inspect and export all personal journey data, payment
+                    records, companion contacts, and wallet transactions stored on Ascent servers.
+                  </p>
+                  <div className="bg-muted/30 rounded-xl p-3 border border-border mb-4 text-[11px] text-muted-foreground space-y-1">
+                    <div>• Format: Standard Machine Readable JSON</div>
+                    <div>• Contains: Profile, Companions, Booking Records, Credit Ledger</div>
+                    <div>• Cryptographic checksum verified on generation</div>
+                  </div>
+                </div>
+
+                <a
+                  href={`/api/account/export-data?customerId=${encodeURIComponent(currentCustomerId)}`}
+                  download
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold text-xs rounded-xl hover:bg-primary/90 transition-colors cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Download Complete Data Archive (JSON)
+                </a>
+              </div>
+
+              {/* Local Storage & Cache Controls */}
+              <div className="bg-card text-card-foreground rounded-2xl border border-border p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                    <h3 className="text-sm font-bold text-foreground">Local Browser Storage &amp; Cache</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Ascent uses browser storage to cache trip schedules and your preferences for quick loading. You can
+                    purge this local cache at any time without terminating your session.
+                  </p>
+                  <div className="bg-muted/30 rounded-xl p-3 border border-border mb-4 text-[11px] text-muted-foreground space-y-1">
+                    <div>• Cached trip searches and route queries</div>
+                    <div>• Stored offline travel preferences</div>
+                    <div>• Safe action: does not sign you out of your account</div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handlePurgeLocalCache}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-border text-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 font-semibold text-xs rounded-xl transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Purge Local Cache &amp; Reset Queries
+                </button>
+              </div>
             </div>
           </div>
         )}

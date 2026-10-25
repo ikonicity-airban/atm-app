@@ -37,3 +37,14 @@ export const applyCheckoutCreditSchema = z.object({
 });
 
 export type ApplyCheckoutCreditInput = z.infer<typeof applyCheckoutCreditSchema>;
+
+export const customerPreferencesSchema = z.object({
+  smsAlerts: z.boolean().default(true),
+  whatsappAlerts: z.boolean().default(true),
+  emailReceipts: z.boolean().default(true),
+  preferredSeatPosition: z.enum(['front_window', 'middle_row', 'rear_row', 'any']).default('any'),
+  autoFillEmergencyContact: z.boolean().default(true),
+  localDataConsent: z.boolean().default(true),
+});
+
+export type CustomerPreferencesInput = z.infer<typeof customerPreferencesSchema>;
