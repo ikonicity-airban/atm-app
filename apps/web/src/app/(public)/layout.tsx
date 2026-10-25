@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { PublicHeader } from '../../components/layout/PublicHeader.tsx';
 import { PublicFooter } from '../../components/layout/PublicFooter.tsx';
+import { FloatingActionDock } from '../../components/layout/FloatingActionDock.tsx';
 
 export default function PublicLayout({
   children,
@@ -28,6 +29,7 @@ export default function PublicLayout({
             router.push(path);
           }}
         />
+        <FloatingActionDock />
       </div>
     </div>
   );

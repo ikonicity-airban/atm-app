@@ -16,6 +16,7 @@ import {
   ArrowRightLeft,
   X,
   ChevronDown,
+  ArrowRight,
 } from 'lucide-react';
 import {
   SERVED_CITIES,
@@ -189,12 +190,33 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-medium dark:font-normal text-shadow-2xl">
             Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
           </p>
+
+          {/* Mobile Only Dual CTAs on One Line */}
+          <div className="md:hidden flex items-center justify-center gap-2.5 pt-3 max-w-sm mx-auto w-full">
+            <Button
+              size="lg"
+              onClick={() => onNavigate ? onNavigate('/trips') : (window.location.href = '/trips')}
+              className="flex-1 font-bold text-xs sm:text-sm rounded-2xl min-h-12 shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <span>Find Trips</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => onNavigate ? onNavigate('/manage') : (window.location.href = '/manage')}
+              className="flex-1 font-semibold text-xs sm:text-sm rounded-2xl min-h-12 border-border/80 bg-background/50 dark:bg-black/30 backdrop-blur-md hover:bg-background flex items-center justify-center cursor-pointer"
+            >
+              Manage Bookings
+            </Button>
+          </div>
         </div>
 
-        {/* 3. Floating Glassmorphism Search Island */}
+        {/* 3. Floating Glassmorphism Search Island (Desktop Only) */}
         <div
           ref={containerRef}
-          className="w-full max-w-5xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative @container/search shadow-xl"
+          className="hidden md:block w-full max-w-5xl mx-auto rounded-3xl glass-card-spatial p-4 sm:p-6 relative @container/search shadow-xl"
         >
           {/* Top Bar: Mode Tabs (Left) + Utility Options (Right) */}
           <div className="flex sm:items-center justify-between gap-3 pb-4 border-b border-border">

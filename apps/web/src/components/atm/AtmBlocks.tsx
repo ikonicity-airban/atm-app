@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   normalisePhone,
   isValidNigerianPhone,
@@ -315,6 +315,9 @@ export function TerminalCard({
   terminal: Terminal;
   className?: string;
 }) {
+  const [showMap, setShowMap] = useState(false);
+  const mapQuery = encodeURIComponent(`${terminal.name}, ${terminal.address}, Nigeria`);
+
   return (
     <div
       className={cn(
@@ -333,6 +336,21 @@ export function TerminalCard({
           <MapPin className="w-3.5 h-3.5 text-muted-foreground mt-0.5 shrink-0" />
           <span>{terminal.address}</span>
         </p>
+
+        {showMap && (
+          <div className="w-full h-44 rounded-xl overflow-hidden border border-border bg-muted/20 mt-3">
+            <iframe
+              title={`Live Google Map for ${terminal.name}`}
+              src={`https://maps.google.com/maps?q=${mapQuery}&z=15&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-full"
+            />
+          </div>
+        )}
       </div>
 
       <div className="pt-3 border-t border-border space-y-2">
@@ -349,14 +367,21 @@ export function TerminalCard({
           ))}
         </div>
 
-        <div>
+        <div className="flex items-center justify-between gap-2 pt-1">
+          <button
+            type="button"
+            onClick={() => setShowMap(!showMap)}
+            className="text-xs text-primary hover:underline font-semibold cursor-pointer"
+          >
+            {showMap ? 'Hide Map' : 'View Live Map'}
+          </button>
           <a
             href={terminal.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold min-h-[36px] transition-colors"
           >
-            <span>Get Directions (Google Maps)</span>
+            <span>Directions (Google Maps)</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>

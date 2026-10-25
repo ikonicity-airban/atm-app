@@ -230,9 +230,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   }, [isMobileMenuOpen, currentPath]);
 
   const handleNav = (path: string) => {
-    onNavigate(path);
+    document.body.classList.remove('mobile-drawer-open');
+    document.body.style.overflow = '';
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
+    onNavigate(path);
   };
 
   const handleHeaderSearch = (query: string) => {
@@ -240,23 +242,91 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
     if (!q) return;
     setIsSearchExpanded(false);
 
+    // Waybill Parcel Tracking Code
     if (/^ATM-EXP/i.test(q) || /^EXP-/i.test(q)) {
       handleNav(`/track?q=${encodeURIComponent(q)}`);
       return;
     }
 
+    // Booking Reference Code
     if (/^ATM-/i.test(q)) {
       handleNav(`/manage?ref=${encodeURIComponent(q)}`);
       return;
     }
 
     const lower = q.toLowerCase();
+
+    // Universal Application Page Routing
+    if (lower.includes('courier') || lower.includes('parcel') || lower.includes('waybill') || lower.includes('freight') || lower.includes('cargo') || lower.includes('package')) {
+      handleNav('/courier');
+      return;
+    }
+    if (lower.includes('track') || lower.includes('telematics') || lower.includes('live')) {
+      handleNav('/track');
+      return;
+    }
+    if (lower.includes('charter') || lower.includes('hire') || lower.includes('private')) {
+      handleNav('/charter');
+      return;
+    }
+    if (lower.includes('corporate') || lower.includes('b2b') || lower.includes('logistics') || lower.includes('fleet')) {
+      handleNav('/corporate');
+      return;
+    }
+    if (lower.includes('terminal') || lower.includes('station') || lower.includes('depot') || lower.includes('park') || lower.includes('location')) {
+      handleNav('/terminals');
+      return;
+    }
+    if (lower.includes('contact') || lower.includes('call') || lower.includes('phone') || lower.includes('whatsapp') || lower.includes('support')) {
+      handleNav('/contact');
+      return;
+    }
+    if (lower.includes('faq') || lower.includes('question') || lower.includes('help') || lower.includes('policy')) {
+      handleNav('/faq');
+      return;
+    }
+    if (lower.includes('manage') || lower.includes('ticket') || lower.includes('checkin') || lower.includes('check-in')) {
+      handleNav('/manage');
+      return;
+    }
+    if (lower.includes('cancel') || lower.includes('refund')) {
+      handleNav('/cancel');
+      return;
+    }
+    if (lower.includes('account') || lower.includes('profile') || lower.includes('wallet') || lower.includes('credit') || lower.includes('companion') || lower.includes('storage') || lower.includes('privacy')) {
+      handleNav('/account');
+      return;
+    }
+    if (lower.includes('terms') || lower.includes('carriage') || lower.includes('condition')) {
+      handleNav('/terms');
+      return;
+    }
+    if (lower.includes('about') || lower.includes('company') || lower.includes('story') || lower.includes('fleet')) {
+      handleNav('/about');
+      return;
+    }
+
+    // Specific Intercity Corridor Routes
+    if ((lower.includes('enugu') && lower.includes('abuja')) || lower === 'enugu-abuja') {
+      handleNav('/routes/enugu-abuja');
+      return;
+    }
+    if ((lower.includes('enugu') && lower.includes('lagos')) || lower === 'enugu-lagos') {
+      handleNav('/routes/enugu-lagos');
+      return;
+    }
+    if ((lower.includes('lagos') && lower.includes('owerri')) || lower === 'lagos-owerri') {
+      handleNav('/routes/lagos-owerri');
+      return;
+    }
+
     const matchedCity = ['Lagos', 'Abuja', 'Enugu', 'Owerri'].find((c) => c.toLowerCase() === lower);
     if (matchedCity) {
       handleNav(`/trips?to=${encodeURIComponent(matchedCity)}`);
       return;
     }
 
+    // Default to trips search with full query
     handleNav(`/trips?search=${encodeURIComponent(q)}`);
   };
 
@@ -657,14 +727,6 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
               onOpenChange={setIsSearchExpanded}
               onSubmit={handleHeaderSearch}
             />
-          </div>
-
-          {/* Theme Switcher Toggle (Desktop Dropdown) */}
-          <ThemeToggle variant="dropdown" />
-
-          {/* Sound Toggle */}
-          <div className="hidden sm:flex items-center">
-            <SoundToggle />
           </div>
 
           {/* Primary Manage Booking Button */}

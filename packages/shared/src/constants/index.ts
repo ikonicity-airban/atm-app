@@ -11,6 +11,7 @@ export const BRAND = {
   timezone: 'Africa/Lagos',
   defaultPhoneCode: '+234',
   supportEmail: 'support@atmnigeria.com',
+  supportDeskWhatsapp: '+2349070000625',
   contactPhones: ['+2349070000625', '+2349070000210', '+2349070000884'],
 } as const;
 
@@ -142,5 +143,3 @@ export const PLACEHOLDER_FARES_KOBO = {
 export * from './navigation.ts';
 export * from './corridors.ts';
 export * from './waypoints.ts';
-
-

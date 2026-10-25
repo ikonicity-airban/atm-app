@@ -48,6 +48,20 @@ export default function ContactPage({ onNavigate }: { onNavigate?: (path: string
               </div>
             </div>
 
+            {/* Embedded Live Google Map for Headquarters */}
+            <div className="w-full h-36 rounded-xl overflow-hidden border border-border bg-muted/20">
+              <iframe
+                title="Ascent Central Headquarters Google Maps"
+                src="https://maps.google.com/maps?q=263+Ogui+Road,+Enugu,+Nigeria&z=15&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full"
+              />
+            </div>
+
             <div className="pt-4 border-t border-border flex flex-col gap-2">
               <WhatsAppButton phone={BRAND.contactPhones[0]} />
               <CallButton phone={BRAND.contactPhones[0]} label="Call Central Dispatch" />
