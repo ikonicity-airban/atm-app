@@ -106,16 +106,23 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add('mobile-drawer-open');
-      const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.classList.remove('mobile-drawer-open');
-        document.body.style.overflow = originalOverflow || '';
-      };
     } else {
       document.body.classList.remove('mobile-drawer-open');
+      document.body.style.overflow = '';
     }
+    return () => {
+      document.body.classList.remove('mobile-drawer-open');
+      document.body.style.overflow = '';
+    };
   }, [isMobileMenuOpen]);
+
+  // Guarantee mobile drawer and body overflow reset on navigation route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    document.body.classList.remove('mobile-drawer-open');
+    document.body.style.overflow = '';
+  }, [currentPath]);
 
   // 1. Travel Links (Passenger Transport)
   const travelLinks: DropdownLink[] = [
@@ -778,15 +785,22 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
       {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-50 flex justify-end">
+          <motion.div
+            key="mobile-nav-portal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-0 z-50 flex justify-end"
+          >
             {/* Backdrop overlay prevents touching or scrolling page behind */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-              className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <div
+              className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs cursor-pointer"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                document.body.classList.remove('mobile-drawer-open');
+                document.body.style.overflow = '';
+              }}
               aria-hidden="true"
             />
 
@@ -814,7 +828,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 </button>
                 <button
                   type="button"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document.body.classList.remove('mobile-drawer-open');
+                    document.body.style.overflow = '';
+                  }}
                   className="p-2 text-muted-foreground hover:text-foreground rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center focus:ring-2 focus:ring-primary cursor-pointer active:scale-95 transition-all"
                   aria-label="Close navigation menu drawer"
                 >
@@ -1126,7 +1144,7 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                 </div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>

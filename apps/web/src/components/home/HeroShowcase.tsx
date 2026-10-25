@@ -174,13 +174,13 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           {/* Centered Top Pill Badge */}
           <div className="flex justify-center mb-1 md:mb-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/20 dark:bg-[#1b1030]/80 border border-border text-foreground/80 dark:text-purple-200 text-xs font-normal backdrop-blur-md shadow-xs">
-              <Icon icon={Star} size="xs" className="text-amber-400 fill-amber-400" />
+              <Icon icon={Star} size="xs" className="text-amber-500 fill-amber-500" />
               <span>Nigeria Executive Interstate Fleet 2026</span>
             </div>
           </div>
 
           {/* Main Typographic Headline */}
-          <div className="md:text-center space-y-3 max-w-3xl mx-auto">
+          <div className="md:text-center space-y-3 max-w-3xl mx-auto mt-10 h-full">
             <h1 className="text-6xl sm:text-5xl lg:text-7xl font-heading font-black tracking-tight leading-none md:leading-[1.1] text-balance">
               <span className="block text-foreground">Your Journey Begins in</span>
               <span className="block bg-linear-to-b from-purple-900/70 via-pink-800/30 to-[#450539] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#941861] bg-clip-text text-transparent text-ellipsis">
@@ -198,20 +198,20 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
         <div className="md:hidden flex items-center justify-center gap-2.5 pt-1 pb-2 max-w-sm mx-auto w-full">
           <Button
             size="lg"
-            onClick={() => onNavigate ? onNavigate('/trips') : (window.location.href = '/trips')}
+            onClick={() => onNavigate ? onNavigate('/manage') : (window.location.href = '/manage')}
             className="flex-1 font-bold text-xs sm:text-sm rounded-2xl min-h-12 shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <span>Find Trips</span>
-            <ArrowRight className="w-4 h-4 shrink-0" />
+            <span>Manage Bookings</span>
           </Button>
 
           <Button
             variant="outline"
             size="lg"
-            onClick={() => onNavigate ? onNavigate('/manage') : (window.location.href = '/manage')}
-            className="flex-1 font-semibold text-xs sm:text-sm rounded-2xl min-h-12 border-border/80 bg-background/50 dark:bg-black/30 backdrop-blur-md hover:bg-background flex items-center justify-center cursor-pointer"
+            onClick={() => onNavigate ? onNavigate('/trips') : (window.location.href = '/trips')}
+            className="flex-1 font-semibold text-xs sm:text-sm rounded-2xl min-h-12 border-border/80 bg-background/50 dark:bg-black/30 backdrop-blur-md hover:bg-background flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            Manage Bookings
+            <Search className="w-4 h-4 shrink-0" />
+            <span>Find Trips</span>
           </Button>
         </div>
 
@@ -521,20 +521,6 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           </div>
         </div>
       </div>
-
-      {/* Floating Dispatch Assistance Bubble */}
-      <a
-        href={`https://wa.me/${BRAND.contactPhones[0].replace(/[^0-9]/g, '')}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Direct WhatsApp Dispatch Support"
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 flex items-center justify-center transition-all duration-200 cursor-pointer motion-reduce:transform-none"
-      >
-        <Icon icon={MessageCircle} size="default" className="text-primary-foreground" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-normal flex items-center justify-center">
-          1
-        </span>
-      </a>
     </div>
   );
 }
