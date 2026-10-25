@@ -6,6 +6,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  ChevronRight,
   Bus,
   Package,
   Calendar,
@@ -46,6 +47,11 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
   const [activeDropdown, setActiveDropdown] = useState<'travel' | 'courier' | 'charter' | 'support' | null>(null);
   const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [openMobileAccordion, setOpenMobileAccordion] = useState<string | null>(null);
+
+  const toggleMobileAccordion = (section: string) => {
+    setOpenMobileAccordion((prev) => (prev === section ? null : section));
+  };
 
   const headerRef = useRef<HTMLElement>(null);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -191,6 +197,23 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
 
   const activeIndex = getActiveNavIndex();
   const highlightedIndex = hoveredNavIndex !== null ? hoveredNavIndex : activeIndex;
+
+  // Set default opened accordion when mobile drawer opens based on active route
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      if (travelLinks.some((l) => currentPath.startsWith(l.path))) {
+        setOpenMobileAccordion('travel');
+      } else if (courierLinks.some((l) => currentPath.startsWith(l.path))) {
+        setOpenMobileAccordion('courier');
+      } else if (charterLinks.some((l) => currentPath.startsWith(l.path))) {
+        setOpenMobileAccordion('charter');
+      } else if (supportLinks.some((l) => currentPath.startsWith(l.path))) {
+        setOpenMobileAccordion('support');
+      } else {
+        setOpenMobileAccordion(null);
+      }
+    }
+  }, [isMobileMenuOpen, currentPath]);
 
   const handleNav = (path: string) => {
     onNavigate(path);
@@ -749,127 +772,263 @@ export function PublicHeader({ currentPath, onNavigate, userRole }: PublicHeader
                   />
                 </div>
 
-                {/* High Visibility Find Trips Button */}
+                {/* High Visibility Find Trips Button with Chevron Right */}
                 <button
                   type="button"
                   onClick={() => handleNav('/trips')}
-                  className="w-full min-h-12 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer"
+                  className="w-full min-h-12 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold text-sm flex items-center justify-between shadow-xs transition-transform active:scale-[0.99] cursor-pointer group"
                 >
                   <div className="flex items-center gap-2.5">
                     <Bus className="w-4 h-4 text-primary-foreground" />
                     <span>Find Scheduled Trips</span>
                   </div>
-                  <span className="text-xs bg-primary-foreground/20 px-2 py-0.5 rounded-md font-semibold">
-                    5 Seat Sienna
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs bg-primary-foreground/20 px-2 py-0.5 rounded-md font-semibold">
+                      5 Seat Sienna
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-primary-foreground transition-transform group-hover:translate-x-0.5" />
+                  </div>
                 </button>
 
-                {/* 1. Passenger Travel Section */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                    Passenger Travel
-                  </span>
-                  <div className="grid grid-cols-1 gap-1">
-                    {travelLinks.map((item) => {
-                      const LinkIcon = item.icon;
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
-                            ? 'bg-primary/10 text-primary font-bold'
-                            : 'text-foreground hover:bg-muted'
-                            }`}
-                        >
-                          <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
-                          <div>
-                            <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                            <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 2. Express Courier Section */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                    Express Courier
-                  </span>
-                  <div className="grid grid-cols-1 gap-1">
-                    {courierLinks.map((item) => {
-                      const LinkIcon = item.icon;
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
-                            ? 'bg-primary/10 text-primary font-bold'
-                            : 'text-foreground hover:bg-muted'
-                            }`}
-                        >
-                          <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
-                          <div>
-                            <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                            <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 3. Charter & Fleet Section */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                    Charter &amp; Corporate
-                  </span>
-                  <div className="grid grid-cols-1 gap-1">
-                    {charterLinks.map((item) => {
-                      const LinkIcon = item.icon;
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() => handleNav(item.path)}
-                          className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer ${currentPath.startsWith(item.path)
-                            ? 'bg-primary/10 text-primary font-bold'
-                            : 'text-foreground hover:bg-muted'
-                            }`}
-                        >
-                          <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
-                          <div>
-                            <div className="text-xs font-semibold leading-tight">{item.label}</div>
-                            <div className="text-[10px] text-muted-foreground leading-tight">{item.sub}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 4. Support & Policies Section */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block px-1">
-                    Customer Support &amp; Policies
-                  </span>
-                  <div className="grid grid-cols-2 gap-1 text-xs">
-                    {supportLinks.map((item) => (
-                      <button
-                        key={item.path}
-                        type="button"
-                        onClick={() => handleNav(item.path)}
-                        className={`text-left px-3 py-2 rounded-lg min-h-11 flex items-center cursor-pointer ${currentPath.startsWith(item.path)
-                          ? 'text-primary font-bold bg-primary/10'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                {/* Accordion Navigation Groups */}
+                <div className="space-y-2.5">
+                  {/* 1. Passenger Travel Accordion */}
+                  <div className="rounded-xl border border-border bg-card/60 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileAccordion('travel')}
+                      className="w-full px-4 py-3 flex items-center justify-between text-left text-xs font-bold uppercase tracking-wider text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+                      aria-expanded={openMobileAccordion === 'travel'}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Bus className="w-4 h-4 text-primary" />
+                        <span>Passenger Travel</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-semibold text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                          {travelLinks.length}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+                            openMobileAccordion === 'travel' ? 'rotate-180 text-primary' : ''
                           }`}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
+                        />
+                      </div>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {openMobileAccordion === 'travel' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: 'easeOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-2 pt-0 grid grid-cols-1 gap-1 border-t border-border/60">
+                            {travelLinks.map((item) => {
+                              const LinkIcon = item.icon;
+                              const isItemActive = currentPath.startsWith(item.path);
+                              return (
+                                <button
+                                  key={item.path}
+                                  type="button"
+                                  onClick={() => handleNav(item.path)}
+                                  className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer transition-colors ${
+                                    isItemActive
+                                      ? 'bg-primary/10 text-primary font-bold'
+                                      : 'text-foreground hover:bg-muted'
+                                  }`}
+                                >
+                                  <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
+                                  <div>
+                                    <div className="text-xs font-semibold leading-tight">{item.label}</div>
+                                    <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* 2. Express Courier Accordion */}
+                  <div className="rounded-xl border border-border bg-card/60 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileAccordion('courier')}
+                      className="w-full px-4 py-3 flex items-center justify-between text-left text-xs font-bold uppercase tracking-wider text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+                      aria-expanded={openMobileAccordion === 'courier'}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Package className="w-4 h-4 text-primary" />
+                        <span>Express Courier</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-semibold text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                          {courierLinks.length}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+                            openMobileAccordion === 'courier' ? 'rotate-180 text-primary' : ''
+                          }`}
+                        />
+                      </div>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {openMobileAccordion === 'courier' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: 'easeOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-2 pt-0 grid grid-cols-1 gap-1 border-t border-border/60">
+                            {courierLinks.map((item) => {
+                              const LinkIcon = item.icon;
+                              const isItemActive = currentPath.startsWith(item.path);
+                              return (
+                                <button
+                                  key={item.path}
+                                  type="button"
+                                  onClick={() => handleNav(item.path)}
+                                  className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer transition-colors ${
+                                    isItemActive
+                                      ? 'bg-primary/10 text-primary font-bold'
+                                      : 'text-foreground hover:bg-muted'
+                                  }`}
+                                >
+                                  <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
+                                  <div>
+                                    <div className="text-xs font-semibold leading-tight">{item.label}</div>
+                                    <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* 3. Charter & Fleet Accordion */}
+                  <div className="rounded-xl border border-border bg-card/60 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileAccordion('charter')}
+                      className="w-full px-4 py-3 flex items-center justify-between text-left text-xs font-bold uppercase tracking-wider text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+                      aria-expanded={openMobileAccordion === 'charter'}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Building2 className="w-4 h-4 text-primary" />
+                        <span>Charter &amp; Corporate</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-semibold text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                          {charterLinks.length}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+                            openMobileAccordion === 'charter' ? 'rotate-180 text-primary' : ''
+                          }`}
+                        />
+                      </div>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {openMobileAccordion === 'charter' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: 'easeOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-2 pt-0 grid grid-cols-1 gap-1 border-t border-border/60">
+                            {charterLinks.map((item) => {
+                              const LinkIcon = item.icon;
+                              const isItemActive = currentPath.startsWith(item.path);
+                              return (
+                                <button
+                                  key={item.path}
+                                  type="button"
+                                  onClick={() => handleNav(item.path)}
+                                  className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 min-h-11 cursor-pointer transition-colors ${
+                                    isItemActive
+                                      ? 'bg-primary/10 text-primary font-bold'
+                                      : 'text-foreground hover:bg-muted'
+                                  }`}
+                                >
+                                  <Icon icon={LinkIcon} size="default" className="text-primary shrink-0" />
+                                  <div>
+                                    <div className="text-xs font-semibold leading-tight">{item.label}</div>
+                                    <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* 4. Support & Policies Accordion */}
+                  <div className="rounded-xl border border-border bg-card/60 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileAccordion('support')}
+                      className="w-full px-4 py-3 flex items-center justify-between text-left text-xs font-bold uppercase tracking-wider text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+                      aria-expanded={openMobileAccordion === 'support'}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <HelpCircle className="w-4 h-4 text-primary" />
+                        <span>Support &amp; Policies</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-semibold text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                          {supportLinks.length}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+                            openMobileAccordion === 'support' ? 'rotate-180 text-primary' : ''
+                          }`}
+                        />
+                      </div>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {openMobileAccordion === 'support' && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: 'easeOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-2 pt-0 grid grid-cols-2 gap-1 text-xs border-t border-border/60">
+                            {supportLinks.map((item) => {
+                              const isItemActive = currentPath.startsWith(item.path);
+                              return (
+                                <button
+                                  key={item.path}
+                                  type="button"
+                                  onClick={() => handleNav(item.path)}
+                                  className={`text-left px-3 py-2.5 rounded-lg min-h-11 flex items-center cursor-pointer transition-colors ${
+                                    isItemActive
+                                      ? 'text-primary font-bold bg-primary/10'
+                                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                                  }`}
+                                >
+                                  {item.label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
 
