@@ -19,10 +19,10 @@ function extractHoldToken(req: Request, body?: any): string | null {
 
 export async function POST(
   req: Request,
-  { params }: { params: Promise<{ holdId: string }> | { holdId: string } }
+  { params }: { params: Promise<{ holdId: string }> }
 ) {
   try {
-    const { holdId } = await Promise.resolve(params);
+    const { holdId } = await params;
     const body = await req.json().catch(() => ({}));
     const holdToken = extractHoldToken(req, body);
 

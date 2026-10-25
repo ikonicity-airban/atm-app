@@ -20,10 +20,10 @@ function extractHoldToken(req: Request, body?: any): string | null {
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ ref: string }> | { ref: string } }
+  { params }: { params: Promise<{ ref: string }> }
 ) {
   try {
-    const resolvedParams = await Promise.resolve(params);
+    const resolvedParams = await params;
     const holdToken = extractHoldToken(req);
 
     if (!holdToken) {
@@ -42,10 +42,10 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Promise<{ ref: string }> | { ref: string } }
+  { params }: { params: Promise<{ ref: string }> }
 ) {
   try {
-    const resolvedParams = await Promise.resolve(params);
+    const resolvedParams = await params;
     const body = await req.json().catch(() => ({}));
     const holdToken = extractHoldToken(req, body);
 
@@ -71,10 +71,10 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ ref: string }> | { ref: string } }
+  { params }: { params: Promise<{ ref: string }> }
 ) {
   try {
-    const resolvedParams = await Promise.resolve(params);
+    const resolvedParams = await params;
     const body = await req.json().catch(() => ({}));
     const holdToken = extractHoldToken(req, body);
 

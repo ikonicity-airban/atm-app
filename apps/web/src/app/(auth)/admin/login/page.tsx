@@ -7,11 +7,10 @@ import { Input } from '../../../../components/ui/Input.tsx';
 import { FormField } from '../../../../components/ui/FormField.tsx';
 import { Lock } from 'lucide-react';
 
-export default function AdminLoginPage({ onLoginSuccess }: { onLoginSuccess?: () => void }) {
+export default function AdminLoginPage() {
   const handleLogin = async () => {
     await auth.setDevStaffSession();
-    if (onLoginSuccess) onLoginSuccess();
-    else if (typeof window !== 'undefined') window.location.href = '/admin';
+    if (typeof window !== 'undefined') window.location.href = '/admin';
   };
 
   return (

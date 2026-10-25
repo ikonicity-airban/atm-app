@@ -342,23 +342,6 @@ export default function TripsSearchPage(rawProps?: any) {
             </span>
           </div>
         </div>
-
-        {/* Mobile filter button trigger */}
-        <div className="block lg:hidden">
-          <button
-            type="button"
-            onClick={() => setIsMobileSheetOpen(true)}
-            className="w-full sm:w-auto min-h-[44px] px-4 py-2 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
-            <span>Search &amp; Filter</span>
-            {activeFiltersCount > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-primary text-primary-foreground text-[10px] font-black">
-                {activeFiltersCount}
-              </span>
-            )}
-          </button>
-        </div>
       </div>
 
       {/* 2. Main Two Column Desktop Layout */}

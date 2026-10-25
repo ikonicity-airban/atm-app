@@ -7,7 +7,7 @@ import { Icon } from '@/components/ui/Icon';
 import { Truck, ShieldCheck, CreditCard, Package, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
-export default function CourierPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
+export default function CourierPage() {
   return (
     <PageShell
       breadcrumbs={[

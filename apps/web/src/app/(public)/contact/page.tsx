@@ -11,7 +11,7 @@ import { ContactInquiryForm } from '@/components/forms/inquiry/ContactInquiryFor
 import { BRAND, SEED_TERMINALS } from '@atm/shared';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
-export default function ContactPage({ onNavigate }: { onNavigate?: (path: string) => void } = {}) {
+export default function ContactPage() {
   return (
     <PageShell density="comfortable" width="standard" className="py-8 sm:py-12 space-y-12">
       {/* Title resting on background per ATM rules */}

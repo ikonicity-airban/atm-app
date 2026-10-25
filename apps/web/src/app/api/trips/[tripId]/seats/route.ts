@@ -4,10 +4,10 @@ import { AppError, successResponse, errorResponse, jsonResponse } from '../../..
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ tripId: string }> | { tripId: string } }
+  { params }: { params: Promise<{ tripId: string }> }
 ) {
   try {
-    const { tripId } = await Promise.resolve(params);
+    const { tripId } = await params;
 
     if (!tripId) {
       throw AppError.validationError('Trip ID is required');

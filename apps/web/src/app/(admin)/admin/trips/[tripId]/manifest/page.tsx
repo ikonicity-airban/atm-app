@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/Table';
 
 export interface HighwayManifestPrintPageProps {
-  params?: { tripId?: string } | Promise<{ tripId?: string }>;
+  params: Promise<{ tripId: string }>;
 }
 
 export default function HighwayManifestPrintPage({ params }: HighwayManifestPrintPageProps) {
@@ -25,13 +25,9 @@ export default function HighwayManifestPrintPage({ params }: HighwayManifestPrin
 
   useEffect(() => {
     if (params) {
-      if (params instanceof Promise) {
-        params.then((p) => {
-          if (p?.tripId) setTripId(p.tripId);
-        });
-      } else if (params.tripId) {
-        setTripId(params.tripId);
-      }
+      params.then((p) => {
+        if (p?.tripId) setTripId(p.tripId);
+      });
     } else if (typeof window !== 'undefined') {
       const parts = window.location.pathname.split('/');
       const manifestIdx = parts.indexOf('manifest');
