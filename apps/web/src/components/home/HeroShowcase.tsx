@@ -180,15 +180,15 @@ export function HeroShowcase({ onNavigate }: HeroShowcaseProps) {
           </div>
 
           {/* Main Typographic Headline */}
-          <div className="md:text-center space-y-2.5 sm:space-y-3 max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-heading font-black tracking-tight leading-tight md:leading-[1.1] text-balance">
+          <div className="md:text-center space-y-3 max-w-3xl mx-auto">
+            <h1 className="text-6xl sm:text-5xl lg:text-7xl font-heading font-black tracking-tight leading-none md:leading-[1.1] text-balance">
               <span className="block text-foreground">Your Journey Begins in</span>
               <span className="block bg-linear-to-b from-purple-900/70 via-pink-800/30 to-[#450539] dark:from-[#e9d5ff] dark:via-[#c084fc] dark:to-[#941861] bg-clip-text text-transparent text-ellipsis">
                 One Click
               </span>
             </h1>
 
-            <p className="text-xs sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-medium dark:font-normal text-shadow-2xl px-2">
+            <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed text-pretty font-medium dark:font-normal text-shadow-2xl">
               Experience comfortable 5 passenger Toyota Sienna interstate travel across Lagos, Abuja, Enugu, and Owerri with instant seat reservation.
             </p>
           </div>
